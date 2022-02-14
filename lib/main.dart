@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
                 //背景色
                 primary: const Color(0xffFFDF1F),
                 //图标颜色
-                onPrimary: const Color(0xffFFDF1F)),
+                onPrimary: const Color(0Xff333333)),
             fontFamily: "PingFangSC",
             textTheme: const TextTheme(
                 //Material 正文字体

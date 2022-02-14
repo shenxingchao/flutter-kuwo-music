@@ -31,6 +31,8 @@ dependencies:
     sdk: flutter
   # 状态管理 路由框架
   get: ^4.3.8
+  # 内容缩放的侧边栏
+  flutter_zoom_drawer: ^2.3.1
 
 
   # The following adds the Cupertino Icons font to your application.
