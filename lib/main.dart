@@ -21,9 +21,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             //自定义主题色方式
             colorScheme: ColorScheme.fromSwatch().copyWith(
-              primary: const Color.fromARGB(255, 255, 223, 31),
-            ),
-            fontFamily: "PingFangSC"),
+                //背景色
+                primary: const Color(0xffFFDF1F),
+                //图标颜色
+                onPrimary: const Color(0xffFFDF1F)),
+            fontFamily: "PingFangSC",
+            textTheme: const TextTheme(
+                //Material 正文字体
+                bodyText2: TextStyle(
+              fontSize: 14.0,
+              color: Color(0xff333333),
+              fontFamily: "PingFangSC",
+            ))),
         //隐藏debug字样
         debugShowCheckedModeBanner: false,
         //名为"/"的路由作为应用的home(首页)

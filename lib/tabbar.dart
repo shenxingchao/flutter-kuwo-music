@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import './home.dart';
+import './component/input.dart';
+import './appbar.dart';
 
 class TabbarComponent extends StatefulWidget {
   const TabbarComponent({Key? key}) : super(key: key);
@@ -18,11 +20,28 @@ class _TabbarComponentState extends State<TabbarComponent> {
     const HomeComponent(),
   ];
   //tabbar路由标题列表
-  final List appBarTitle = ['主页', '我的'];
+  final List appBarTitle = ['主页', '歌曲详情', '我的'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:AppBarComponent(
+        currentIndex == 0
+            ? InputComponent(
+                height: 40,
+                hasBorder: true,
+                isCircle: true,
+                showSearchIcon: true,
+                placeholder: "歌曲/歌手/歌单/MV",
+                onSubmitted: (value) {
+                  // Get.toNamed('/search_list', arguments: value);
+                })
+            : Text(appBarTitle[currentIndex]),
+        appBarHeight: currentIndex == 0 ? 70 : 66.0,
+        elevation: 0,
+        shadowColor: Colors.transparent,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
       body: router[currentIndex],
       //tabbar
       bottomNavigationBar: BottomNavigationBar(
@@ -36,6 +55,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
         // showUnselectedLabels: false,
         //选中字体
         selectedFontSize: 14,
+        selectedItemColor: const Color(0xff333333),
         //没选中字体
         unselectedFontSize: 14,
         //背景颜色
