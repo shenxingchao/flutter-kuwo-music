@@ -71,7 +71,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
                   })
               : Text(appBarTitle[currentIndex]),
           leading: GestureDetector(
-              child: const Icon(Icons.person),
+              child: const Icon(Icons.menu),
               onTap: () {
                 zoomDrawerController.toggle?.call();
               }),

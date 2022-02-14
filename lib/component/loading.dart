@@ -9,10 +9,11 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: const Center(
+      child: Center(
         child: CircularProgressIndicator(
           backgroundColor: Colors.white,
-          valueColor: AlwaysStoppedAnimation(Colors.blue),
+          valueColor:
+              AlwaysStoppedAnimation(Theme.of(context).colorScheme.primary),
           strokeWidth: 2,
         ),
       ),

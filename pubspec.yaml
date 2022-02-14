@@ -33,6 +33,12 @@ dependencies:
   get: ^4.3.8
   # 内容缩放的侧边栏
   flutter_zoom_drawer: ^2.3.1
+  # 网络请求库
+  dio: ^4.0.0 
+  # toast弹窗
+  fluttertoast: ^8.0.8
+  # 轮播图
+  carousel_slider: ^4.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
