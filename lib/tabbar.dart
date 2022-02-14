@@ -21,7 +21,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
     const HomeComponent(),
   ];
   //tabbar路由标题列表
-  final List appBarTitle = ['主页', '歌曲详情', '我的'];
+  final List appBarTitle = ['首页', '歌曲详情', '我的'];
 
   //侧边栏控制器
   final zoomDrawerController = ZoomDrawerController();
@@ -34,27 +34,27 @@ class _TabbarComponentState extends State<TabbarComponent> {
       //显示样式
       style: DrawerStyle.Style3,
       //抽屉宽度
-      slideWidth: MediaQuery.of(context).size.width * (0.65),
+      slideWidth: MediaQuery.of(context).size.width * (0.8),
       //主屏幕圆角
       borderRadius: 0.0,
       //旋转角度
       angle: 0.0,
-      //禁止主页滑动打开抽屉手势 
-      disableGesture:false,
+      //禁止主页滑动打开抽屉手势
+      disableGesture: false,
       //抽屉背景色
       backgroundColor: const Color(0x33000000),
       //显示抽屉阴影
       showShadow: true,
       //点击主屏幕时关闭抽屉
-      mainScreenTapClose:true,
+      mainScreenTapClose: true,
       //主屏幕覆盖层颜色
-      overlayColor:const Color(0xff000000),
+      overlayColor: const Color(0xff000000),
       //主屏幕迷糊量
-      overlayBlur:4,
+      overlayBlur: 2,
       menuScreen: Container(
-        width: MediaQuery.of(context).size.width * (0.65),
+        width: MediaQuery.of(context).size.width * (0.8),
         height: MediaQuery.of(context).size.height,
-        color: Colors.blue,
+        color: Colors.white,
       ),
       //主屏幕
       mainScreen: Scaffold(
@@ -62,7 +62,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
           currentIndex == 0
               ? InputComponent(
                   height: 40,
-                  hasBorder: true,
+                  hasBorder: false,
                   isCircle: true,
                   showSearchIcon: true,
                   placeholder: "歌曲/歌手/歌单/MV",
@@ -110,8 +110,8 @@ class _TabbarComponentState extends State<TabbarComponent> {
                       height: 0,
                     ),
                     Positioned(
-                        top: -10,
-                        child: Image.asset('assets/images/test.png',
+                        top: -15,
+                        child: Image.asset('assets/images/music_icon.png',
                             fit: BoxFit.cover))
                   ],
                 )),
