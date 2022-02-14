@@ -18,12 +18,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         title: 'app',
-        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: "PingFangSC"),
+        theme: ThemeData(
+            //自定义主题色方式
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: const Color.fromARGB(255, 255, 223, 31),
+            ),
+            fontFamily: "PingFangSC"),
+        //隐藏debug字样
         debugShowCheckedModeBanner: false,
         //名为"/"的路由作为应用的home(首页)
         initialRoute: "/",
         getPages: Routers.routes);
-    //使用这个拦截可以统一路由动画
-    // onGenerateRoute: (settings) => Routers.generateRoute(settings));
   }
 }
