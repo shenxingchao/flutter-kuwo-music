@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:get/get.dart';
 import './home.dart';
 import './component/input.dart';
 import './appbar.dart';
@@ -56,6 +57,43 @@ class _TabbarComponentState extends State<TabbarComponent> {
         width: MediaQuery.of(context).size.width * (0.8),
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/images/drawer.png',
+              fit: BoxFit.fitWidth,
+            ),
+            Expanded(
+              child: MediaQuery.removePadding(
+                context: context,
+                removeTop: true,
+                child: Scaffold(
+                  body: ListView(
+                    //垂直列表 水平列表有滚动条哦
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      ListTile(
+                        leading: Icon(
+                          Icons.history,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        title: const Text('更换主题色'),
+                        tileColor: Colors.white,
+                        onTap: () {
+                          Get.toNamed(
+                            '/theme',
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       //主屏幕
       mainScreen: Scaffold(
