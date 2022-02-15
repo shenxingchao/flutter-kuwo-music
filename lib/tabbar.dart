@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import './home.dart';
+import './user.dart';
 import './component/input.dart';
 import './appbar.dart';
 import './store/store.dart';
@@ -20,7 +21,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
   final List router = [
     const HomeComponent(),
     const Text('音乐详情'),
-    const HomeComponent(),
+    const UserCommponent(),
   ];
   //tabbar路由标题列表
   final List appBarTitle = ['首页', '歌曲详情', '我的'];
