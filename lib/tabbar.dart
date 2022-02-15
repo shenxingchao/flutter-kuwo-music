@@ -112,7 +112,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
                     ),
                     Positioned(
                         top: -15,
-                        child: Image.asset('assets/icons/music.png',
+                        child: Image.asset('assets/images/icons/music.png',
                             fit: BoxFit.cover))
                   ],
                 )),

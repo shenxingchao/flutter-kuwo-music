@@ -18,19 +18,19 @@ class _HomeComponentState extends State<HomeComponent> {
   List categoryList = [
     {
       "title": '歌单',
-      "icon": 'assets/icons/play_list.png',
+      "icon": 'assets/images/icons/play_list.png',
     },
     {
       "title": '排行榜',
-      "icon": 'assets/icons/rank.png',
+      "icon": 'assets/images/icons/rank.png',
     },
     {
       "title": '歌手',
-      "icon": 'assets/icons/artist.png',
+      "icon": 'assets/images/icons/artist.png',
     },
     {
       "title": 'MV',
-      "icon": 'assets/icons/mv.png',
+      "icon": 'assets/images/icons/mv.png',
     }
   ];
   //推荐歌单
