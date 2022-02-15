@@ -3,6 +3,7 @@ import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import './home.dart';
 import './component/input.dart';
 import './appbar.dart';
+import './store/store.dart';
 
 class TabbarComponent extends StatefulWidget {
   const TabbarComponent({Key? key}) : super(key: key);
@@ -111,7 +112,7 @@ class _TabbarComponentState extends State<TabbarComponent> {
                     ),
                     Positioned(
                         top: -15,
-                        child: Image.asset('assets/images/icons/music.png',
+                        child: Image.asset('assets/icons/music.png',
                             fit: BoxFit.cover))
                   ],
                 )),
