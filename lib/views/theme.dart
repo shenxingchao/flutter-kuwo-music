@@ -11,13 +11,11 @@ class ThemeComponent extends StatefulWidget {
 }
 
 class _ThemeComponentState extends State<ThemeComponent> {
-  List<Color> themeList = [
-    const Color(0xffFFDF1F),
-    const Color(0xff40A7FF),
-    const Color(0xff00ED93),
-    const Color(0xffFF9B9D),
-    const Color(0xffC986FF),
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +44,14 @@ class _ThemeComponentState extends State<ThemeComponent> {
                 childAspectRatio: 0.8,
                 //子元素
                 children: themeList
-                    .map(
-                      (item) => GestureDetector(
+                    .asMap().entries.map(
+                      (entry) => GestureDetector(
                           child: Container(
                             decoration: BoxDecoration(
                               //背景颜色
-                              color: item,
+                              color: entry.value,
                               borderRadius: BorderRadius.circular(4),
-                              boxShadow: item == Get.find<Store>().primary
+                              boxShadow: entry.value == Get.find<Store>().primary
                                   ? const [
                                       BoxShadow(
                                         offset: Offset(0, 4), //x,y轴
@@ -65,7 +63,10 @@ class _ThemeComponentState extends State<ThemeComponent> {
                             ),
                           ),
                           onTap: () {
-                            store.changeTheme(item);
+                            //更改主题
+                            store.changeTheme(entry.value);
+                            //记录主题的index
+                            box.write('primary', entry.key);
                           }),
                     )
                     .toList(),
