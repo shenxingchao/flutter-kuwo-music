@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './component/loading.dart';
 import './utils/request.dart';
 
@@ -35,13 +36,22 @@ class _HomeComponentState extends State<HomeComponent> {
   ];
   //推荐歌单
   List playList = [];
+  //定义刷新控件
+  final RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
   //mounted
   @override
   void initState() {
     super.initState();
+    onRefresh();
+  }
+
+  void onRefresh() {
     getBannerList();
     getPlayList();
+    //下拉刷新完成
+    refreshController.refreshCompleted();
   }
 
   //获取轮播图
@@ -92,18 +102,27 @@ class _HomeComponentState extends State<HomeComponent> {
   @override
   Widget build(BuildContext context) {
     return bannerList.isNotEmpty
-        ? Scrollbar(
-            child: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                //轮播图
-                CarouselWidget(bannerList: bannerList),
-                //分类图标
-                CategoryWidget(categoryList: categoryList),
-                //推荐歌单
-                RecommendPlayListWidget(playList: playList)
-              ])))
+        ? //刷新组件
+        SmartRefresher(
+            //下拉刷新
+            enablePullDown: true,
+            //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+            header: WaterDropMaterialHeader(
+                backgroundColor: Theme.of(context).colorScheme.primary),
+            controller: refreshController,
+            onRefresh: onRefresh,
+            child: Scrollbar(
+                child: SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                  //轮播图
+                  CarouselWidget(bannerList: bannerList),
+                  //分类图标
+                  CategoryWidget(categoryList: categoryList),
+                  //推荐歌单
+                  RecommendPlayListWidget(playList: playList)
+                ]))))
         : const Loading();
   }
 }
