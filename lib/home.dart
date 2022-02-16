@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './component/loading.dart';
 import './utils/request.dart';
@@ -225,10 +226,8 @@ class RecommendPlayListWidget extends StatelessWidget {
                         ],
                       ),
                       onTap: () {
-                        // Get.toNamed('/book_chapter',
-                        //     arguments: Book(
-                        //         id: item["id"],
-                        //         bookName: item["book_name"]));
+                        Get.toNamed('/play_list_detail',
+                            arguments: {"id": item["id"]});
                       },
                     ),
                   )))
