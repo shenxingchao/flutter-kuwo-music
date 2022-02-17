@@ -28,7 +28,7 @@ class Store extends GetxController {
       : themeList[0];
 
   //当前播放的歌曲信息对象
-  PlayMusicInfo ? playMusicInfo;
+  PlayMusicInfo? playMusicInfo;
 
   //当前播放列表
   List<PlayListMuisc> playListMuisc = [];
@@ -73,6 +73,7 @@ class Store extends GetxController {
         pic120: muisc.data["data"]["pic120"],
         albuminfo: muisc.data["data"]["albuminfo"],
         name: muisc.data["data"]["name"]);
+    print(playMusicInfo?.artist);
     //播放新的音乐
     await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
     //添加到播放列表，如果已经添加，则不再添加

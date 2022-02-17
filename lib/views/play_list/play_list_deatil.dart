@@ -432,7 +432,9 @@ class ListWidget extends StatelessWidget {
                             //添加到播放列表
                             store.playMusic(rid: entry.value["rid"]);
                           },
-                          onLongPress: () => {print("弹出下载")}),
+                          onLongPress: () => {
+                                print("弹出下载"),
+                              }),
                     )
                   ]))
             ])
