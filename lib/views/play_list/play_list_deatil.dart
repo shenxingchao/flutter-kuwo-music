@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterkuwomusic/api/common_api.dart';
-import 'package:flutterkuwomusic/interface/play_list_music.dart';
-import 'package:flutterkuwomusic/utils/play_audio.dart';
+import 'package:flutterkuwomusic/views/common/bottom_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -115,42 +113,47 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
   Widget build(BuildContext context) {
     return playList != null
         ? Scaffold(
-            body: NestedScrollView(
-                floatHeaderSlivers: false,
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
-                  return [
-                    //AppBar
-                    getSliverAppBar(context, innerBoxIsScrolled),
-                    //吸顶工具栏
-                    const FixToolBarWidget(),
-                  ];
-                },
-                body: list.isNotEmpty
-                    ? SmartRefresher(
-                        //下拉刷新
-                        enablePullDown: false,
-                        //上拉加载
-                        enablePullUp: false,
-                        //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
-                        header: const ClassicHeader(
-                          releaseText: "松开刷新",
-                          refreshingText: '刷新中...',
-                          completeText: '刷新完成',
-                          idleText: '下拉刷新',
-                        ),
-                        footer: const ClassicFooter(
-                          canLoadingText: '松开加载',
-                          loadingText: '加载中...',
-                          idleText: '上拉加载',
-                          noDataText: '没有更多了^_^',
-                        ),
-                        controller: refreshController,
-                        onRefresh: onRefresh,
-                        onLoading: onLoading,
-                        child: CustomScrollView(
-                            slivers: <Widget>[ListWidget(list: list)]))
-                    : const Loading()))
+            body: Column(children: [
+            Expanded(
+                flex: 1,
+                child: NestedScrollView(
+                    floatHeaderSlivers: false,
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return [
+                        //AppBar
+                        getSliverAppBar(context, innerBoxIsScrolled),
+                        //吸顶工具栏
+                        const FixToolBarWidget(),
+                      ];
+                    },
+                    body: list.isNotEmpty
+                        ? SmartRefresher(
+                            //下拉刷新
+                            enablePullDown: true,
+                            //上拉加载
+                            enablePullUp: true,
+                            //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+                            header: const ClassicHeader(
+                              releaseText: "松开刷新",
+                              refreshingText: '刷新中...',
+                              completeText: '刷新完成',
+                              idleText: '下拉刷新',
+                            ),
+                            footer: const ClassicFooter(
+                              canLoadingText: '松开加载',
+                              loadingText: '加载中...',
+                              idleText: '上拉加载',
+                              noDataText: '没有更多了^_^',
+                            ),
+                            controller: refreshController,
+                            onRefresh: onRefresh,
+                            onLoading: onLoading,
+                            child: CustomScrollView(
+                                slivers: <Widget>[ListWidget(list: list)]))
+                        : const Loading())),
+            const PlayMusicBottomBar()
+          ]))
         : const Loading();
   }
 

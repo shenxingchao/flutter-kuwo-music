@@ -28,7 +28,7 @@ class Store extends GetxController {
       : themeList[0];
 
   //当前播放的歌曲信息对象
-  late PlayMusicInfo playMusicInfo;
+  PlayMusicInfo ? playMusicInfo;
 
   //当前播放列表
   List<PlayListMuisc> playListMuisc = [];
@@ -51,6 +51,8 @@ class Store extends GetxController {
     var res = await CommonApi().getMusicListByPlayListId(mid: rid);
     //停止之前播放的音乐
     await PlayAudio.instance.audioPlayer.stop();
+    //清空当前播放对象
+    playMusicInfo = null;
     //获取音乐详情
     var muisc = await CommonApi().getMusicDetail(mid: rid);
     //变更当前播放对象
