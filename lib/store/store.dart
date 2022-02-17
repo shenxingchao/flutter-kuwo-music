@@ -22,6 +22,10 @@ class Store extends GetxController {
       ? themeList[box.read('primary')]
       : themeList[0];
 
+  //当前播放的歌曲信息对象
+  
+  //当前播放列表
+
   //更换主题色
   void changeTheme(Color color) {
     primary = color;

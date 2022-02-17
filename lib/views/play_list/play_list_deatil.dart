@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkuwomusic/api/common_api.dart';
+import 'package:flutterkuwomusic/utils/play_audio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
 import '../../component/sticky_container.dart';
+import '../../store/store.dart';
 import '../../utils/request.dart';
 
 class PlayListDetailComponenet extends StatefulWidget {
@@ -232,6 +235,59 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
   }
 }
 
+//吸顶工具栏
+class FixToolBarWidget extends StatelessWidget {
+  const FixToolBarWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+        pinned: true,
+        delegate: StickyContainerComponent(
+            maxHeight: 50,
+            minHeight: 50,
+            builder: (context, offset, overlapsContent) {
+              return Container(
+                height: 50,
+                color: Colors.white,
+                child: Container(
+                  height: 49,
+                  //定义样式
+                  decoration: const BoxDecoration(
+                    //边框
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 0.5, //宽度
+                        color: Color(0xffcccccc), //边框颜色
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: GestureDetector(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            child: const Icon(Icons.play_circle_outline,
+                                color: Color(0xff999999)),
+                          ),
+                          const Text('播放全部')
+                        ],
+                      ),
+                      onTap: () => {print("播放全部")},
+                    ),
+                  ),
+                ),
+              );
+            }));
+  }
+}
+
+
 //列表内容
 class ListWidget extends StatelessWidget {
   const ListWidget({
@@ -243,7 +299,10 @@ class ListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverList(
+    return GetBuilder<Store>(
+        //初始化store控制器
+        init: Store(),
+        builder: (store) {return SliverList(
         delegate: SliverChildListDelegate([
       Column(children: [
         ...list.asMap().entries.map((entry) => Column(children: [
@@ -340,63 +399,19 @@ class ListWidget extends StatelessWidget {
                         color: Color(0xffdddddd),
                       )
                     ]),
-                    onTap: () => {print("点击试听")},
+                    onTap: () async {
+                      //获取音频地址
+                      var res = await CommonApi()
+                          .getMusicListByPlayListId(mid: entry.value["rid"]);
+                      //停止之前播放的音乐
+                      await PlayAudio.instance.audioPlayer.stop();
+                      //播放新的音乐
+                      await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+                    },
                     onLongPress: () => {print("弹出下载")}),
               )
             ]))
       ])
-    ]));
-  }
-}
-
-//吸顶工具栏
-class FixToolBarWidget extends StatelessWidget {
-  const FixToolBarWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-        pinned: true,
-        delegate: StickyContainerComponent(
-            maxHeight: 50,
-            minHeight: 50,
-            builder: (context, offset, overlapsContent) {
-              return Container(
-                height: 50,
-                color: Colors.white,
-                child: Container(
-                  height: 49,
-                  //定义样式
-                  decoration: const BoxDecoration(
-                    //边框
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 0.5, //宽度
-                        color: Color(0xffcccccc), //边框颜色
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: GestureDetector(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                            child: const Icon(Icons.play_circle_outline,
-                                color: Color(0xff999999)),
-                          ),
-                          const Text('播放全部')
-                        ],
-                      ),
-                      onTap: () => {print("播放全部")},
-                    ),
-                  ),
-                ),
-              );
-            }));
+    ]));});
   }
 }
