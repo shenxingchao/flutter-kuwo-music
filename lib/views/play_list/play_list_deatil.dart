@@ -129,9 +129,9 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                 body: list.isNotEmpty
                     ? SmartRefresher(
                         //下拉刷新
-                        enablePullDown: true,
+                        enablePullDown: false,
                         //上拉加载
-                        enablePullUp: true,
+                        enablePullUp: false,
                         //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
                         header: const ClassicHeader(
                           releaseText: "松开刷新",
@@ -174,19 +174,28 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       flexibleSpace: FlexibleSpaceBar(
           //标题缩放
           expandedTitleScale: 1,
+          //回弹模式
+          stretchModes: const [
+            StretchMode.zoomBackground,
+            StretchMode.blurBackground
+          ],
           background: SizedBox(
             child: Stack(
               //堆叠内容对齐方式
               alignment: Alignment.centerLeft,
               children: [
                 Positioned(
-                  child: Image.network(
-                    playList["img700"],
-                    alignment: Alignment.center,
-                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                    fit: BoxFit.cover,
+                    child: Row(children: [
+                  Expanded(
+                    flex: 1,
+                    child: Image.network(
+                      playList["img700"],
+                      alignment: Alignment.center,
+                      //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
+                ])),
                 Positioned(
                     bottom: 100,
                     left: 50,
@@ -201,6 +210,15 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                             fit: BoxFit.cover,
                             width: 50,
                             height: 50,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(
+                                'assets/images/default.png',
+                                fit: BoxFit.cover,
+                                width: 50,
+                                height: 50,
+                              );
+                            },
                           ),
                         ),
                         Text(
@@ -408,23 +426,8 @@ class ListWidget extends StatelessWidget {
                             )
                           ]),
                           onTap: () async {
-                            //获取音频地址
-                            var res = await CommonApi()
-                                .getMusicListByPlayListId(
-                                    mid: entry.value["rid"]);
-                            //停止之前播放的音乐
-                            await PlayAudio.instance.audioPlayer.stop();
-                            //播放新的音乐
-                            await PlayAudio.instance.audioPlayer
-                                .play(res.data["data"]["url"]);
                             //添加到播放列表
-                            store.changePlayListMuisc([
-                              ...store.playListMuisc,
-                              PlayListMuisc(
-                                  id: entry.value["rid"],
-                                  name: entry.value["name"],
-                                  path: res.data["data"]["url"])
-                            ]);
+                            store.playMusic(rid: entry.value["rid"]);
                           },
                           onLongPress: () => {print("弹出下载")}),
                     )
