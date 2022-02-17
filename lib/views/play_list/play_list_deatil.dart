@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
-import '../../component/stickycontainer.dart';
+import '../../component/sticky_container.dart';
 import '../../utils/request.dart';
 
 class PlayListDetailComponenet extends StatefulWidget {
@@ -116,119 +116,10 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                 headerSliverBuilder:
                     (BuildContext context, bool innerBoxIsScrolled) {
                   return [
-                    SliverAppBar(
-                      title: Text(
-                        playList["name"],
-                      ),
-                      foregroundColor: Colors.white,
-                      //appbar滚动后保持可见
-                      pinned: true,
-                      //头部总高度
-                      expandedHeight: MediaQuery.of(context).size.width -
-                          MediaQuery.of(context).padding.top,
-                      //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
-                      forceElevated: innerBoxIsScrolled,
-                      //阴影深度
-                      elevation: 0,
-                      //堆栈容器,高度就是expandedHeight的高度
-                      flexibleSpace: FlexibleSpaceBar(
-                          //标题缩放
-                          expandedTitleScale: 1,
-                          background: SizedBox(
-                            child: Stack(
-                              //堆叠内容对齐方式
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                Positioned(
-                                  child: Image.network(
-                                    playList["img700"],
-                                    alignment: Alignment.center,
-                                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                    bottom: 100,
-                                    left: 50,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipOval(
-                                          child: Image.network(
-                                            playList["uPic"],
-                                            alignment: Alignment.center,
-                                            //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                                            fit: BoxFit.cover,
-                                            width: 50,
-                                            height: 50,
-                                          ),
-                                        ),
-                                        Text(
-                                          playList["uname"],
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          '共' +
-                                              playList["total"].toString() +
-                                              "首",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          '播放' +
-                                              (playList["listencnt"] / 10000)
-                                                  .toStringAsFixed(2) +
-                                              "万",
-                                          style: const TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
-                                        ),
-                                      ],
-                                    )),
-                              ],
-                            ),
-                          )),
-                    ),
-                    SliverPersistentHeader(
-                        pinned: true,
-                        delegate: StickyContainerComponent(
-                            maxHeight: 50,
-                            minHeight: 50,
-                            builder: (context, offset, overlapsContent) {
-                              return Container(
-                                height: 50,
-                                color: Colors.white,
-                                child: Container(
-                                  height: 49,
-                                  //定义样式
-                                  decoration: const BoxDecoration(
-                                    //边框
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        width: 0.5, //宽度
-                                        color: Color(0xffcccccc), //边框颜色
-                                      ),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: const [Text('播放全部')],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            })),
+                    //AppBar
+                    getSliverAppBar(context, innerBoxIsScrolled),
+                    //吸顶工具栏
+                    const FixToolBarWidget(),
                   ];
                 },
                 body: list.isNotEmpty
@@ -253,146 +144,259 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                         controller: refreshController,
                         onRefresh: onRefresh,
                         onLoading: onLoading,
-                        child: CustomScrollView(slivers: <Widget>[
-                          SliverList(
-                              delegate: SliverChildListDelegate([
-                            Column(children: [
-                              ...list
-                                  .asMap()
-                                  .entries
-                                  .map((entry) => Column(children: [
-                                        Material(
-                                          color: Colors.white,
-                                          child: InkWell(
-                                              child: Column(children: [
-                                                Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  height: 80,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  0, 0, 10, 0),
-                                                          child: Text(
-                                                              (entry.key + 1)
-                                                                  .toString())),
-                                                      Expanded(
-                                                          flex: 2,
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    entry.value[
-                                                                        "name"],
-                                                                    style: const TextStyle(
-                                                                        fontSize:
-                                                                            18),
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                  ),
-                                                                  //副标题
-                                                                  Container(
-                                                                    margin:
-                                                                        const EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            5,
-                                                                            0,
-                                                                            0),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Text(
-                                                                          entry.value["hasLossless"]
-                                                                              ? '无损 '
-                                                                              : '',
-                                                                          style:
-                                                                              const TextStyle(color: Colors.orange),
-                                                                        ),
-                                                                        Text(
-                                                                          entry.value["hasmv"] == 1
-                                                                              ? 'MV '
-                                                                              : '',
-                                                                          style:
-                                                                              const TextStyle(color: Colors.orange),
-                                                                        ),
-                                                                        Expanded(
-                                                                          child:
-                                                                              Text(
-                                                                            entry.value["artist"],
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          )),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .end,
-                                                        children: [
-                                                          GestureDetector(
-                                                            child: const Icon(
-                                                                Icons
-                                                                    .more_horiz),
-                                                            onTap: () =>
-                                                                {print("弹出下载")},
-                                                          ),
-                                                          GestureDetector(
-                                                            child: const Icon(
-                                                                Icons
-                                                                    .more_horiz),
-                                                            onTap: () =>
-                                                                {print("弹出下载")},
-                                                          ),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                const Divider(
-                                                  height: 1,
-                                                  color: Color(0xffdddddd),
-                                                )
-                                              ]),
-                                              onTap: () => {print("点击试听")},
-                                              onLongPress: () =>
-                                                  {print("弹出下载")}),
-                                        )
-                                      ]))
-                            ])
-                          ]))
-                        ]))
+                        child: CustomScrollView(
+                            slivers: <Widget>[ListWidget(list: list)]))
                     : const Loading()))
         : const Loading();
+  }
+
+  //AppBar
+  SliverAppBar getSliverAppBar(BuildContext context, bool innerBoxIsScrolled) {
+    return SliverAppBar(
+      title: Text(
+        playList["name"],
+      ),
+      foregroundColor: Colors.white,
+      //appbar滚动后保持可见
+      pinned: true,
+      //头部总高度
+      expandedHeight: MediaQuery.of(context).size.width -
+          MediaQuery.of(context).padding.top,
+      //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
+      forceElevated: innerBoxIsScrolled,
+      //阴影深度
+      elevation: 0,
+      //堆栈容器,高度就是expandedHeight的高度
+      flexibleSpace: FlexibleSpaceBar(
+          //标题缩放
+          expandedTitleScale: 1,
+          background: SizedBox(
+            child: Stack(
+              //堆叠内容对齐方式
+              alignment: Alignment.centerLeft,
+              children: [
+                Positioned(
+                  child: Image.network(
+                    playList["img700"],
+                    alignment: Alignment.center,
+                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                    bottom: 100,
+                    left: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipOval(
+                          child: Image.network(
+                            playList["uPic"],
+                            alignment: Alignment.center,
+                            //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                            fit: BoxFit.cover,
+                            width: 50,
+                            height: 50,
+                          ),
+                        ),
+                        Text(
+                          playList["uname"],
+                          style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          '共' + playList["total"].toString() + "首",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          '播放' +
+                              (playList["listencnt"] / 10000)
+                                  .toStringAsFixed(2) +
+                              "万",
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
+                    )),
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+//列表内容
+class ListWidget extends StatelessWidget {
+  const ListWidget({
+    Key? key,
+    required this.list,
+  }) : super(key: key);
+
+  final List list;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+        delegate: SliverChildListDelegate([
+      Column(children: [
+        ...list.asMap().entries.map((entry) => Column(children: [
+              Material(
+                color: Colors.white,
+                child: InkWell(
+                    child: Column(children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                child: Text((entry.key + 1).toString())),
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          entry.value["name"],
+                                          style: const TextStyle(fontSize: 18),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        //副标题
+                                        Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 5, 0, 0),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                entry.value["hasLossless"]
+                                                    ? '无损 '
+                                                    : '',
+                                                style: const TextStyle(
+                                                    color: Colors.orange),
+                                              ),
+                                              Text(
+                                                entry.value["hasmv"] == 1
+                                                    ? 'MV '
+                                                    : '',
+                                                style: const TextStyle(
+                                                    color: Colors.orange),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  entry.value["artist"],
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                  child: GestureDetector(
+                                    child: const Icon(Icons.ondemand_video,
+                                        color: Color(0xff999999)),
+                                    onTap: () => {print("弹出下载")},
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: const Icon(Icons.more_horiz,
+                                      color: Color(0xff999999)),
+                                  onTap: () => {print("弹出下载")},
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      const Divider(
+                        height: 1,
+                        color: Color(0xffdddddd),
+                      )
+                    ]),
+                    onTap: () => {print("点击试听")},
+                    onLongPress: () => {print("弹出下载")}),
+              )
+            ]))
+      ])
+    ]));
+  }
+}
+
+//吸顶工具栏
+class FixToolBarWidget extends StatelessWidget {
+  const FixToolBarWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+        pinned: true,
+        delegate: StickyContainerComponent(
+            maxHeight: 50,
+            minHeight: 50,
+            builder: (context, offset, overlapsContent) {
+              return Container(
+                height: 50,
+                color: Colors.white,
+                child: Container(
+                  height: 49,
+                  //定义样式
+                  decoration: const BoxDecoration(
+                    //边框
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 0.5, //宽度
+                        color: Color(0xffcccccc), //边框颜色
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: GestureDetector(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            child: const Icon(Icons.play_circle_outline,
+                                color: Color(0xff999999)),
+                          ),
+                          const Text('播放全部')
+                        ],
+                      ),
+                      onTap: () => {print("播放全部")},
+                    ),
+                  ),
+                ),
+              );
+            }));
   }
 }
