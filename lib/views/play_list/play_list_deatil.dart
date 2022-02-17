@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterkuwomusic/api/common_api.dart';
+import 'package:flutterkuwomusic/interface/play_list_music.dart';
 import 'package:flutterkuwomusic/utils/play_audio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -287,7 +288,6 @@ class FixToolBarWidget extends StatelessWidget {
   }
 }
 
-
 //列表内容
 class ListWidget extends StatelessWidget {
   const ListWidget({
@@ -302,116 +302,135 @@ class ListWidget extends StatelessWidget {
     return GetBuilder<Store>(
         //初始化store控制器
         init: Store(),
-        builder: (store) {return SliverList(
-        delegate: SliverChildListDelegate([
-      Column(children: [
-        ...list.asMap().entries.map((entry) => Column(children: [
-              Material(
-                color: Colors.white,
-                child: InkWell(
-                    child: Column(children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        height: 80,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+        builder: (store) {
+          return SliverList(
+              delegate: SliverChildListDelegate([
+            Column(children: [
+              ...list.asMap().entries.map((entry) => Column(children: [
+                    Material(
+                      color: Colors.white,
+                      child: InkWell(
+                          child: Column(children: [
                             Container(
-                                margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                child: Text((entry.key + 1).toString())),
-                            Expanded(
-                                flex: 1,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          entry.value["name"],
-                                          style: const TextStyle(fontSize: 18),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        //副标题
-                                        Container(
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 5, 0, 0),
-                                          child: Row(
+                              padding: const EdgeInsets.all(10),
+                              height: 80,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                      margin: const EdgeInsets.fromLTRB(
+                                          0, 0, 10, 0),
+                                      child: Text((entry.key + 1).toString())),
+                                  Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                entry.value["hasLossless"]
-                                                    ? '无损 '
-                                                    : '',
+                                                entry.value["name"],
                                                 style: const TextStyle(
-                                                    color: Colors.orange),
+                                                    fontSize: 18),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              Text(
-                                                entry.value["hasmv"] == 1
-                                                    ? 'MV '
-                                                    : '',
-                                                style: const TextStyle(
-                                                    color: Colors.orange),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  entry.value["artist"],
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                              //副标题
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 5, 0, 0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      entry.value["hasLossless"]
+                                                          ? '无损 '
+                                                          : '',
+                                                      style: const TextStyle(
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Text(
+                                                      entry.value["hasmv"] == 1
+                                                          ? 'MV '
+                                                          : '',
+                                                      style: const TextStyle(
+                                                          color: Colors.orange),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        entry.value["artist"],
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                              )
+                                              ),
                                             ],
                                           ),
+                                        ],
+                                      )),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 0, 5, 0),
+                                        child: GestureDetector(
+                                          child: const Icon(
+                                              Icons.ondemand_video,
+                                              color: Color(0xff999999)),
+                                          onTap: () => {print("弹出下载")},
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  child: GestureDetector(
-                                    child: const Icon(Icons.ondemand_video,
-                                        color: Color(0xff999999)),
-                                    onTap: () => {print("弹出下载")},
-                                  ),
-                                ),
-                                GestureDetector(
-                                  child: const Icon(Icons.more_horiz,
-                                      color: Color(0xff999999)),
-                                  onTap: () => {print("弹出下载")},
-                                ),
-                              ],
+                                      ),
+                                      GestureDetector(
+                                        child: const Icon(Icons.more_horiz,
+                                            color: Color(0xff999999)),
+                                        onTap: () => {print("弹出下载")},
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            const Divider(
+                              height: 1,
+                              color: Color(0xffdddddd),
                             )
-                          ],
-                        ),
-                      ),
-                      const Divider(
-                        height: 1,
-                        color: Color(0xffdddddd),
-                      )
-                    ]),
-                    onTap: () async {
-                      //获取音频地址
-                      var res = await CommonApi()
-                          .getMusicListByPlayListId(mid: entry.value["rid"]);
-                      //停止之前播放的音乐
-                      await PlayAudio.instance.audioPlayer.stop();
-                      //播放新的音乐
-                      await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
-                    },
-                    onLongPress: () => {print("弹出下载")}),
-              )
-            ]))
-      ])
-    ]));});
+                          ]),
+                          onTap: () async {
+                            //获取音频地址
+                            var res = await CommonApi()
+                                .getMusicListByPlayListId(
+                                    mid: entry.value["rid"]);
+                            //停止之前播放的音乐
+                            await PlayAudio.instance.audioPlayer.stop();
+                            //播放新的音乐
+                            await PlayAudio.instance.audioPlayer
+                                .play(res.data["data"]["url"]);
+                            //添加到播放列表
+                            store.changePlayListMuisc([
+                              ...store.playListMuisc,
+                              PlayListMuisc(
+                                  id: entry.value["rid"],
+                                  name: entry.value["name"],
+                                  path: res.data["data"]["url"])
+                            ]);
+                          },
+                          onLongPress: () => {print("弹出下载")}),
+                    )
+                  ]))
+            ])
+          ]));
+        });
   }
 }

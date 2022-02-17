@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterkuwomusic/interface/play_list_music.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -23,12 +24,19 @@ class Store extends GetxController {
       : themeList[0];
 
   //当前播放的歌曲信息对象
-  
+
   //当前播放列表
+  List<PlayListMuisc> playListMuisc = [];
 
   //更换主题色
   void changeTheme(Color color) {
     primary = color;
+    update();
+  }
+
+  //更新播放列表
+  void changePlayListMuisc(List<PlayListMuisc> playListMusic) {
+    playListMuisc = playListMusic;
     update();
   }
 }
