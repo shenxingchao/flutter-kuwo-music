@@ -220,11 +220,37 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
   }
 }
 
-//弹出的下拉框
-class PlayListBottomSheetWidget extends StatelessWidget {
-  const PlayListBottomSheetWidget({
-    Key? key,
-  }) : super(key: key);
+//正在播放的歌曲列表，弹出的下拉框
+class PlayListBottomSheetWidget extends StatefulWidget {
+  const PlayListBottomSheetWidget({Key? key}) : super(key: key);
+
+  @override
+  _PlayListBottomSheetWidgetState createState() =>
+      _PlayListBottomSheetWidgetState();
+}
+
+class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
+  //初始化滚动视图控制器
+  ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    //为了避免内存泄露，需要调用_controller.dispose
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initScrollOffset();
+  }
+
+  //初始化弹窗的滚动条位置 为当前播放的歌曲 如果没有则初始化到顶部
+  void initScrollOffset() {
+    //todo 计算距离
+    scrollController = ScrollController(initialScrollOffset: 0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -273,6 +299,7 @@ class PlayListBottomSheetWidget extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: ListView(
+                      controller: scrollController,
                       children: [
                         ...store.playListMusic.map((item) => Material(
                             color: Colors.white,
