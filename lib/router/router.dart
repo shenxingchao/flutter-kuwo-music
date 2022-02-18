@@ -2,7 +2,8 @@ import 'package:get/get.dart';
 import '../tabbar.dart';
 import '../user.dart';
 import '../views/theme.dart';
-import '../views/play_list/play_list_deatil.dart';
+import '../views/play_list/play_list_detail.dart';
+import '../views/music/music_detail.dart';
 
 //抽离路由代码
 class Routers {
@@ -11,18 +12,22 @@ class Routers {
     GetPage(
         name: '/',
         page: () => const TabbarComponent(),
-        transition: Transition.rightToLeft),
+        transition: Transition.cupertino),
     GetPage(
         name: '/user',
         page: () => const UserCommponent(),
-        transition: Transition.rightToLeft),
+        transition: Transition.cupertino),
     GetPage(
         name: '/theme',
         page: () => const ThemeComponent(),
-        transition: Transition.rightToLeft),
+        transition: Transition.cupertino),
     GetPage(
         name: '/play_list_detail',
         page: () => const PlayListDetailComponenet(),
-        transition: Transition.rightToLeft),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/music_detail',
+        page: () => const MusicDetailComponent(),
+        transition: Transition.downToUp),
   ];
 }

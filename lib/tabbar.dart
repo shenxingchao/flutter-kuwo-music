@@ -81,12 +81,12 @@ class _TabbarComponentState extends State<TabbarComponent>
       overlayBlur: 2,
       menuScreen: const MenuScreenWidget(),
       //主屏幕
-      mainScreen: getMainScreen(context,animationController),
+      mainScreen: getMainScreen(context, animationController),
     );
   }
 
   //主屏幕
-  Scaffold getMainScreen(BuildContext context,animationController) {
+  Scaffold getMainScreen(BuildContext context, animationController) {
     return Scaffold(
         appBar: AppBarComponent(
           currentIndex == 0
@@ -199,6 +199,8 @@ class _TabbarComponentState extends State<TabbarComponent>
                     if (index != 1) {
                       //点击音乐图标直接进入音乐详情
                       currentIndex = index;
+                    } else {
+                      Get.toNamed('/music_detail');
                     }
                   });
                 },
