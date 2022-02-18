@@ -187,7 +187,92 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                   child: const Icon(Icons.menu,
                                       size: 30, color: Color(0xff333333)),
                                 ),
-                                onTap: () => {print("弹出下载")},
+                                onTap: () => {
+                                  //显示下拉弹出方法
+                                  showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height /
+                                                2,
+                                            color: Colors.white,
+                                            child: ListView(
+                                              children: [
+                                                ...store.playListMusic
+                                                    .map((item) => Material(
+                                                        color: Colors.white,
+                                                        child: InkWell(
+                                                          child: Column(
+                                                              children: [
+                                                                Container(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(10),
+                                                                  height: 50,
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.spaceBetween,
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                children: [
+                                                                                  Text(
+                                                                                    item.name,
+                                                                                    style: TextStyle(fontSize: 18, color: store.playMusicInfo?.rid == item.rid ? Theme.of(context).colorScheme.primary : const Color(0xff333333)),
+                                                                                    maxLines: 1,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          )),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.end,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.end,
+                                                                        children: [
+                                                                          GestureDetector(
+                                                                            child:
+                                                                                const Icon(Icons.delete_outline_rounded, color: Color(0xffcccccc)),
+                                                                            onTap: () =>
+                                                                                {
+                                                                              print("弹出下载")
+                                                                            },
+                                                                          ),
+                                                                        ],
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                const Divider(
+                                                                  height: 1,
+                                                                  color: Color(
+                                                                      0xffdddddd),
+                                                                )
+                                                              ]),
+                                                          onTap: () {},
+                                                        )))
+                                              ],
+                                            ));
+                                      })
+                                },
                               )),
                         ],
                       )
