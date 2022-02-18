@@ -313,9 +313,11 @@ class FixToolBarWidget extends StatelessWidget {
 
                               for (var element in list) {
                                 audioList.add(PlayListMusic(
+                                    artist: element["artist"],
                                     rid: element["rid"],
                                     name: element["name"],
-                                    isLocal: false));
+                                    isLocal: false,
+                                    pic120: element["pic120"]));
                               }
 
                               store.playAudioList(audioList);
@@ -366,53 +368,48 @@ class ListWidget extends StatelessWidget {
                                     flex: 1,
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              entry.value["name"],
-                                              style:
-                                                  const TextStyle(fontSize: 18),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            //副标题
-                                            Container(
-                                              margin: const EdgeInsets.fromLTRB(
-                                                  0, 5, 0, 0),
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    entry.value["hasLossless"]
-                                                        ? '无损 '
-                                                        : '',
-                                                    style: const TextStyle(
-                                                        color: Colors.orange),
-                                                  ),
-                                                  Text(
-                                                    entry.value["hasmv"] == 1
-                                                        ? 'MV '
-                                                        : '',
-                                                    style: const TextStyle(
-                                                        color: Colors.orange),
-                                                  ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      entry.value["artist"],
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  )
-                                                ],
+                                        Text(
+                                          entry.value["name"],
+                                          style: const TextStyle(fontSize: 18),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        //副标题
+                                        Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 5, 0, 0),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                entry.value["hasLossless"]
+                                                    ? '无损 '
+                                                    : '',
+                                                style: const TextStyle(
+                                                    color: Colors.orange),
                                               ),
-                                            ),
-                                          ],
+                                              Text(
+                                                entry.value["hasmv"] == 1
+                                                    ? 'MV '
+                                                    : '',
+                                                style: const TextStyle(
+                                                    color: Colors.orange),
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                    entry.value["artist"],
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xff999999))),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ],
                                     )),
@@ -424,7 +421,8 @@ class ListWidget extends StatelessWidget {
                                       margin:
                                           const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                       child: GestureDetector(
-                                        child: const Icon(Icons.ondemand_video,
+                                        child: const Icon(
+                                            Icons.play_circle_outline_rounded,
                                             color: Color(0xffcccccc)),
                                         onTap: () => {print("弹出下载")},
                                       ),

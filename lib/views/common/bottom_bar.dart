@@ -192,85 +192,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                   showModalBottomSheet<void>(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return Container(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height /
-                                                2,
-                                            color: Colors.white,
-                                            child: ListView(
-                                              children: [
-                                                ...store.playListMusic
-                                                    .map((item) => Material(
-                                                        color: Colors.white,
-                                                        child: InkWell(
-                                                          child: Column(
-                                                              children: [
-                                                                Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(10),
-                                                                  height: 50,
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Column(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceBetween,
-                                                                            crossAxisAlignment:
-                                                                                CrossAxisAlignment.start,
-                                                                            children: [
-                                                                              Column(
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Text(
-                                                                                    item.name,
-                                                                                    style: TextStyle(fontSize: 18, color: store.playMusicInfo?.rid == item.rid ? Theme.of(context).colorScheme.primary : const Color(0xff333333)),
-                                                                                    maxLines: 1,
-                                                                                    overflow: TextOverflow.ellipsis,
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ],
-                                                                          )),
-                                                                      Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.end,
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.end,
-                                                                        children: [
-                                                                          GestureDetector(
-                                                                            child:
-                                                                                const Icon(Icons.delete_outline_rounded, color: Color(0xffcccccc)),
-                                                                            onTap: () =>
-                                                                                {
-                                                                              print("弹出下载")
-                                                                            },
-                                                                          ),
-                                                                        ],
-                                                                      )
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                const Divider(
-                                                                  height: 1,
-                                                                  color: Color(
-                                                                      0xffdddddd),
-                                                                )
-                                                              ]),
-                                                          onTap: () {},
-                                                        )))
-                                              ],
-                                            ));
+                                        return const PlayListBottomSheetWidget();
                                       })
                                 },
                               )),
@@ -295,5 +217,189 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
         store.audioPlayState == PlayerState.COMPLETED) {
       animationController.stop();
     }
+  }
+}
+
+//弹出的下拉框
+class PlayListBottomSheetWidget extends StatelessWidget {
+  const PlayListBottomSheetWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<Store>(
+        //初始化store控制器
+        init: Store(),
+        builder: (store) {
+          return Container(
+              height: MediaQuery.of(context).size.height / 2,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  Container(
+                    height: 49,
+                    //定义样式
+                    decoration: const BoxDecoration(
+                      //边框
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 0.5, //宽度
+                          color: Color(0xffcccccc), //边框颜色
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      child: GestureDetector(
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                              child: const Icon(Icons.play_circle_outline,
+                                  color: Color(0xff999999)),
+                            ),
+                            const Text('播放全部')
+                          ],
+                        ),
+                        onTap: () {
+                          //播放第一首
+                          store.playMusic(rid: store.playListMusic[0].rid);
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: ListView(
+                      children: [
+                        ...store.playListMusic.map((item) => Material(
+                            color: Colors.white,
+                            child: InkWell(
+                              child: Column(children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Offstage(
+                                        offstage: store.playMusicInfo?.rid !=
+                                            item.rid,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              0, 0, 10, 0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            child: Image.network(
+                                              item.pic120,
+                                              alignment: Alignment.center,
+                                              //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                                              fit: BoxFit.cover,
+                                              width: 50,
+                                              height: 50,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object exception,
+                                                      StackTrace? stackTrace) {
+                                                return Image.asset(
+                                                  'assets/images/default.png',
+                                                  fit: BoxFit.cover,
+                                                  width: 50,
+                                                  height: 50,
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                item.name,
+                                                style: const TextStyle(
+                                                    fontSize: 18),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              Text(
+                                                item.artist,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color: Color(0xff999999)),
+                                              ),
+                                            ],
+                                          )),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          GestureDetector(
+                                            child: Icon(
+                                                store.playMusicInfo?.rid ==
+                                                            item.rid &&
+                                                        store.audioPlayState ==
+                                                            PlayerState.PLAYING
+                                                    ? Icons.pause_circle
+                                                    : Icons.play_circle,
+                                                size: 30,
+                                                color: const Color(0xffC3CADE)),
+                                            onTap: () {
+                                              if (store.playMusicInfo?.rid ==
+                                                  item.rid) {
+                                                if (store.audioPlayState ==
+                                                    PlayerState.PLAYING) {
+                                                  //暂停
+                                                  PlayAudio.instance.audioPlayer
+                                                      .pause();
+                                                }
+                                                if (store.audioPlayState ==
+                                                        PlayerState.PAUSED ||
+                                                    store.audioPlayState ==
+                                                        PlayerState.COMPLETED) {
+                                                  //播放完了再继续播放
+                                                  PlayAudio.instance.audioPlayer
+                                                      .resume();
+                                                }
+                                              } else {
+                                                //直接播放
+                                                store.playMusic(rid: item.rid);
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const Divider(
+                                  height: 1,
+                                  color: Color(0xffdddddd),
+                                )
+                              ]),
+                              onTap: () {
+                                //直接播放
+                                store.playMusic(rid: item.rid);
+                              },
+                            )))
+                      ],
+                    ),
+                  )
+                ],
+              ));
+        });
   }
 }

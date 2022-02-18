@@ -92,9 +92,11 @@ class Store extends GetxController {
         changePlayListMusic([
           ...playListMusic,
           PlayListMusic(
+              artist: music.data["data"]["artist"],
               rid: music.data["data"]["rid"],
               name: music.data["data"]["name"],
-              isLocal: isLocal)
+              isLocal: isLocal,
+              pic120: music.data["data"]["pic120"])
         ]);
       }
     } else {
@@ -107,10 +109,14 @@ class Store extends GetxController {
   //改变正在播放音频的播放状态
   changeAudioPlayState(playState) {
     audioPlayState = playState;
+    //播放完毕后 在这里根据播放模式来判断是否需要切换下一首
+    if(audioPlayState == PlayerState.COMPLETED){
+      playNextMusic();
+    }
     update();
   }
 
-  //播放正在播放列表里的下一首
+  //播放正在播放列表里的下一首 这里的下一首需要根据播放模式
   void playNextMusic() {
     if (playListMusic.isNotEmpty) {
       //当前播放歌曲的索引
