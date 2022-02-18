@@ -123,6 +123,24 @@ class Store extends GetxController {
     update();
   }
 
+  //查找当前播放歌曲在播放列表里的索引
+  int getPlayingIndex() {
+    //当前播放歌曲的索引
+    int playingIndex = 0;
+    //查找正在播放的索引 如果没有则从第一首开始播放
+    if (playMusicInfo != null) {
+      for (var i = 0; i < playListMusic.length; i++) {
+        var item = playListMusic[i];
+        //找到当前播放的id
+        if (item.rid == playMusicInfo!.rid) {
+          playingIndex = i;
+          break;
+        }
+      }
+    }
+    return playingIndex;
+  }
+
   //播放正在播放列表里的下一首 这里的下一首需要根据播放模式
   void playNextMusic() {
     if (playListMusic.isNotEmpty) {
@@ -132,22 +150,17 @@ class Store extends GetxController {
         case PlayMode.SINGLE_MODE:
         case PlayMode.LIST_FOR_MODE:
         case PlayMode.LIST_MODE:
-          //查找正在播放的索引 如果没有则从第一首开始播放
           if (playMusicInfo != null) {
-            for (var i = 0; i < playListMusic.length; i++) {
-              var item = playListMusic[i];
-              //找到当前播放的id 如果是最后一首 则下一首是第一首
-              if (item.rid == playMusicInfo!.rid) {
-                if (i == playListMusic.length - 1) {
-                  playingIndex = 0;
-                  if (playMode == PlayMode.LIST_MODE) {
-                    //如果是顺序播放到最后一首就不播放了
-                    playingIndex = -1;
-                  }
-                } else {
-                  playingIndex = i + 1;
-                }
+            //查找正在播放的索引 如果没有则从第一首开始播放
+            playingIndex = getPlayingIndex();
+            if (playingIndex == playListMusic.length - 1) {
+              playingIndex = 0;
+              if (playMode == PlayMode.LIST_MODE) {
+                //如果是顺序播放到最后一首就不播放了
+                playingIndex = -1;
               }
+            } else {
+              playingIndex = playingIndex + 1;
             }
           }
           break;

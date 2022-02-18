@@ -283,7 +283,7 @@ class FixToolBarWidget extends StatelessWidget {
                       height: 50,
                       color: Colors.white,
                       child: Container(
-                        height: 49,
+                        height: 49.5,
                         //定义样式
                         decoration: const BoxDecoration(
                           //边框
@@ -355,7 +355,7 @@ class ListWidget extends StatelessWidget {
                         child: Column(children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            height: 80,
+                            height: 70,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,

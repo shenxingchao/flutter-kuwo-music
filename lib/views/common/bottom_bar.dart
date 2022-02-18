@@ -248,8 +248,11 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
 
   //初始化弹窗的滚动条位置 为当前播放的歌曲 如果没有则初始化到顶部
   void initScrollOffset() {
-    //todo 计算距离
-    scrollController = ScrollController(initialScrollOffset: 0);
+    //查找当前正在播放的索引
+    int playingIndex = Get.find<Store>().getPlayingIndex();
+
+    scrollController =
+        ScrollController(initialScrollOffset: 71.0 * playingIndex);
   }
 
   @override
@@ -264,7 +267,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
               child: Column(
                 children: [
                   Container(
-                    height: 49,
+                    height: 49.5,
                     //定义样式
                     decoration: const BoxDecoration(
                       //边框
@@ -307,6 +310,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                               child: Column(children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
+                                  height: 70,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
