@@ -303,11 +303,11 @@ class FixToolBarWidget extends StatelessWidget {
                                 Row(children: [
                                   Container(
                                     margin:
-                                        const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                        const EdgeInsets.fromLTRB(10, 0, 5, 0),
                                     child: const Icon(Icons.play_circle_outline,
                                         color: Color(0xff999999)),
                                   ),
-                                  const Text('播放全部'),
+                                  Text('播放全部(' + list.length.toString() + ')首'),
                                 ]),
                               ],
                             ),
