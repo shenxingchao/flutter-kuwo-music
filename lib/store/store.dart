@@ -32,7 +32,7 @@ class Store extends GetxController {
   PlayMusicInfo? playMusicInfo;
 
   //当前播放列表
-  List<PlayListMuisc> playListMuisc = [];
+  List<PlayListMusic> playListMusic = [];
 
   //正在播放音频的播放状态
   PlayerState audioPlayState = PlayerState.STOPPED;
@@ -44,57 +44,63 @@ class Store extends GetxController {
   }
 
   //更新播放列表
-  void changePlayListMuisc(List<PlayListMuisc> playListMusic) {
-    playListMuisc = playListMusic;
+  void changePlayListMusic(List<PlayListMusic> playListMusicObj) {
+    playListMusic = playListMusicObj;
     update();
   }
 
   //播放audio方法统一方法
-  void playMusic({required int rid}) async {
-    //获取音频地址
-    var res = await CommonApi().getMusicListByPlayListId(mid: rid);
-    //停止之前播放的音乐
-    await PlayAudio.instance.audioPlayer.stop();
-    //清空当前播放对象
-    playMusicInfo = null;
-    //获取音乐详情
-    var muisc = await CommonApi().getMusicDetail(mid: rid);
-    //变更当前播放对象
-    playMusicInfo = PlayMusicInfo(
-        artist: muisc.data["data"]["artist"],
-        pic: muisc.data["data"]["pic"],
-        rid: muisc.data["data"]["rid"],
-        duration: muisc.data["data"]["duration"],
-        mvPlayCnt: muisc.data["data"]["mvPlayCnt"],
-        hasLossless: muisc.data["data"]["hasLossless"],
-        hasmv: muisc.data["data"]["hasmv"],
-        releaseDate: muisc.data["data"]["releaseDate"],
-        album: muisc.data["data"]["album"],
-        albumid: muisc.data["data"]["albumid"],
-        artistid: muisc.data["data"]["artistid"],
-        songTimeMinutes: muisc.data["data"]["songTimeMinutes"],
-        isListenFee: muisc.data["data"]["isListenFee"],
-        pic120: muisc.data["data"]["pic120"],
-        albuminfo: muisc.data["data"]["albuminfo"],
-        name: muisc.data["data"]["name"]);
-    //播放新的音乐
-    await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
-    //添加到播放列表，如果已经添加，则不再添加
-    var isExsit = false;
-    for (var item in playListMuisc) {
-      if (item.rid == muisc.data["data"]["rid"]) {
-        isExsit = true;
+  void playMusic({required int rid, bool isLocal = false}) async {
+    //网络音乐播放
+    if (!isLocal) {
+      //获取音频地址
+      var res = await CommonApi().getMusicListByPlayListId(mid: rid);
+      //停止之前播放的音乐
+      await PlayAudio.instance.audioPlayer.stop();
+      //清空当前播放对象
+      playMusicInfo = null;
+      //获取音乐详情
+      var music = await CommonApi().getMusicDetail(mid: rid);
+      //变更当前播放对象
+      playMusicInfo = PlayMusicInfo(
+          artist: music.data["data"]["artist"],
+          pic: music.data["data"]["pic"],
+          rid: music.data["data"]["rid"],
+          duration: music.data["data"]["duration"],
+          mvPlayCnt: music.data["data"]["mvPlayCnt"],
+          hasLossless: music.data["data"]["hasLossless"],
+          hasmv: music.data["data"]["hasmv"],
+          releaseDate: music.data["data"]["releaseDate"],
+          album: music.data["data"]["album"],
+          albumid: music.data["data"]["albumid"],
+          artistid: music.data["data"]["artistid"],
+          songTimeMinutes: music.data["data"]["songTimeMinutes"],
+          isListenFee: music.data["data"]["isListenFee"],
+          pic120: music.data["data"]["pic120"],
+          albuminfo: music.data["data"]["albuminfo"],
+          name: music.data["data"]["name"]);
+      //播放新的音乐
+      await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+      //添加到播放列表，如果已经添加，则不再添加
+      var isExsit = false;
+      for (var item in playListMusic) {
+        if (item.rid == music.data["data"]["rid"]) {
+          isExsit = true;
+        }
       }
+      if (!isExsit) {
+        changePlayListMusic([
+          ...playListMusic,
+          PlayListMusic(
+              rid: music.data["data"]["rid"],
+              name: music.data["data"]["name"],
+              isLocal: isLocal)
+        ]);
+      }
+    } else {
+      //本地音乐播放 通过rid去查询本地mp3文件和lrc文件
     }
-    if (!isExsit) {
-      changePlayListMuisc([
-        ...playListMuisc,
-        PlayListMuisc(
-            rid: muisc.data["data"]["rid"],
-            name: muisc.data["data"]["name"],
-            path: res.data["data"]["url"])
-      ]);
-    }
+
     update();
   }
 
@@ -106,20 +112,20 @@ class Store extends GetxController {
 
   //播放正在播放列表里的下一首
   void playNextMusic() {
-    if (playListMuisc.isNotEmpty) {
+    if (playListMusic.isNotEmpty) {
       //当前播放歌曲的索引
       int playingIndex = 0;
       //查找正在播放的索引 如果没有则从第一首开始播放 这里只实现了循环播放  后面需要加入单曲播放 顺序播放 和随机播放的判断
       if (playMusicInfo != null) {
-        for (var i = 0; i < playListMuisc.length; i++) {
-          var item = playListMuisc[i];
+        for (var i = 0; i < playListMusic.length; i++) {
+          var item = playListMusic[i];
           //找到当前播放的id 如果是最后一首 则下一首是第一首
           if (item.rid == playMusicInfo!.rid) {
-            playingIndex = i == playListMuisc.length - 1 ? 0 : i+1;
+            playingIndex = i == playListMusic.length - 1 ? 0 : i + 1;
           }
         }
       }
-      playMusic(rid: playListMuisc[playingIndex].rid);
+      playMusic(rid: playListMusic[playingIndex].rid);
     }
   }
 }

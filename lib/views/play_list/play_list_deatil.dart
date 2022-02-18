@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
 import '../../component/sticky_container.dart';
+import '../../interface/play_list_music.dart';
 import '../../store/store.dart';
 import '../../utils/request.dart';
 
@@ -124,7 +125,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                         //AppBar
                         getSliverAppBar(context, innerBoxIsScrolled),
                         //吸顶工具栏
-                        const FixToolBarWidget(),
+                        FixToolBarWidget(list: list)
                       ];
                     },
                     body: list.isNotEmpty
@@ -261,51 +262,75 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
 class FixToolBarWidget extends StatelessWidget {
   const FixToolBarWidget({
     Key? key,
+    required this.list,
   }) : super(key: key);
+
+  final List list;
 
   @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-        pinned: true,
-        delegate: StickyContainerComponent(
-            maxHeight: 50,
-            minHeight: 50,
-            builder: (context, offset, overlapsContent) {
-              return Container(
-                height: 50,
-                color: Colors.white,
-                child: Container(
-                  height: 49,
-                  //定义样式
-                  decoration: const BoxDecoration(
-                    //边框
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 0.5, //宽度
-                        color: Color(0xffcccccc), //边框颜色
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: GestureDetector(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                            child: const Icon(Icons.play_circle_outline,
-                                color: Color(0xff999999)),
+    return GetBuilder<Store>(
+        //初始化store控制器
+        init: Store(),
+        builder: (store) {
+          return SliverPersistentHeader(
+              pinned: true,
+              delegate: StickyContainerComponent(
+                  maxHeight: 50,
+                  minHeight: 50,
+                  builder: (context, offset, overlapsContent) {
+                    return Container(
+                      height: 50,
+                      color: Colors.white,
+                      child: Container(
+                        height: 49,
+                        //定义样式
+                        decoration: const BoxDecoration(
+                          //边框
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 0.5, //宽度
+                              color: Color(0xffcccccc), //边框颜色
+                            ),
                           ),
-                          const Text('播放全部')
-                        ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                          child: GestureDetector(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                  child: const Icon(Icons.play_circle_outline,
+                                      color: Color(0xff999999)),
+                                ),
+                                const Text('播放全部')
+                              ],
+                            ),
+                            onTap: () {
+                              List<PlayListMusic> playListMusicList = [];
+
+                              for (var element in list) {
+                                playListMusicList.add(PlayListMusic(
+                                    rid: element["rid"],
+                                    name: element["name"],
+                                    isLocal: false));
+                              }
+
+                              store.changePlayListMusic([
+                                ...store.playListMusic,
+                                ...playListMusicList
+                              ]);
+
+                              store.playMusic(rid: list[0]["rid"]);
+                            },
+                          ),
+                        ),
                       ),
-                      onTap: () => {print("播放全部")},
-                    ),
-                  ),
-                ),
-              );
-            }));
+                    );
+                  }));
+        });
   }
 }
 
