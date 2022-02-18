@@ -309,21 +309,16 @@ class FixToolBarWidget extends StatelessWidget {
                               ],
                             ),
                             onTap: () {
-                              List<PlayListMusic> playListMusicList = [];
+                              List<PlayListMusic> audioList = [];
 
                               for (var element in list) {
-                                playListMusicList.add(PlayListMusic(
+                                audioList.add(PlayListMusic(
                                     rid: element["rid"],
                                     name: element["name"],
                                     isLocal: false));
                               }
-
-                              store.changePlayListMusic([
-                                ...store.playListMusic,
-                                ...playListMusicList
-                              ]);
-
-                              store.playMusic(rid: list[0]["rid"]);
+                              
+                              store.playAudioList(audioList);
                             },
                           ),
                         ),

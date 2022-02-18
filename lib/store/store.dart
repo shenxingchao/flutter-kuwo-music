@@ -128,4 +128,23 @@ class Store extends GetxController {
       playMusic(rid: playListMusic[playingIndex].rid);
     }
   }
+
+  //播放一个列表的歌曲
+  void playAudioList(audioList) {
+    //清除前面重复的歌曲
+    for (var i = playListMusic.length - 1; i >= 0; i--) {
+      var item = playListMusic[i];
+      audioList.forEach((element) {
+        if (item.rid == element.rid) {
+          playListMusic.remove(item);
+          return;
+        }
+      });
+    }
+
+    //整个列表添加到正在播放列表中
+    changePlayListMusic([...playListMusic, ...audioList]);
+    //播放列表的第一首
+    playMusic(rid: audioList[0].rid);
+  }
 }
