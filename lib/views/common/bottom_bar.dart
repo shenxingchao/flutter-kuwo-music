@@ -278,25 +278,37 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                         ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: GestureDetector(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                              child: const Icon(Icons.play_circle_outline,
-                                  color: Color(0xff999999)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(children: [
+                                Container(
+                                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                  child: const Icon(Icons.play_circle_outline,
+                                      color: Color(0xff999999)),
+                                ),
+                                const Text('播放全部')
+                              ]),
                             ),
-                            const Text('播放全部')
-                          ],
-                        ),
-                        onTap: () {
-                          //播放第一首
-                          store.playMusic(rid: store.playListMusic[0].rid);
-                        },
-                      ),
+                            onTap: () {
+                              //播放第一首
+                              store.playMusic(rid: store.playListMusic[0].rid);
+                            }),
+                        GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(children: const [Text('清空列表')]),
+                            ),
+                            onTap: () {
+                              store.changePlayListMusic([]);
+                            })
+                      ],
                     ),
                   ),
                   Expanded(

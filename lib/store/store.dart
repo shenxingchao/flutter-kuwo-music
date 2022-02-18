@@ -50,8 +50,15 @@ class Store extends GetxController {
   }
 
   //更新播放列表
-  void changePlayListMusic(List<PlayListMusic> playListMusicObj) {
+  void changePlayListMusic(List<PlayListMusic> playListMusicObj) async {
     playListMusic = playListMusicObj;
+    if (playListMusic.isEmpty) {
+      //清空播放列表 停止所有播放音乐 并设置当前播放对象为空
+      //停止之前播放的音乐
+      await PlayAudio.instance.audioPlayer.stop();
+      //清空当前播放对象
+      playMusicInfo = null;
+    }
     update();
   }
 

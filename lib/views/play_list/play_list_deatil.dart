@@ -283,29 +283,32 @@ class FixToolBarWidget extends StatelessWidget {
                       height: 50,
                       color: Colors.white,
                       child: Container(
-                        height: 49.5,
-                        //定义样式
-                        decoration: const BoxDecoration(
-                          //边框
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 0.5, //宽度
-                              color: Color(0xffcccccc), //边框颜色
+                          height: 49.5,
+                          //定义样式
+                          decoration: const BoxDecoration(
+                            //边框
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 0.5, //宽度
+                                color: Color(0xffcccccc), //边框颜色
+                              ),
                             ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                           child: GestureDetector(
+                            //保证空白范围可点击 这里点击一行
+                            behavior: HitTestBehavior.opaque,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                  child: const Icon(Icons.play_circle_outline,
-                                      color: Color(0xff999999)),
-                                ),
-                                const Text('播放全部')
+                                Row(children: [
+                                  Container(
+                                    margin:
+                                        const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                                    child: const Icon(Icons.play_circle_outline,
+                                        color: Color(0xff999999)),
+                                  ),
+                                  const Text('播放全部'),
+                                ]),
                               ],
                             ),
                             onTap: () {
@@ -322,9 +325,7 @@ class FixToolBarWidget extends StatelessWidget {
 
                               store.playAudioList(audioList);
                             },
-                          ),
-                        ),
-                      ),
+                          )),
                     );
                   }));
         });
@@ -417,19 +418,25 @@ class ListWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Container(
-                                      margin:
-                                          const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                                      child: GestureDetector(
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        margin: const EdgeInsets.fromLTRB(
+                                            0, 0, 5, 0),
+                                        padding: const EdgeInsets.all(5),
                                         child: const Icon(
                                             Icons.play_circle_outline_rounded,
                                             color: Color(0xffcccccc)),
-                                        onTap: () => {print("弹出下载")},
                                       ),
+                                      onTap: () => {print("弹出下载")},
                                     ),
                                     GestureDetector(
-                                      child: const Icon(Icons.more_horiz,
-                                          color: Color(0xffcccccc)),
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        child: const Icon(Icons.more_horiz,
+                                            color: Color(0xffcccccc)),
+                                      ),
                                       onTap: () => {print("弹出下载")},
                                     ),
                                   ],
