@@ -42,33 +42,31 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
               body: Stack(
                 children: [
                   Positioned(
+                      child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
                     child: store.playMusicInfo != null
-                        ? SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            child: Image.network(
-                              store.playMusicInfo!.pic,
-                              alignment: Alignment.center,
-                              fit: BoxFit.cover,
-                              //加滤镜
-                              // color: Colors.black,
-                              colorBlendMode: BlendMode.srcIn,
-                            ),
+                        ? Image.network(
+                            store.playMusicInfo!.pic,
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
                           )
-                        : Container(
-                            color: Colors.red,
+                        : Image.asset(
+                            'assets/images/icons/music.png',
+                            alignment: Alignment.center,
+                            fit: BoxFit.cover,
                           ),
-                  ),
+                  )),
                   //高斯模糊滤镜
                   BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+                    filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
                     child: Center(
                       child: Container(
-                        color: Colors.black.withOpacity(0.3),
+                        color: Colors.black.withOpacity(0.5),
                       ),
                     ),
                   ),
-                  SafeArea(child: Text('333'))
+                  const SafeArea(child: Text('333'))
                 ],
               ));
         });
