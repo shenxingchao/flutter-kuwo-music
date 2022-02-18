@@ -1,11 +1,14 @@
+import 'dart:math';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterkuwomusic/interface/play_list_music.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../api/common_api.dart';
+import '../interface/play_list_music.dart';
 import '../interface/play_music_info.dart';
+import '../interface/play_mode.dart';
 import '../utils/play_audio.dart';
 
 //全局变量start
@@ -36,6 +39,9 @@ class Store extends GetxController {
 
   //正在播放音频的播放状态
   PlayerState audioPlayState = PlayerState.STOPPED;
+
+  //播放模式 默认列表循环
+  PlayMode playMode = PlayMode.LIST_FOR_MODE;
 
   //更换主题色
   void changeTheme(Color color) {
@@ -109,8 +115,9 @@ class Store extends GetxController {
   //改变正在播放音频的播放状态
   changeAudioPlayState(playState) {
     audioPlayState = playState;
-    //播放完毕后 在这里根据播放模式来判断是否需要切换下一首
-    if(audioPlayState == PlayerState.COMPLETED){
+    //播放完毕后 只要不是单曲播放就切换下一首
+    if (audioPlayState == PlayerState.COMPLETED &&
+        playMode != PlayMode.SINGLE_MODE) {
       playNextMusic();
     }
     update();
@@ -121,17 +128,43 @@ class Store extends GetxController {
     if (playListMusic.isNotEmpty) {
       //当前播放歌曲的索引
       int playingIndex = 0;
-      //查找正在播放的索引 如果没有则从第一首开始播放 这里只实现了循环播放  后面需要加入单曲播放 顺序播放 和随机播放的判断
-      if (playMusicInfo != null) {
-        for (var i = 0; i < playListMusic.length; i++) {
-          var item = playListMusic[i];
-          //找到当前播放的id 如果是最后一首 则下一首是第一首
-          if (item.rid == playMusicInfo!.rid) {
-            playingIndex = i == playListMusic.length - 1 ? 0 : i + 1;
+      switch (playMode) {
+        case PlayMode.SINGLE_MODE:
+        case PlayMode.LIST_FOR_MODE:
+        case PlayMode.LIST_MODE:
+          //查找正在播放的索引 如果没有则从第一首开始播放
+          if (playMusicInfo != null) {
+            for (var i = 0; i < playListMusic.length; i++) {
+              var item = playListMusic[i];
+              //找到当前播放的id 如果是最后一首 则下一首是第一首
+              if (item.rid == playMusicInfo!.rid) {
+                if (i == playListMusic.length - 1) {
+                  playingIndex = 0;
+                  if (playMode == PlayMode.LIST_MODE) {
+                    //如果是顺序播放到最后一首就不播放了
+                    playingIndex = -1;
+                  }
+                } else {
+                  playingIndex = i + 1;
+                }
+              }
+            }
           }
-        }
+          break;
+        case PlayMode.SINGLE_FOR_MODE:
+          playMusic(rid: playListMusic[playingIndex].rid);
+          break;
+        case PlayMode.RANDOM_MODE:
+          var rid = playMusicInfo?.rid;
+          do {
+            playingIndex = Random().nextInt(playListMusic.length);
+          } while (rid != playListMusic[playingIndex].rid);
+          break;
       }
-      playMusic(rid: playListMusic[playingIndex].rid);
+
+      if (playingIndex != -1) {
+        playMusic(rid: playListMusic[playingIndex].rid);
+      }
     }
   }
 
