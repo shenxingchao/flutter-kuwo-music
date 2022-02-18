@@ -409,13 +409,13 @@ class ListWidget extends StatelessWidget {
                                         child: GestureDetector(
                                           child: const Icon(
                                               Icons.ondemand_video,
-                                              color: Color(0xff999999)),
+                                              color: Color(0xffcccccc)),
                                           onTap: () => {print("弹出下载")},
                                         ),
                                       ),
                                       GestureDetector(
                                         child: const Icon(Icons.more_horiz,
-                                            color: Color(0xff999999)),
+                                            color: Color(0xffcccccc)),
                                         onTap: () => {print("弹出下载")},
                                       ),
                                     ],

@@ -1,9 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import './router/router.dart';
 import './store/store.dart';
+import 'utils/play_audio.dart';
 
 void main() async {
   //透明状态栏
@@ -13,7 +15,27 @@ void main() async {
   await GetStorage.init();
   //依赖注入到内存
   Get.put(Store());
+  //打开APP就开始监听音频播放状态 只需要监听一次
+  listenAudio();
   runApp(const MyApp());
+}
+
+//监听音频播放状态
+listenAudio() {
+  PlayAudio.instance.audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+    if (s == PlayerState.PLAYING) {
+      Get.find<Store>().changeAudioPlayState(PlayerState.PLAYING);
+    }
+    if (s == PlayerState.STOPPED) {
+      Get.find<Store>().changeAudioPlayState(PlayerState.STOPPED);
+    }
+    if (s == PlayerState.PAUSED) {
+      Get.find<Store>().changeAudioPlayState(PlayerState.PAUSED);
+    }
+    if (s == PlayerState.COMPLETED) {
+      Get.find<Store>().changeAudioPlayState(PlayerState.COMPLETED);
+    }
+  });
 }
 
 class MyApp extends StatefulWidget {

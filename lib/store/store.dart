@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterkuwomusic/interface/play_list_music.dart';
 import 'package:get/get.dart';
@@ -32,6 +33,9 @@ class Store extends GetxController {
 
   //当前播放列表
   List<PlayListMuisc> playListMuisc = [];
+
+  //正在播放音频的播放状态
+  PlayerState audioPlayState = PlayerState.STOPPED;
 
   //更换主题色
   void changeTheme(Color color) {
@@ -73,14 +77,15 @@ class Store extends GetxController {
         pic120: muisc.data["data"]["pic120"],
         albuminfo: muisc.data["data"]["albuminfo"],
         name: muisc.data["data"]["name"]);
-    print(playMusicInfo?.artist);
     //播放新的音乐
     await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
     //添加到播放列表，如果已经添加，则不再添加
     var isExsit = false;
-    playListMuisc.map((PlayListMuisc item) => {
-          if (item.rid == muisc.data["data"]["rid"]) {isExsit = true}
-        });
+    for (var item in playListMuisc) {
+      if (item.rid == muisc.data["data"]["rid"]) {
+        isExsit = true;
+      }
+    }
     if (!isExsit) {
       changePlayListMuisc([
         ...playListMuisc,
@@ -90,7 +95,31 @@ class Store extends GetxController {
             path: res.data["data"]["url"])
       ]);
     }
-
     update();
+  }
+
+  //改变正在播放音频的播放状态
+  changeAudioPlayState(playState) {
+    audioPlayState = playState;
+    update();
+  }
+
+  //播放正在播放列表里的下一首
+  void playNextMusic() {
+    if (playListMuisc.isNotEmpty) {
+      //当前播放歌曲的索引
+      int playingIndex = 0;
+      //查找正在播放的索引 如果没有则从第一首开始播放 这里只实现了循环播放  后面需要加入单曲播放 顺序播放 和随机播放的判断
+      if (playMusicInfo != null) {
+        for (var i = 0; i < playListMuisc.length; i++) {
+          var item = playListMuisc[i];
+          //找到当前播放的id 如果是最后一首 则下一首是第一首
+          if (item.rid == playMusicInfo!.rid) {
+            playingIndex = i == playListMuisc.length - 1 ? 0 : i+1;
+          }
+        }
+      }
+      playMusic(rid: playListMuisc[playingIndex].rid);
+    }
   }
 }
