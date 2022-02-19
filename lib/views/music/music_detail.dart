@@ -35,10 +35,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                   elevation: 0,
                   shadowColor: Colors.transparent,
                   backgroundColor: Colors.transparent,
-                  leftIconColor: Colors.white,
-                  systemOverlayStyle: const SystemUiOverlayStyle(
-                      statusBarBrightness: Brightness.dark,
-                      statusBarIconBrightness: Brightness.dark)),
+                  leftIconColor: Colors.white),
               body: Stack(
                 children: [
                   Positioned(
