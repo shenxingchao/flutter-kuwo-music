@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import '../tabbar.dart';
-import '../user.dart';
 import '../views/theme.dart';
 import '../views/play_list/play_list_detail.dart';
 import '../views/music/music_detail.dart';
@@ -12,11 +11,7 @@ class Routers {
     GetPage(
         name: '/',
         page: () => const TabbarComponent(),
-        transition: Transition.cupertino),
-    GetPage(
-        name: '/user',
-        page: () => const UserCommponent(),
-        transition: Transition.cupertino),
+        transition: Transition.fade),
     GetPage(
         name: '/theme',
         page: () => const ThemeComponent(),
