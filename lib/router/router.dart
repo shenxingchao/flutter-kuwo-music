@@ -11,7 +11,7 @@ class Routers {
     GetPage(
         name: '/',
         page: () => const TabbarComponent(),
-        transition: Transition.fade),
+        transition: Transition.cupertino),
     GetPage(
         name: '/theme',
         page: () => const ThemeComponent(),
@@ -23,6 +23,6 @@ class Routers {
     GetPage(
         name: '/music_detail',
         page: () => const MusicDetailComponent(),
-        transition: Transition.downToUp),
+        transition: Transition.cupertino),
   ];
 }

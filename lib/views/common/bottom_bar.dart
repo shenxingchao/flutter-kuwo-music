@@ -45,165 +45,172 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
         init: Store(),
         builder: (store) {
           audioListen(store);
-          return Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  height: 60,
-                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  //定义样式
-                  decoration: const BoxDecoration(
-                      //边框
-                      border: Border(
-                        top: BorderSide(
-                          width: 0.5, //宽度
-                          color: Color(0xffcccccc), //边框颜色
-                        ),
-                      ),
-                      color: Colors.white),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      RotationTransition(
-                        turns: animationController
-                          ..addStatusListener((status) {
-                            if (store.audioPlayState == PlayerState.PLAYING &&
-                                status == AnimationStatus.completed) {
-                              animationController.reset();
-                              animationController.forward();
-                            }
-                          }),
-                        //设置动画的旋转中心
-                        alignment: Alignment.center,
-                        child: ClipOval(
-                            child: store.playMusicInfo != null &&
-                                    store.playMusicInfo!.pic120 != ''
-                                ? Image.network(
-                                    store.playMusicInfo!.pic120,
-                                    alignment: Alignment.center,
-                                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                                    fit: BoxFit.cover,
-                                    width: 50,
-                                    height: 50,
-                                    errorBuilder: (BuildContext context,
-                                        Object exception,
-                                        StackTrace? stackTrace) {
-                                      return Image.asset(
-                                        'assets/images/default.png',
+          return GestureDetector(
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      height: 60,
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      //定义样式
+                      decoration: const BoxDecoration(
+                          //边框
+                          border: Border(
+                            top: BorderSide(
+                              width: 0.5, //宽度
+                              color: Color(0xffcccccc), //边框颜色
+                            ),
+                          ),
+                          color: Colors.white),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          RotationTransition(
+                            turns: animationController
+                              ..addStatusListener((status) {
+                                if (store.audioPlayState ==
+                                        PlayerState.PLAYING &&
+                                    status == AnimationStatus.completed) {
+                                  animationController.reset();
+                                  animationController.forward();
+                                }
+                              }),
+                            //设置动画的旋转中心
+                            alignment: Alignment.center,
+                            child: ClipOval(
+                                child: store.playMusicInfo != null &&
+                                        store.playMusicInfo!.pic120 != ''
+                                    ? Image.network(
+                                        store.playMusicInfo!.pic120,
+                                        alignment: Alignment.center,
+                                        //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
                                         fit: BoxFit.cover,
                                         width: 50,
                                         height: 50,
-                                      );
-                                    },
-                                  )
-                                : Image.asset(
-                                    'assets/images/icons/music.png',
-                                    fit: BoxFit.cover,
-                                    width: 50,
-                                    height: 50,
-                                  )),
-                      ),
-                      Expanded(
-                          flex: 1,
-                          child: Container(
-                            margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    store.playMusicInfo != null
-                                        ? store.playMusicInfo!.name
-                                        : '音乐就要免费听',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  Offstage(
-                                    offstage: store.playMusicInfo == null,
-                                    child: Text(
-                                      store.playMusicInfo != null
-                                          ? store.playMusicInfo!.artist
-                                          : '',
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: const TextStyle(
-                                          fontSize: 12.0,
-                                          color: Color(0xff999999)),
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return Image.asset(
+                                            'assets/images/default.png',
+                                            fit: BoxFit.cover,
+                                            width: 50,
+                                            height: 50,
+                                          );
+                                        },
+                                      )
+                                    : Image.asset(
+                                        'assets/images/icons/music.png',
+                                        fit: BoxFit.cover,
+                                        width: 50,
+                                        height: 50,
+                                      )),
+                          ),
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                margin: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        store.playMusicInfo != null
+                                            ? store.playMusicInfo!.name
+                                            : '音乐就要免费听',
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Offstage(
+                                        offstage: store.playMusicInfo == null,
+                                        child: Text(
+                                          store.playMusicInfo != null
+                                              ? store.playMusicInfo!.artist
+                                              : '',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                              fontSize: 12.0,
+                                              color: Color(0xff999999)),
+                                        ),
+                                      ),
+                                    ]),
+                              )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Material(
+                                  color: Colors.white,
+                                  child: InkWell(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Icon(
+                                          store.audioPlayState ==
+                                                  PlayerState.PLAYING
+                                              ? Icons
+                                                  .pause_circle_outline_rounded
+                                              : Icons.play_arrow_rounded,
+                                          size: 30,
+                                          color: const Color(0xff333333)),
                                     ),
-                                  ),
-                                ]),
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Material(
-                              color: Colors.white,
-                              child: InkWell(
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Icon(
-                                      store.audioPlayState ==
-                                              PlayerState.PLAYING
-                                          ? Icons.pause_circle_outline_rounded
-                                          : Icons.play_arrow_rounded,
-                                      size: 30,
-                                      color: const Color(0xff333333)),
-                                ),
-                                onTap: () {
-                                  if (store.audioPlayState ==
-                                      PlayerState.PLAYING) {
-                                    //暂停
-                                    PlayAudio.instance.audioPlayer.pause();
-                                  }
-                                  if (store.audioPlayState ==
-                                          PlayerState.PAUSED ||
-                                      store.audioPlayState ==
-                                          PlayerState.COMPLETED) {
-                                    //播放完了再继续播放
-                                    PlayAudio.instance.audioPlayer.resume();
-                                  }
-                                },
-                              )),
-                          Material(
-                              color: Colors.white,
-                              child: InkWell(
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: const Icon(Icons.skip_next_rounded,
-                                      size: 30, color: Color(0xff333333)),
-                                ),
-                                onTap: () => {
-                                  //播放下一首
-                                  store.playNextMusic()
-                                },
-                              )),
-                          Material(
-                              color: Colors.white,
-                              child: InkWell(
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  child: const Icon(Icons.menu,
-                                      size: 30, color: Color(0xff333333)),
-                                ),
-                                onTap: () => {
-                                  //显示下拉弹出方法
-                                  showModalBottomSheet<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return const PlayListBottomSheetWidget();
-                                      })
-                                },
-                              )),
+                                    onTap: () {
+                                      if (store.audioPlayState ==
+                                          PlayerState.PLAYING) {
+                                        //暂停
+                                        PlayAudio.instance.audioPlayer.pause();
+                                      }
+                                      if (store.audioPlayState ==
+                                              PlayerState.PAUSED ||
+                                          store.audioPlayState ==
+                                              PlayerState.COMPLETED) {
+                                        //播放完了再继续播放
+                                        PlayAudio.instance.audioPlayer.resume();
+                                      }
+                                    },
+                                  )),
+                              Material(
+                                  color: Colors.white,
+                                  child: InkWell(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Icon(Icons.skip_next_rounded,
+                                          size: 30, color: Color(0xff333333)),
+                                    ),
+                                    onTap: () => {
+                                      //播放下一首
+                                      store.playNextMusic()
+                                    },
+                                  )),
+                              Material(
+                                  color: Colors.white,
+                                  child: InkWell(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Icon(Icons.menu,
+                                          size: 30, color: Color(0xff333333)),
+                                    ),
+                                    onTap: () => {
+                                      //显示下拉弹出方法
+                                      showModalBottomSheet<void>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const PlayListBottomSheetWidget();
+                                          })
+                                    },
+                                  )),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          );
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              onTap: () {
+                Get.toNamed('music_detail');
+              });
         });
   }
 
@@ -252,7 +259,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
     int playingIndex = Get.find<Store>().getPlayingIndex();
 
     scrollController =
-        ScrollController(initialScrollOffset: 71.0 * playingIndex);
+        ScrollController(initialScrollOffset: 73.0 * playingIndex);
   }
 
   @override

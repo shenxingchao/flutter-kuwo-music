@@ -72,6 +72,10 @@ class Store extends GetxController {
       await PlayAudio.instance.audioPlayer.stop();
       //清空当前播放对象
       playMusicInfo = null;
+      //请求失败了
+      if (res.data == null) {
+        return;
+      }
       //获取音乐详情
       var music = await CommonApi().getMusicDetail(mid: rid);
       //变更当前播放对象
@@ -178,13 +182,48 @@ class Store extends GetxController {
           var rid = playMusicInfo?.rid;
           do {
             playingIndex = Random().nextInt(playListMusic.length);
-          } while (rid != playListMusic[playingIndex].rid);
+          } while (rid == playListMusic[playingIndex].rid);
           break;
       }
 
       if (playingIndex != -1) {
         playMusic(rid: playListMusic[playingIndex].rid);
       }
+    }
+  }
+
+  //播放正在播放列表里的上一首 这里需要根据播放模式
+  void playPrevMusic() {
+    if (playListMusic.isNotEmpty) {
+      //当前播放歌曲的索引
+      int playingIndex = 0;
+      switch (playMode) {
+        case PlayMode.SINGLE_MODE:
+        case PlayMode.LIST_FOR_MODE:
+        case PlayMode.LIST_MODE:
+          if (playMusicInfo != null) {
+            //查找正在播放的索引 如果没有则从第一首开始播放
+            playingIndex = getPlayingIndex();
+            if (playingIndex == 0) {
+              //如果是第一首 则转到最后一首
+              playingIndex = playListMusic.length - 1;
+            } else {
+              playingIndex = playingIndex - 1;
+            }
+          }
+          break;
+        case PlayMode.SINGLE_FOR_MODE:
+          playMusic(rid: playListMusic[playingIndex].rid);
+          break;
+        case PlayMode.RANDOM_MODE:
+          var rid = playMusicInfo?.rid;
+          do {
+            playingIndex = Random().nextInt(playListMusic.length);
+          } while (rid != playListMusic[playingIndex].rid);
+          break;
+      }
+
+      playMusic(rid: playListMusic[playingIndex].rid);
     }
   }
 
@@ -205,5 +244,27 @@ class Store extends GetxController {
     changePlayListMusic([...playListMusic, ...audioList]);
     //播放列表的第一首
     playMusic(rid: audioList[0].rid);
+  }
+
+  //切换播放模式
+  void changePlayMode() {
+    var playModeList = [
+      PlayMode.SINGLE_MODE,
+      PlayMode.SINGLE_FOR_MODE,
+      PlayMode.LIST_MODE,
+      PlayMode.LIST_FOR_MODE,
+      PlayMode.RANDOM_MODE,
+    ];
+
+    var index = 0;
+    for (var i = 0; i < playModeList.length; i++) {
+      if (playMode == playModeList[i]) {
+        index = i + 1;
+        if (index == playModeList.length) {
+          index = 0;
+        }
+      }
+    }
+    playMode = playModeList[index];
   }
 }

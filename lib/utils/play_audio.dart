@@ -80,8 +80,8 @@ class PlayAudio {
 
   //跳转到指定位置播放
   //milliseconds 毫秒
-  Future<int> seekAudio({int milliseconds = 0}) async {
-    int result = await audioPlayer.seek(Duration(milliseconds: milliseconds));
+  Future<int> seekAudio({int microseconds = 0}) async {
+    int result = await audioPlayer.seek(Duration(microseconds: microseconds));
     if (result != 1) {
       Fluttertoast.showToast(
         msg: "跳转播放失败",
