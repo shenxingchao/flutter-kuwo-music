@@ -322,7 +322,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                               child: Column(children: [
                                 Container(
                                   padding: const EdgeInsets.all(10),
-                                  height: 70,
+                                  height: 72,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
