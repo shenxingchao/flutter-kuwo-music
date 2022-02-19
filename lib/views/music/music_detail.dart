@@ -25,6 +25,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
   List lrcList = [];
   //当前播放进度 秒
   double audioDuration = 0;
+  String audioDurationFormat = '00:00';
 
   //初始化滚动视图控制器
   ScrollController scrollController = ScrollController(initialScrollOffset: 0);
@@ -93,6 +94,14 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
             audioDuration / Get.find<Store>().playMusicInfo!.duration > 1
                 ? 1
                 : audioDuration / Get.find<Store>().playMusicInfo!.duration;
+        //当前播放进度格式化
+        audioDurationFormat = ((audioDuration / 60).floor() < 10
+                ? '0' + (audioDuration / 60).floor().toString()
+                : (audioDuration / 60).floor().toString()) +
+            ":" +
+            ((audioDuration % 60).floor() < 10
+                ? '0' + (audioDuration % 60).floor().toString()
+                : (audioDuration % 60).floor().toString());
         //根据播放进度判断在这个时间所在的索引 然后滚动到这个索引位置的歌词
         var index = 0;
         for (var i = 0; i < lrcList.length; i++) {
@@ -268,25 +277,54 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                SliderTheme(
-                                  data: SliderTheme.of(context).copyWith(
-                                    trackHeight: 2,
-                                  ),
-                                  child: Slider(
-                                    value: audioPercent,
-                                    onChanged: (v) {
-                                      //拖动后毫秒数
-                                      double second =
-                                          store.playMusicInfo!.duration * v;
-                                      int microseconds =
-                                          (second * 1000 * 1000).round();
-                                      PlayAudio.instance.seekAudio(
-                                          microseconds: microseconds);
-                                    },
-                                    max: 1.0,
-                                    min: 0,
-                                  ),
-                                ),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        audioDurationFormat,
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: SliderTheme(
+                                          data:
+                                              SliderTheme.of(context).copyWith(
+                                            trackHeight: 2,
+                                          ),
+                                          child: Slider(
+                                            value: audioPercent,
+                                            onChanged: (v) {
+                                              if (store.playMusicInfo != null) {
+                                                //拖动后毫秒数
+                                                double second = store
+                                                        .playMusicInfo!
+                                                        .duration *
+                                                    v;
+                                                int microseconds =
+                                                    (second * 1000 * 1000)
+                                                        .round();
+                                                PlayAudio.instance.seekAudio(
+                                                    microseconds: microseconds);
+                                              }
+                                            },
+                                            max: 1.0,
+                                            min: 0,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        store.playMusicInfo != null
+                                            ? store
+                                                .playMusicInfo!.songTimeMinutes
+                                            : '00:00',
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    ]),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
