@@ -188,20 +188,16 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
               //堆叠内容对齐方式
               alignment: Alignment.centerLeft,
               children: [
+                Image.network(
+                  playList["img700"],
+                  alignment: Alignment.center,
+                  //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                  fit: BoxFit.fill,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width,
+                ),
                 Positioned(
-                    child: Row(children: [
-                  Expanded(
-                    flex: 1,
-                    child: Image.network(
-                      playList["img700"],
-                      alignment: Alignment.center,
-                      //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ])),
-                Positioned(
-                    bottom: 100,
+                    bottom: 50,
                     left: 50,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
