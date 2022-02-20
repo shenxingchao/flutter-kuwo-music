@@ -34,6 +34,9 @@ class _TabbarComponentState extends State<TabbarComponent>
   //定义动画控制器
   late AnimationController animationController;
 
+  //文本默认值控制器
+  TextEditingController textController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +47,7 @@ class _TabbarComponentState extends State<TabbarComponent>
   void dispose() {
     //路由销毁时需要释放动画资源
     animationController.dispose();
+    textController.dispose();
     super.dispose();
   }
 
@@ -91,13 +95,14 @@ class _TabbarComponentState extends State<TabbarComponent>
         appBar: AppBarComponent(
           currentIndex == 0
               ? InputComponent(
+                  controller: textController,
                   height: 40,
                   hasBorder: false,
                   isCircle: true,
                   showSearchIcon: true,
                   placeholder: "歌曲/歌手/歌单/MV",
                   onSubmitted: (value) {
-                    // Get.toNamed('/search_list', arguments: value);
+                    Get.toNamed('/search_list', arguments: value);
                   })
               : Text(appBarTitle[currentIndex]),
           leading: GestureDetector(

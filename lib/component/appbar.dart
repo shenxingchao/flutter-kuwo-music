@@ -13,6 +13,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   final Color leftIconColor;
   final SystemUiOverlayStyle? systemOverlayStyle;
   final bool centerTitle;
+  final PreferredSizeWidget? bottom;
   const AppBarComponent(this.title,
       {Key? key,
       this.leading,
@@ -23,7 +24,8 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       this.backgroundColor = Colors.white,
       this.leftIconColor = Colors.black,
       this.systemOverlayStyle,
-      this.centerTitle = false})
+      this.centerTitle = false,
+      this.bottom})
       : super(key: key);
 
   @override
@@ -60,6 +62,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
           color: leftIconColor,
           //透明度
           opacity: 100),
+      bottom: bottom,
     );
   }
 
