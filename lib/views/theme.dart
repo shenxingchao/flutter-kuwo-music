@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../appbar.dart';
+import '../component/appbar.dart';
 import '../store/store.dart';
 
 class ThemeComponent extends StatefulWidget {
@@ -11,7 +11,6 @@ class ThemeComponent extends StatefulWidget {
 }
 
 class _ThemeComponentState extends State<ThemeComponent> {
-
   @override
   void initState() {
     super.initState();
@@ -44,22 +43,25 @@ class _ThemeComponentState extends State<ThemeComponent> {
                 childAspectRatio: 0.8,
                 //子元素
                 children: themeList
-                    .asMap().entries.map(
+                    .asMap()
+                    .entries
+                    .map(
                       (entry) => GestureDetector(
                           child: Container(
                             decoration: BoxDecoration(
                               //背景颜色
                               color: entry.value,
                               borderRadius: BorderRadius.circular(4),
-                              boxShadow: entry.value == Get.find<Store>().primary
-                                  ? const [
-                                      BoxShadow(
-                                        offset: Offset(0, 4), //x,y轴
-                                        color: Color(0xffaaaaaa), //投影颜色
-                                        blurRadius: 4, //投影距离
-                                      )
-                                    ]
-                                  : [],
+                              boxShadow:
+                                  entry.value == Get.find<Store>().primary
+                                      ? const [
+                                          BoxShadow(
+                                            offset: Offset(0, 4), //x,y轴
+                                            color: Color(0xffaaaaaa), //投影颜色
+                                            blurRadius: 4, //投影距离
+                                          )
+                                        ]
+                                      : [],
                             ),
                           ),
                           onTap: () {

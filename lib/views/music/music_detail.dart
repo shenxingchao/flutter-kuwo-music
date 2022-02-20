@@ -3,7 +3,7 @@ import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterkuwomusic/appbar.dart';
+import 'package:flutterkuwomusic/component/appbar.dart';
 import 'package:flutterkuwomusic/interface/play_mode.dart';
 import 'package:flutterkuwomusic/utils/play_audio.dart';
 import 'package:fluttertoast/fluttertoast.dart';

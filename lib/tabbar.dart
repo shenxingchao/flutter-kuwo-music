@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import './home.dart';
 import './user.dart';
 import './component/input.dart';
-import './appbar.dart';
+import 'component/appbar.dart';
 import './store/store.dart';
 
 class TabbarComponent extends StatefulWidget {
