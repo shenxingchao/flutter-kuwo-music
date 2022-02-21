@@ -154,19 +154,19 @@ class _SearchListComponentState extends State<SearchListComponent>
       setState(() {
         switch (tabItemIndex) {
           case 0:
-            data = res.data["data"]["list"];
+            data = res.data["data"]["list"] ?? [];
             break;
           case 1:
-            data = res.data["data"]["albumList"];
+            data = res.data["data"]["albumList"] ?? [];
             break;
           case 2:
-            data = res.data["data"]["mvlist"];
+            data = res.data["data"]["mvlist"] ?? [];
             break;
           case 3:
-            data = res.data["data"]["list"];
+            data = res.data["data"]["list"] ?? [];
             break;
           case 4:
-            data = res.data["data"]["list"];
+            data = res.data["data"]["list"] ?? [];
             break;
         }
         if (data.isEmpty) {

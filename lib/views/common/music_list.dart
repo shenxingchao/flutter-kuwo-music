@@ -26,7 +26,7 @@ class ListWidget extends StatelessWidget {
                         child: Column(children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            height: 72,
+                            height: 73,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
