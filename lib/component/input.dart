@@ -83,6 +83,7 @@ class InputComponent extends StatelessWidget {
               onPressed: controller?.clear,
               icon: const Icon(
                 Icons.clear,
+                size: 14,
                 color: Colors.grey,
               ),
             ),

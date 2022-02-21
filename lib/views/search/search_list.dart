@@ -10,6 +10,7 @@ import '../../store/store.dart';
 import '../../utils/request.dart';
 import '../common/bottom_bar.dart';
 import '../common/music_list.dart';
+import '../common/play_list.dart';
 
 class SearchListComponent extends StatefulWidget {
   const SearchListComponent({Key? key}) : super(key: key);
@@ -258,18 +259,11 @@ class _SearchListComponentState extends State<SearchListComponent>
                                       builder: (context) {
                                         if (item == '单曲') {
                                           return ListWidget(list: list[0]);
-                                        } else if (item == '专辑') {
+                                        } else if (item == '歌单') {
                                           return SliverList(
                                               delegate:
                                                   SliverChildListDelegate([
-                                            Column(children: [
-                                              ...list[1]
-                                                  .asMap()
-                                                  .entries
-                                                  .map((entry) =>
-                                                      const Text('3333'))
-                                                  .toList()
-                                            ])
+                                            PlayListWidget(playList: list[3])
                                           ]));
                                         } else {
                                           return SliverList(

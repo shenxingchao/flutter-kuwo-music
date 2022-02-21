@@ -71,7 +71,10 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
           msg: "请求服务器错误",
         );
       });
-      if (mounted && res != null && res!.data != null) {
+      if (mounted &&
+          res != null &&
+          res.data != null &&
+          res.data["data"]["lrclist"] != null) {
         setState(() {
           lrcList = res.data["data"]["lrclist"];
           positionIndex = 0;
