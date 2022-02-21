@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
 
 import './component/loading.dart';
@@ -47,7 +48,8 @@ class _UserCommponentState extends State<UserCommponent> {
                         "." +
                         packageInfo.buildNumber +
                         " ©by sxc 2022/2/13"),
-                    const Text("本软件仅用于学习用途，接口皆来自于网络，版权归酷我所有，请在法律允许的范围内使用。如有侵权，请联系本人删除")
+                    const Text(
+                        "本软件仅用于学习用途，接口皆来自于网络，版权归酷我所有，请在法律允许的范围内使用。如有侵权，请联系本人删除")
                   ],
                 ),
               ),
@@ -65,9 +67,9 @@ class _UserCommponentState extends State<UserCommponent> {
                 title: const Text('更新日志'),
                 tileColor: Colors.white,
                 onTap: () {
-                  // Get.toNamed(
-                  //   '/history',
-                  // );
+                  Get.toNamed(
+                    '/history',
+                  );
                 },
               ),
             ],
