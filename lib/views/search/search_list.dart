@@ -230,7 +230,9 @@ class _SearchListComponentState extends State<SearchListComponent>
                           var item = entry.value;
                           var index = entry.key;
                           return Column(children: [
-                            PlayMusicListWidget(item: item, list: list),
+                            //播放全部工具栏
+                            PlayMusicListWidget(item: item, list: list[0]),
+                            //内容部分
                             Expanded(
                               flex: 1,
                               child: SmartRefresher(
@@ -297,7 +299,7 @@ class PlayMusicListWidget extends StatelessWidget {
   }) : super(key: key);
 
   final dynamic item;
-  final List<List> list;
+  final List list;
 
   @override
   Widget build(BuildContext context) {
@@ -334,13 +336,13 @@ class PlayMusicListWidget extends StatelessWidget {
                             child: const Icon(Icons.play_circle_outline,
                                 color: Color(0xff999999)),
                           ),
-                          Text('播放全部(' + list[0].length.toString() + ')首'),
+                          Text('播放全部(' + list.length.toString() + ')首'),
                         ]),
                       ],
                     ),
                     onTap: () {
                       List<PlayListMusic> audioList = [];
-                      for (var element in list[0]) {
+                      for (var element in list) {
                         audioList.add(PlayListMusic(
                             artist: element["artist"],
                             rid: element["rid"],
