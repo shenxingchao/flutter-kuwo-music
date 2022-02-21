@@ -53,6 +53,10 @@ dependencies:
   permission_handler: ^8.2.5
   # 打开文件插件 用于打开安装文件
   open_file: ^3.2.1
+  # 启动图标
+  flutter_launcher_icons: ^0.9.2
+  # 原生启动屏
+  flutter_native_splash: ^1.2.4
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -121,3 +125,12 @@ flutter:
     - family: SourceHanSerifCN
       fonts:
         - asset: assets/fonts/SourceHanSerifCN.otf
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.jpg"
+flutter_native_splash:
+  #下面2个选一个
+  # color: "#42a5f5"
+  background_image: "assets/images/splashscreen.png"
