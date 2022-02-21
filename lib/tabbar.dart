@@ -102,7 +102,9 @@ class _TabbarComponentState extends State<TabbarComponent>
                   showSearchIcon: true,
                   placeholder: "歌曲/歌手/歌单/MV",
                   onSubmitted: (value) {
-                    Get.toNamed('/search_list', arguments: value);
+                    if (value != '') {
+                      Get.toNamed('/search_list', arguments: value);
+                    }
                   })
               : Text(appBarTitle[currentIndex]),
           leading: GestureDetector(

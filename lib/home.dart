@@ -1,10 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import './component/loading.dart';
 import './utils/request.dart';
 import './views/common/play_list.dart';
+import './utils/app_update.dart';
 
 class HomeComponent extends StatefulWidget {
   const HomeComponent({Key? key}) : super(key: key);
@@ -13,7 +16,16 @@ class HomeComponent extends StatefulWidget {
   _HomeComponentState createState() => _HomeComponentState();
 }
 
-class _HomeComponentState extends State<HomeComponent> {
+class _HomeComponentState extends State<HomeComponent>
+    with WidgetsBindingObserver {
+  //APP升级对象
+  late AppUpdate appUpdate;
+
+  //当前下载进度
+  double downloadPercent = 0;
+  //更新日志列表
+  List historyList = [];
+
   //Banner图
   List bannerList = [];
   //分类图标
@@ -46,6 +58,229 @@ class _HomeComponentState extends State<HomeComponent> {
   void initState() {
     super.initState();
     onRefresh();
+    WidgetsBinding.instance!.addObserver(this);
+    updateApp();
+  }
+
+  //监听APP切换状态 必须with WidgetsBindingObserver 类似继承 但是不会覆盖原有的变量方法 可以with多个类
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    //从后台隐藏状态切换到前台显示状态
+    if (state == AppLifecycleState.resumed) {
+      //如果进度下载进度为1 则安装APP
+      if (downloadPercent >= 1) {
+        appUpdate.installApk();
+      }
+    }
+  }
+
+  //检查app更新
+  void updateApp() async {
+    //检查App升级
+    appUpdate = AppUpdate();
+    await appUpdate.init();
+    await appUpdate.checkUpdate();
+    if (appUpdate.canUpdate) {
+      //查询更新日志并显示
+      await Request.http(url: '/version/history.json', type: 'get', data: {})
+          .then((res) {
+        setState(() {
+          historyList = res.data['data'];
+        });
+      }).catchError((error) {});
+      //如果可以更新 弹窗选择是否更新
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return UnconstrainedBox(
+              //抵消Dialog的最小宽度 即可设置宽度
+              constrainedAxis: Axis.vertical, //内容垂直
+              child: AlertDialog(
+                backgroundColor: Colors.transparent,
+                contentPadding: EdgeInsets.zero,
+                content: SizedBox(
+                  width: Get.width * 3 / 5,
+                  height: 425,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: Image.asset(
+                            'assets/images/app_update.png',
+                            fit: BoxFit.fitWidth,
+                            alignment: Alignment.bottomCenter,
+                          ),
+                        ),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              color: Colors.white,
+                              padding:
+                                  const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Padding(
+                                            padding:
+                                                EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                            child: Text(
+                                              '检测到新版本',
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                          ),
+                                          Text(historyList.first["version"]),
+                                          ...historyList.first["history_list"]
+                                              .map((item) {
+                                            return Text(
+                                              item,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            );
+                                          }).toList()
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      TextButton(
+                                        child: const Text(
+                                          '下次在说',
+                                          style: TextStyle(
+                                              color: Color(0xff999999)),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: const Text(
+                                          '立即更新',
+                                          style: TextStyle(
+                                              color: Color(0xff333333)),
+                                        ),
+                                        onPressed: () async {
+                                          Navigator.of(context).pop();
+                                          //显示下载进度
+                                          late StateSetter dialogState;
+                                          showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return StatefulBuilder(
+                                                    builder: (context, state) {
+                                                  dialogState = state;
+                                                  return UnconstrainedBox(
+                                                      //抵消Dialog的最小宽度 即可设置宽度
+                                                      constrainedAxis:
+                                                          Axis.vertical, //内容垂直
+                                                      child: AlertDialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        contentPadding:
+                                                            EdgeInsets.zero,
+                                                        content: SizedBox(
+                                                          width:
+                                                              Get.width * 3 / 5,
+                                                          height: 295,
+                                                          child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: double
+                                                                      .infinity,
+                                                                  child: Image
+                                                                      .asset(
+                                                                    'assets/images/app_update.png',
+                                                                    fit: BoxFit
+                                                                        .fitWidth,
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomCenter,
+                                                                    child: Container(
+                                                                        color: Colors.white,
+                                                                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                                                                        child: Column(
+                                                                          children: [
+                                                                            const SizedBox(
+                                                                                width: double.infinity,
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                                                                                  child: Text('更新提示', style: TextStyle(fontSize: 20), textAlign: TextAlign.center),
+                                                                                )),
+                                                                            SizedBox(
+                                                                              width: double.infinity,
+                                                                              child: Text("正在更新 当前进度" + (downloadPercent * 100).toStringAsFixed(2) + '%', textAlign: TextAlign.center),
+                                                                            )
+                                                                          ],
+                                                                        )),
+                                                                  ),
+                                                                ),
+                                                              ]),
+                                                        ),
+                                                      ));
+                                                });
+                                              });
+
+                                          //创建下载任务
+                                          Dio dio = Dio();
+                                          await dio.download(
+                                              appUpdate.downloadUrl,
+                                              appUpdate.savePath,
+                                              onReceiveProgress:
+                                                  (received, total) {
+                                            if (total != -1) {
+                                              //当前下载的百分比例
+                                              double percentValue =
+                                                  double.parse(
+                                                      (received / total)
+                                                          .toStringAsFixed(2));
+                                              dialogState(() {
+                                                downloadPercent = percentValue;
+                                              });
+                                            }
+                                          });
+                                          await appUpdate.installApk();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ));
+        },
+      );
+    }
   }
 
   void onRefresh() {

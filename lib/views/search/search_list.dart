@@ -193,8 +193,10 @@ class _SearchListComponentState extends State<SearchListComponent>
                 onSubmitted: (value) {
                   setState(() {
                     keyword = value;
+                    if (keyword != '') {
+                      onRefresh();
+                    }
                   });
-                  onRefresh();
                 }),
             appBarHeight: 120.0,
             elevation: 0,

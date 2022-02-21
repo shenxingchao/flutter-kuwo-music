@@ -45,6 +45,14 @@ dependencies:
   pull_to_refresh: ^2.0.0
   # 音频播放
   audioplayers: ^0.20.1
+  # 获取应用包信息
+  package_info: ^2.0.2
+  # 获取应用安装路径
+  path_provider: ^2.0.5
+  # 权限请求插件
+  permission_handler: ^8.2.5
+  # 打开文件插件 用于打开安装文件
+  open_file: ^3.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
