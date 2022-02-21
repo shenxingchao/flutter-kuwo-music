@@ -73,7 +73,7 @@ class Store extends GetxController {
       //清空当前播放对象
       playMusicInfo = null;
       //请求失败了
-      if (res.data == null) {
+      if (res == null || res.data == null) {
         return;
       }
       //获取音乐详情
