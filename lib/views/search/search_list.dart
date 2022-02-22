@@ -8,8 +8,11 @@ import '../../component/loading.dart';
 import '../../interface/play_list_music.dart';
 import '../../store/store.dart';
 import '../../utils/request.dart';
+import '../common/album_list.dart';
+import '../common/artist_list.dart';
 import '../common/bottom_bar.dart';
 import '../common/music_list.dart';
+import '../common/mv_list.dart';
 import '../common/play_list.dart';
 
 class SearchListComponent extends StatefulWidget {
@@ -194,6 +197,11 @@ class _SearchListComponentState extends State<SearchListComponent>
                   setState(() {
                     keyword = value;
                     if (keyword != '') {
+                      //状态初始化
+                      setState(() {
+                        list = [[], [], [], [], []];
+                        pages = [1, 1, 1, 1, 1];
+                      });
                       onRefresh();
                     }
                   });
@@ -263,19 +271,34 @@ class _SearchListComponentState extends State<SearchListComponent>
                                       builder: (context) {
                                         if (item == '单曲') {
                                           return ListWidget(list: list[0]);
+                                        } else if (item == '专辑') {
+                                          return SliverList(
+                                              delegate:
+                                                  SliverChildListDelegate([
+                                            AlbumListWidget(list: list[1])
+                                          ]));
+                                        } else if (item == 'MV') {
+                                          return SliverList(
+                                              delegate:
+                                                  SliverChildListDelegate([
+                                            MVListWidget(list: list[2])
+                                          ]));
                                         } else if (item == '歌单') {
                                           return SliverList(
                                               delegate:
                                                   SliverChildListDelegate([
-                                            PlayListWidget(playList: list[3])
+                                            PlayListWidget(list: list[3])
+                                          ]));
+                                        } else if (item == '歌手') {
+                                          return SliverList(
+                                              delegate:
+                                                  SliverChildListDelegate([
+                                            ArtistListWidget(list: list[4])
                                           ]));
                                         } else {
                                           return SliverList(
                                               delegate:
-                                                  SliverChildListDelegate([
-                                            Column(
-                                                children: const [Text('未完成')])
-                                          ]));
+                                                  SliverChildListDelegate([]));
                                         }
                                       },
                                     )

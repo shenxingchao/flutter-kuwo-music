@@ -386,7 +386,7 @@ class _HomeComponentState extends State<HomeComponent>
                         ),
                       ),
                     ),
-                    PlayListWidget(playList: playList)
+                    PlayListWidget(list: playList)
                   ])
                 ]))))
         : const Loading();

@@ -98,7 +98,10 @@ class ListWidget extends StatelessWidget {
                                             Icons.play_circle_outline_rounded,
                                             color: Color(0xffcccccc)),
                                       ),
-                                      onTap: () => {print("弹出下载")},
+                                      onTap: () => {
+                                        // Get.toNamed('/mv_detail',
+                                        //     arguments: {"id": entry.value["rid"])});
+                                      },
                                     ),
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,
@@ -107,7 +110,9 @@ class ListWidget extends StatelessWidget {
                                         child: const Icon(Icons.more_horiz,
                                             color: Color(0xffcccccc)),
                                       ),
-                                      onTap: () => {print("弹出下载")},
+                                      onTap: () => {
+                                        //print("弹出下载")
+                                      },
                                     ),
                                   ],
                                 )
@@ -124,7 +129,7 @@ class ListWidget extends StatelessWidget {
                           store.playMusic(rid: entry.value["rid"]);
                         },
                         onLongPress: () => {
-                              print("弹出下载"),
+                              // print("弹出下载"),
                             }),
                   ))
             ])

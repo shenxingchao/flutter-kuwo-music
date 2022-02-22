@@ -1,9 +1,8 @@
-//歌单列表
+//MV列表
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class PlayListWidget extends StatelessWidget {
-  const PlayListWidget({
+class MVListWidget extends StatelessWidget {
+  const MVListWidget({
     Key? key,
     required this.list,
   }) : super(key: key);
@@ -26,11 +25,8 @@ class PlayListWidget extends StatelessWidget {
         //相当于垂直方向上的 align-item
         runAlignment: WrapAlignment.center,
         children: list.map((item) {
-          if (item["listencnt"] == null) {
-            return const SizedBox();
-          }
           return FractionallySizedBox(
-              widthFactor: 1 / 3,
+              widthFactor: 1 / 2,
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: GestureDetector(
@@ -40,7 +36,7 @@ class PlayListWidget extends StatelessWidget {
                         alignment: Alignment.bottomLeft,
                         children: [
                           AspectRatio(
-                              aspectRatio: 1 / 1,
+                              aspectRatio: 324 / 182,
                               child: Container(
                                   decoration: const BoxDecoration(boxShadow: [
                                     BoxShadow(
@@ -57,14 +53,14 @@ class PlayListWidget extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         placeholder:
                                             'assets/images/default.png',
-                                        image: item["img"],
+                                        image: item["pic"],
                                       )))),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
                             child:
                                 //返回类型不一致 这里一致处理
                                 Text(
-                              (int.parse(item["listencnt"].toString()) / 10000)
+                              (int.parse(item["mvPlayCnt"].toString()) / 10000)
                                       .toStringAsFixed(2) +
                                   "万",
                               style: const TextStyle(color: Colors.white),
@@ -81,18 +77,11 @@ class PlayListWidget extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                       ),
-                      Text(
-                        item["uname"],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 14, color: Color(0xff999999)),
-                      ),
                     ],
                   ),
                   onTap: () {
-                    Get.toNamed('/play_list_detail',
-                        arguments: {"id": int.parse(item["id"].toString())});
+                    // Get.toNamed('/mv_detail',
+                    //     arguments: {"id": item["id"]});
                   },
                 ),
               ));
