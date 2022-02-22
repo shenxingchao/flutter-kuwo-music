@@ -58,7 +58,8 @@ dependencies:
   # 原生启动屏
   flutter_native_splash: ^1.2.4
   # 视频播放
-  fijkplayer: ^0.10.1 
+  chewie: ^1.3.0
+  video_player: ^2.2.18
 
 
   # The following adds the Cupertino Icons font to your application.
