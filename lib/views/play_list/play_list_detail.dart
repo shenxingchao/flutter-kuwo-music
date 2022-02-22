@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/views/common/bottom_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -36,6 +37,8 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
   //定义刷新控件
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
+  //标题和状态栏颜色 收缩时显示黑色 展开式显示白色
+  bool lightTheme = true;
 
   @override
   void initState() {
@@ -118,42 +121,59 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
             body: Column(children: [
             Expanded(
                 flex: 1,
-                child: NestedScrollView(
-                    floatHeaderSlivers: false,
-                    headerSliverBuilder:
-                        (BuildContext context, bool innerBoxIsScrolled) {
-                      return [
-                        //AppBar
-                        getSliverAppBar(context, innerBoxIsScrolled),
-                        //吸顶工具栏
-                        FixToolBarWidget(list: list)
-                      ];
+                child: NotificationListener(
+                    onNotification: (ScrollNotification notification) {
+                      if (notification is ScrollUpdateNotification &&
+                          notification.depth == 0) {
+                        double maxHight = MediaQuery.of(context).size.width -
+                            MediaQuery.of(context).padding.top -
+                            66;
+                        setState(() {
+                          if (notification.metrics.pixels > maxHight) {
+                            lightTheme = false;
+                          } else {
+                            lightTheme = true;
+                          }
+                        });
+                      }
+                      return true;
                     },
-                    body: list.isNotEmpty
-                        ? SmartRefresher(
-                            //下拉刷新
-                            enablePullDown: true,
-                            //上拉加载
-                            enablePullUp: true,
-                            //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
-                            header: const ClassicHeader(
-                              releaseText: "松开刷新",
-                              refreshingText: '刷新中...',
-                              completeText: '刷新完成',
-                              idleText: '下拉刷新',
-                            ),
-                            footer: const ClassicFooter(
-                              canLoadingText: '松开加载',
-                              loadingText: '加载中...',
-                              idleText: '上拉加载',
-                              noDataText: '没有更多了^_^',
-                            ),
-                            controller: refreshController,
-                            onRefresh: onRefresh,
-                            onLoading: onLoading,
-                            child: CustomScrollView(
-                                slivers: <Widget>[ListWidget(list: list)]))
-                        : const Loading())),
+                    child: NestedScrollView(
+                        floatHeaderSlivers: false,
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return [
+                            //AppBar
+                            getSliverAppBar(context, innerBoxIsScrolled),
+                            //吸顶工具栏
+                            FixToolBarWidget(list: list)
+                          ];
+                        },
+                        body: list.isNotEmpty
+                            ? SmartRefresher(
+                                //下拉刷新
+                                enablePullDown: true,
+                                //上拉加载
+                                enablePullUp: true,
+                                //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+                                header: const ClassicHeader(
+                                  releaseText: "松开刷新",
+                                  refreshingText: '刷新中...',
+                                  completeText: '刷新完成',
+                                  idleText: '下拉刷新',
+                                ),
+                                footer: const ClassicFooter(
+                                  canLoadingText: '松开加载',
+                                  loadingText: '加载中...',
+                                  idleText: '上拉加载',
+                                  noDataText: '没有更多了^_^',
+                                ),
+                                controller: refreshController,
+                                onRefresh: onRefresh,
+                                onLoading: onLoading,
+                                child: CustomScrollView(
+                                    slivers: <Widget>[ListWidget(list: list)]))
+                            : const Loading()))),
             const PlayMusicBottomBar()
           ]))
         : const Loading();
@@ -165,9 +185,11 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       title: Text(
         playList["name"],
       ),
-      foregroundColor: Colors.white,
+      foregroundColor: lightTheme ? Colors.white : const Color(0xff333333),
       //appbar滚动后保持可见
       pinned: true,
+      //合并后高度
+      collapsedHeight: 66,
       //头部总高度
       expandedHeight: MediaQuery.of(context).size.width -
           MediaQuery.of(context).padding.top,
@@ -175,6 +197,12 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       forceElevated: innerBoxIsScrolled,
       //阴影深度
       elevation: 0,
+      //状态栏样式
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarBrightness: lightTheme ? Brightness.light : Brightness.dark,
+        statusBarIconBrightness:
+            lightTheme ? Brightness.light : Brightness.dark,
+      ),
       //堆栈容器,高度就是expandedHeight的高度
       flexibleSpace: FlexibleSpaceBar(
           //标题缩放
