@@ -1,5 +1,6 @@
 //MV列表
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MVListWidget extends StatelessWidget {
   const MVListWidget({
@@ -80,8 +81,8 @@ class MVListWidget extends StatelessWidget {
                     ],
                   ),
                   onTap: () {
-                    // Get.toNamed('/mv_detail',
-                    //     arguments: {"id": item["id"]});
+                    Get.toNamed('/mv_detail',
+                        arguments: {"id": item["id"]});
                   },
                 ),
               ));

@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import '../../store/store.dart';
 
 //音乐列表
-class ListWidget extends StatelessWidget {
-  const ListWidget({
+class MusicListWidget extends StatelessWidget {
+  const MusicListWidget({
     Key? key,
     required this.list,
   }) : super(key: key);
@@ -88,20 +88,24 @@ class ListWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      child: Container(
-                                        margin: const EdgeInsets.fromLTRB(
-                                            0, 0, 5, 0),
-                                        padding: const EdgeInsets.all(5),
-                                        child: const Icon(
-                                            Icons.play_circle_outline_rounded,
-                                            color: Color(0xffcccccc)),
+                                    Offstage(
+                                      offstage: entry.value["hasmv"] != 1,
+                                      child: GestureDetector(
+                                        behavior: HitTestBehavior.opaque,
+                                        child: Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 0, 5, 0),
+                                          padding: const EdgeInsets.all(5),
+                                          child: const Icon(
+                                              Icons.play_circle_outline_rounded,
+                                              color: Color(0xffcccccc)),
+                                        ),
+                                        onTap: () => {
+                                          Get.toNamed('/mv_detail', arguments: {
+                                            "id": entry.value["rid"]
+                                          })
+                                        },
                                       ),
-                                      onTap: () => {
-                                        // Get.toNamed('/mv_detail',
-                                        //     arguments: {"id": entry.value["rid"])});
-                                      },
                                     ),
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,

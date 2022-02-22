@@ -270,7 +270,7 @@ class _SearchListComponentState extends State<SearchListComponent>
                                     Builder(
                                       builder: (context) {
                                         if (item == '单曲') {
-                                          return ListWidget(list: list[0]);
+                                          return MusicListWidget(list: list[0]);
                                         } else if (item == '专辑') {
                                           return SliverList(
                                               delegate:

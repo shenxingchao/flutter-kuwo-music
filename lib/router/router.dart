@@ -5,6 +5,7 @@ import '../views/play_list/play_list_detail.dart';
 import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
+import '../views/mv/mv_detail.dart';
 
 //抽离路由代码
 class Routers {
@@ -29,6 +30,10 @@ class Routers {
     GetPage(
         name: '/search_list',
         page: () => const SearchListComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/mv_detail',
+        page: () => const MvDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/history',

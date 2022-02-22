@@ -177,7 +177,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                                 onRefresh: onRefresh,
                                 onLoading: onLoading,
                                 child: CustomScrollView(
-                                    slivers: <Widget>[ListWidget(list: list)]))
+                                    slivers: <Widget>[MusicListWidget(list: list)]))
                             : const Loading()))),
             const PlayMusicBottomBar()
           ]))
