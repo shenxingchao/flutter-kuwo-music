@@ -8,6 +8,7 @@ import './component/loading.dart';
 import './utils/request.dart';
 import './views/common/play_list.dart';
 import './utils/app_update.dart';
+import 'store/store.dart';
 
 class HomeComponent extends StatefulWidget {
   const HomeComponent({Key? key}) : super(key: key);
@@ -57,7 +58,16 @@ class _HomeComponentState extends State<HomeComponent>
   @override
   void initState() {
     super.initState();
-    onRefresh();
+    //首屏缓存，如果有缓存，则不刷新
+    if (Get.find<Store>().homeCache["homeBannerList"]!.isNotEmpty) {
+      setState(() {
+        bannerList = Get.find<Store>().homeCache["homeBannerList"] as List;
+        playList = Get.find<Store>().homeCache["homePlayList"] as List;
+      });
+    } else {
+      onRefresh();
+    }
+
     WidgetsBinding.instance!.addObserver(this);
     updateApp();
   }
@@ -283,15 +293,20 @@ class _HomeComponentState extends State<HomeComponent>
     }
   }
 
-  void onRefresh() {
-    getBannerList();
-    getPlayList();
+  void onRefresh() async {
+    await getBannerList();
+    await getPlayList();
     //下拉刷新完成
     refreshController.refreshCompleted();
+    //写入缓存
+    Get.find<Store>().changeHomeCache({
+      "homeBannerList": bannerList,
+      "homePlayList": playList,
+    });
   }
 
   //获取轮播图
-  void getBannerList() async {
+  Future getBannerList() async {
     var res =
         await Request.http(url: 'index/getBannerList', type: 'get', data: {})
             .then((res) {
@@ -311,10 +326,11 @@ class _HomeComponentState extends State<HomeComponent>
         bannerList = res.data["data"];
       });
     }
+    return res;
   }
 
   //获取推荐歌单
-  void getPlayList() async {
+  Future getPlayList() async {
     var res = await Request.http(
         url: 'index/getRecomendSongList', type: 'get', data: {}).then((res) {
       if (res.data["code"] != 200) {
@@ -333,6 +349,7 @@ class _HomeComponentState extends State<HomeComponent>
         playList = res.data["data"]["list"];
       });
     }
+    return res;
   }
 
   @override

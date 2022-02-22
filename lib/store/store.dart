@@ -26,6 +26,12 @@ List<Color> themeList = [
 
 //类似vuex状态管理类
 class Store extends GetxController {
+  //首屏缓存
+  Map<String, List> homeCache = {
+    "homeBannerList":[],
+    "homePlayList":[],
+  };
+
   //主题色
   Color primary = box.read('primary') != null
       ? themeList[box.read('primary')]
@@ -42,6 +48,13 @@ class Store extends GetxController {
 
   //播放模式 默认列表循环
   PlayMode playMode = PlayMode.LIST_FOR_MODE;
+
+
+  //更换首屏缓存
+  void changeHomeCache(Map<String, List> homeCacheObj) {
+    homeCache = homeCacheObj;
+    update();
+  }
 
   //更换主题色
   void changeTheme(Color color) {

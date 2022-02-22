@@ -63,10 +63,12 @@ class _TabbarComponentState extends State<TabbarComponent>
     //侧边栏
     return ZoomDrawer(
       controller: zoomDrawerController,
+      //从右到左
+      isRtl: false,
       //显示样式
       style: DrawerStyle.Style3,
       //抽屉宽度
-      slideWidth: MediaQuery.of(context).size.width * (0.8),
+      slideWidth: MediaQuery.of(context).size.width * (0.75),
       //主屏幕圆角
       borderRadius: 0.0,
       //旋转角度
@@ -74,15 +76,17 @@ class _TabbarComponentState extends State<TabbarComponent>
       //禁止主页滑动打开抽屉手势
       disableGesture: false,
       //抽屉背景色
-      backgroundColor: const Color(0x33000000),
+      backgroundColor: const Color(0xffffffff),
       //显示抽屉阴影
-      showShadow: true,
+      showShadow: false,
       //点击主屏幕时关闭抽屉
       mainScreenTapClose: true,
       //主屏幕覆盖层颜色
-      overlayColor: const Color(0xff000000),
-      //主屏幕迷糊量
-      overlayBlur: 2,
+      overlayColor: const Color(0xcc000000),
+      overlayBlend:BlendMode.srcOver,
+      //主屏幕模糊量
+      overlayBlur: 0,
+      //侧边栏
       menuScreen: const MenuScreenWidget(),
       //主屏幕
       mainScreen: getMainScreen(context, animationController),
