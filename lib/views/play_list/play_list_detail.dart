@@ -128,13 +128,18 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                         double maxHight = MediaQuery.of(context).size.width -
                             MediaQuery.of(context).padding.top -
                             66;
-                        setState(() {
-                          if (notification.metrics.pixels > maxHight) {
+                        //尽量不要每次滚动都去setState
+                        if (notification.metrics.pixels >= maxHight &&
+                            lightTheme) {
+                          setState(() {
                             lightTheme = false;
-                          } else {
+                          });
+                        } else if (notification.metrics.pixels < maxHight &&
+                            !lightTheme) {
+                          setState(() {
                             lightTheme = true;
-                          }
-                        });
+                          });
+                        }
                       }
                       return true;
                     },
