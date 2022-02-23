@@ -41,6 +41,9 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
   //播放百分比
   double audioPercent = 0;
 
+  //收藏状态
+  bool isLike = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,6 +51,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
     getLrcList();
     //播放进度监听
     audioProgressListen();
+    //初始化歌曲收藏状态
+    initLikeState();
   }
 
   @override
@@ -133,6 +138,22 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
           }
         }
       });
+    });
+  }
+
+  //初始化歌曲收藏状态
+  initLikeState() {
+    setState(() {
+      if (box.read('favouriteMusicList') != null) {
+        isLike = false;
+        var favouriteMusicList = box.read('favouriteMusicList');
+        //查找当前歌曲是否在收藏列表
+        for (var item in favouriteMusicList) {
+          if (item["rid"] == Get.find<Store>().playMusicInfo?.rid) {
+            isLike = true;
+          }
+        }
+      }
     });
   }
 
@@ -292,14 +313,52 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                       Material(
                                           color: Colors.transparent,
                                           child: InkWell(
-                                              child: Container(
-                                                  padding:
-                                                      const EdgeInsets.all(10),
-                                                  child: Row(children: const [
-                                                    Icon(Icons.favorite_outline,
-                                                        size: 30,
-                                                        color: Colors.grey),
-                                                  ]))))
+                                            child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(10),
+                                                child: Row(children: [
+                                                  isLike
+                                                      ? const Icon(
+                                                          Icons
+                                                              .favorite_rounded,
+                                                          size: 30,
+                                                          color: Colors.red)
+                                                      : const Icon(
+                                                          Icons
+                                                              .favorite_border_rounded,
+                                                          size: 30,
+                                                          color: Colors.grey),
+                                                ])),
+                                            onTap: () {
+                                              setState(() {
+                                                isLike = !isLike;
+                                                var favouriteMusicList = box.read(
+                                                        'favouriteMusicList') ??
+                                                    [];
+                                                //记录缓存
+                                                if (isLike) {
+                                                  favouriteMusicList.add(store
+                                                      .playMusicInfo
+                                                      ?.toMap());
+                                                  box.write(
+                                                      'favouriteMusicList',
+                                                      favouriteMusicList);
+                                                }
+                                                //删除缓存
+                                                else {
+                                                  favouriteMusicList
+                                                      .removeWhere((item) {
+                                                    return item["rid"] ==
+                                                        store
+                                                            .playMusicInfo?.rid;
+                                                  });
+                                                  box.write(
+                                                      'favouriteMusicList',
+                                                      favouriteMusicList);
+                                                }
+                                              });
+                                            },
+                                          ))
                                     ]),
                                 Row(
                                     mainAxisAlignment:
@@ -521,6 +580,10 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
         store.audioPlayState == PlayerState.COMPLETED) {
       //播放完毕清空歌词
       lrcList = [];
+      //延迟到视图构建好在调用
+      Future.delayed(const Duration(milliseconds: 200)).then((e) {
+        initLikeState();
+      });
     }
     if (store.audioPlayState == PlayerState.PLAYING && lrcList.isEmpty) {
       //重置歌词 等待2秒获取歌词 因为此时当前播放为空 所以不能获取歌词  获取歌词判断的逻辑有问题 必须要有歌曲播放才能获取 要判断当前是否切换了下一首

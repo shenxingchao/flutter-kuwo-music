@@ -49,4 +49,41 @@ class PlayMusicInfo {
     required this.albuminfo,
     required this.name,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      //歌手名称
+      "artist": artist,
+      //歌曲封面图
+      "pic": pic,
+      // 歌曲id
+      "rid": rid,
+      // 歌曲时长(s)
+      "duration": duration,
+      // MV播放次数
+      "mvPlayCnt": mvPlayCnt,
+      // 无损音质
+      "hasLossless": hasLossless,
+      // 是否有MV(1有0没有)
+      "hasmv": hasmv,
+      // 发布日期
+      "releaseDate": releaseDate,
+      // 专辑名称
+      "album": album,
+      // 专辑id
+      "albumid": albumid,
+      // 歌手id
+      "artistid": artistid,
+      // 歌曲时长格式化(ii:ss)
+      "songTimeMinutes": songTimeMinutes,
+      // 是否付费(true付费false免费)
+      "isListenFee": isListenFee,
+      // 歌曲封面120px缩略图
+      "pic120": pic120,
+      // 专辑描述
+      "albuminfo": albuminfo,
+      // 歌曲名称
+      "name": name
+    };
+  }
 }
