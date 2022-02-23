@@ -269,7 +269,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
         init: Store(),
         builder: (store) {
           return Container(
-              height: MediaQuery.of(context).size.height / 2,
+              height: Get.height / 2,
               color: Colors.white,
               child: Column(
                 children: [

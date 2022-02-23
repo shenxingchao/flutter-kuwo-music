@@ -123,7 +123,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
               (scrollController.position.pixels <
                       scrollController.position.maxScrollExtent ||
                   positionIndex < lrcList.length - 6)) {
-            double offsetScroll = ((positionIndex - 5) * 40);
+            double offsetScroll = ((positionIndex - 5) *
+                ((Get.height - Get.statusBarHeight) / 10 * 7 / 11));
             scrollController.animateTo(
               offsetScroll,
               duration: const Duration(milliseconds: 200),
@@ -162,8 +163,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                 children: [
                   Positioned(
                       child: SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
+                    width: Get.width,
+                    height: Get.height,
                     child: store.playMusicInfo != null
                         ? Image.network(
                             store.playMusicInfo!.pic,
@@ -192,21 +193,16 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                         offstage: !showCover,
                         child: GestureDetector(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.width,
+                            width: Get.width,
+                            height: Get.width,
                             child: store.playMusicInfo != null
                                 ? Center(
                                     child: Image.network(
                                       store.playMusicInfo!.pic,
                                       alignment: Alignment.center,
                                       fit: BoxFit.cover,
-                                      width: MediaQuery.of(context).size.width /
-                                          5 *
-                                          3,
-                                      height:
-                                          MediaQuery.of(context).size.width /
-                                              5 *
-                                              3,
+                                      width: Get.width / 5 * 3,
+                                      height: Get.width / 5 * 3,
                                     ),
                                   )
                                 : const SizedBox(),
@@ -222,7 +218,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                         offstage: showCover,
                         child: GestureDetector(
                             child: SizedBox(
-                              height: 440,
+                              height:
+                                  (Get.height - Get.statusBarHeight) / 10 * 7,
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -238,7 +235,11 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                   .asMap()
                                                   .entries
                                                   .map((entry) => Container(
-                                                        height: 40,
+                                                        height: ((Get.height -
+                                                                Get.statusBarHeight) /
+                                                            10 *
+                                                            7 /
+                                                            11),
                                                         alignment:
                                                             Alignment.center,
                                                         child: Text(

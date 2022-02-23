@@ -68,7 +68,7 @@ class _TabbarComponentState extends State<TabbarComponent>
       //显示样式
       style: DrawerStyle.Style3,
       //抽屉宽度
-      slideWidth: MediaQuery.of(context).size.width * (0.75),
+      slideWidth: Get.width * (0.75),
       //主屏幕圆角
       borderRadius: 0.0,
       //旋转角度
@@ -241,8 +241,8 @@ class MenuScreenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * (0.8),
-      height: MediaQuery.of(context).size.height,
+      width: Get.width * (0.8),
+      height: Get.height,
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

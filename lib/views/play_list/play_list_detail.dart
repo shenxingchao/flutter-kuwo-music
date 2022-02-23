@@ -125,7 +125,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                     onNotification: (ScrollNotification notification) {
                       if (notification is ScrollUpdateNotification &&
                           notification.depth == 0) {
-                        double maxHight = MediaQuery.of(context).size.width -
+                        double maxHight = Get.width -
                             MediaQuery.of(context).padding.top -
                             66;
                         //尽量不要每次滚动都去setState
@@ -196,7 +196,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       //合并后高度
       collapsedHeight: 66,
       //头部总高度
-      expandedHeight: MediaQuery.of(context).size.width -
+      expandedHeight: Get.width -
           MediaQuery.of(context).padding.top,
       //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
       forceElevated: innerBoxIsScrolled,
@@ -227,8 +227,8 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                   alignment: Alignment.center,
                   //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
                   fit: BoxFit.fill,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width,
+                  width: Get.width,
+                  height: Get.width,
                 ),
                 Positioned(
                     bottom: 50,
