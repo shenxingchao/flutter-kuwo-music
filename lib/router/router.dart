@@ -5,6 +5,7 @@ import '../views/play_list/play_list_detail.dart';
 import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
+import '../views/user/favourite_list.dart';
 import '../views/mv/mv_detail.dart';
 
 //抽离路由代码
@@ -38,6 +39,10 @@ class Routers {
     GetPage(
         name: '/history',
         page: () => const HistroyComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/favourite_list',
+        page: () => const FavouriteListComponent(),
         transition: Transition.cupertino),
   ];
 }

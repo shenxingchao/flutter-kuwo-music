@@ -49,9 +49,38 @@ class _UserCommponentState extends State<UserCommponent> {
                         packageInfo.buildNumber +
                         " ©by sxc 2022/2/13"),
                     const Text(
-                        "本软件仅用于学习用途，接口皆来自于网络，版权归酷我所有，请在法律允许的范围内使用。如有侵权，请联系本人删除")
+                        "本软件仅用于学习用途，接口皆来自于网络，版权归酷我所有，请在法律允许的范围内使用。如有侵权，请联系本人删除",
+                        style:
+                            TextStyle(fontSize: 12, color: Color(0xff999999)))
                   ],
                 ),
+              ),
+              Container(
+                width: Get.width,
+                padding: const EdgeInsets.fromLTRB(30, 50, 30, 50),
+                color: Colors.white,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Material(
+                          color: Colors.white,
+                          child: InkWell(
+                            child: Column(children: const [
+                              Icon(Icons.favorite_rounded,
+                                  size: 30, color: Colors.red),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text("收藏")
+                            ]),
+                            onTap: () {
+                              Get.toNamed(
+                                '/favourite_list',
+                              );
+                            },
+                          ))
+                    ]),
               ),
               const Divider(
                 height: 1,

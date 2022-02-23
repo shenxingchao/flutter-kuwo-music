@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -129,8 +130,14 @@ class Store extends GetxController {
           pic120: music.data["data"]["pic120"],
           albuminfo: music.data["data"]["albuminfo"],
           name: music.data["data"]["name"]);
-      //播放新的音乐
-      await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+      try {
+        //播放新的音乐
+        await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+      } catch (e) {
+        Fluttertoast.showToast(
+          msg: "播放接口出错，按太快了",
+        );
+      }
 
       //添加到播放列表，如果已经添加，则不再添加
       if (!isExsit) {

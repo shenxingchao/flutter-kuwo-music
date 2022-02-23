@@ -148,6 +148,10 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
         if (box.read('favouriteMusicList') != null) {
           isLike = false;
           var favouriteMusicList = box.read('favouriteMusicList');
+          //每次进入清除null歌曲
+          favouriteMusicList.removeWhere((item) {
+            return item == null;
+          });
           //查找当前歌曲是否在收藏列表
           for (var item in favouriteMusicList) {
             if (item["rid"] == Get.find<Store>().playMusicInfo?.rid) {
@@ -332,33 +336,37 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                           color: Colors.grey),
                                                 ])),
                                             onTap: () {
-                                              setState(() {
-                                                isLike = !isLike;
-                                                var favouriteMusicList = box.read(
-                                                        'favouriteMusicList') ??
-                                                    [];
-                                                //记录缓存
-                                                if (isLike) {
-                                                  favouriteMusicList.add(store
-                                                      .playMusicInfo
-                                                      ?.toMap());
-                                                  box.write(
-                                                      'favouriteMusicList',
-                                                      favouriteMusicList);
-                                                }
-                                                //删除缓存
-                                                else {
-                                                  favouriteMusicList
-                                                      .removeWhere((item) {
-                                                    return item["rid"] ==
-                                                        store
-                                                            .playMusicInfo?.rid;
-                                                  });
-                                                  box.write(
-                                                      'favouriteMusicList',
-                                                      favouriteMusicList);
-                                                }
-                                              });
+                                              if (store.playMusicInfo != null) {
+                                                setState(() {
+                                                  isLike = !isLike;
+                                                  var favouriteMusicList = box.read(
+                                                          'favouriteMusicList') ??
+                                                      [];
+                                                  //记录缓存
+                                                  if (isLike) {
+                                                    favouriteMusicList.add(store
+                                                        .playMusicInfo
+                                                        ?.toMap());
+                                                    box.write(
+                                                        'favouriteMusicList',
+                                                        favouriteMusicList);
+                                                  }
+                                                  //删除缓存
+                                                  else {
+                                                    favouriteMusicList
+                                                        .removeWhere((item) {
+                                                      return item == null ||
+                                                          item["rid"] ==
+                                                              store
+                                                                  .playMusicInfo
+                                                                  ?.rid;
+                                                    });
+                                                    box.write(
+                                                        'favouriteMusicList',
+                                                        favouriteMusicList);
+                                                  }
+                                                });
+                                              }
                                             },
                                           ))
                                     ]),
