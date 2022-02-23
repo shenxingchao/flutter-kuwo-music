@@ -143,18 +143,20 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
 
   //初始化歌曲收藏状态
   initLikeState() {
-    setState(() {
-      if (box.read('favouriteMusicList') != null) {
-        isLike = false;
-        var favouriteMusicList = box.read('favouriteMusicList');
-        //查找当前歌曲是否在收藏列表
-        for (var item in favouriteMusicList) {
-          if (item["rid"] == Get.find<Store>().playMusicInfo?.rid) {
-            isLike = true;
+    if (mounted) {
+      setState(() {
+        if (box.read('favouriteMusicList') != null) {
+          isLike = false;
+          var favouriteMusicList = box.read('favouriteMusicList');
+          //查找当前歌曲是否在收藏列表
+          for (var item in favouriteMusicList) {
+            if (item["rid"] == Get.find<Store>().playMusicInfo?.rid) {
+              isLike = true;
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 
   @override
