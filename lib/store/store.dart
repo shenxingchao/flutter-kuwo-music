@@ -34,7 +34,7 @@ class Store extends GetxController {
   };
 
   //通知插件
-  FlutterLocalNotificationsPlugin?flutterLocalNotificationsPlugin;
+  FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
 
   //主题色
   Color primary = box.read('primary') != null
@@ -60,7 +60,9 @@ class Store extends GetxController {
   }
 
   //初始化通知插件
-  void changeFlutterLocalNotificationsPlugin(FlutterLocalNotificationsPlugin changeFlutterLocalNotificationsPluginObj) {
+  void changeFlutterLocalNotificationsPlugin(
+      FlutterLocalNotificationsPlugin
+          changeFlutterLocalNotificationsPluginObj) {
     flutterLocalNotificationsPlugin = changeFlutterLocalNotificationsPluginObj;
     update();
   }
@@ -86,6 +88,15 @@ class Store extends GetxController {
 
   //播放audio方法统一方法
   void playMusic({required int rid, bool isLocal = false}) async {
+    //判断是否在播放列表里，找到他是否本地音频
+    var isExsit = false;
+    for (var item in playListMusic) {
+      if (item.rid == rid) {
+        isExsit = true;
+        isLocal = item.isLocal;
+      }
+    }
+
     //网络音乐播放
     if (!isLocal) {
       //获取音频地址
@@ -120,13 +131,8 @@ class Store extends GetxController {
           name: music.data["data"]["name"]);
       //播放新的音乐
       await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+
       //添加到播放列表，如果已经添加，则不再添加
-      var isExsit = false;
-      for (var item in playListMusic) {
-        if (item.rid == music.data["data"]["rid"]) {
-          isExsit = true;
-        }
-      }
       if (!isExsit) {
         changePlayListMusic([
           ...playListMusic,
@@ -134,12 +140,14 @@ class Store extends GetxController {
               artist: music.data["data"]["artist"],
               rid: music.data["data"]["rid"],
               name: music.data["data"]["name"],
-              isLocal: isLocal,
+              isLocal: false,
               pic120: music.data["data"]["pic120"])
         ]);
       }
     } else {
-      //本地音乐播放 通过rid去查询本地mp3文件和lrc文件
+      //本地音频播放
+      //添加到播放列表，如果已经添加，则不再添加
+      if (!isExsit) {}
     }
 
     update();

@@ -124,7 +124,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                       scrollController.position.maxScrollExtent ||
                   positionIndex < lrcList.length - 6)) {
             double offsetScroll = ((positionIndex - 5) *
-                ((Get.height - Get.statusBarHeight) / 10 * 7 / 11));
+                ((Get.height - Get.statusBarHeight) / 10 * 6 / 11));
             scrollController.animateTo(
               offsetScroll,
               duration: const Duration(milliseconds: 200),
@@ -192,6 +192,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                       Offstage(
                         offstage: !showCover,
                         child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           child: SizedBox(
                             width: Get.width,
                             height: Get.width,
@@ -218,8 +219,9 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                         offstage: showCover,
                         child: GestureDetector(
                             child: SizedBox(
+                              width: Get.width,
                               height:
-                                  (Get.height - Get.statusBarHeight) / 10 * 7,
+                                  (Get.height - Get.statusBarHeight) / 10 * 6,
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -238,7 +240,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                         height: ((Get.height -
                                                                 Get.statusBarHeight) /
                                                             10 *
-                                                            7 /
+                                                            6 /
                                                             11),
                                                         alignment:
                                                             Alignment.center,
@@ -253,7 +255,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                                   positionIndex ==
                                                                           entry
                                                                               .key
-                                                                      ? 18
+                                                                      ? 20
                                                                       : 16,
                                                               color: positionIndex ==
                                                                       entry.key
@@ -281,6 +283,24 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                              child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(10),
+                                                  child: Row(children: const [
+                                                    Icon(Icons.favorite_outline,
+                                                        size: 30,
+                                                        color: Colors.grey),
+                                                  ]))))
+                                    ]),
                                 Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
