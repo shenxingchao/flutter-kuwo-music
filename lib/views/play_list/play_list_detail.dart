@@ -125,9 +125,8 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                     onNotification: (ScrollNotification notification) {
                       if (notification is ScrollUpdateNotification &&
                           notification.depth == 0) {
-                        double maxHight = Get.width -
-                            MediaQuery.of(context).padding.top -
-                            66;
+                        double maxHight =
+                            Get.width - MediaQuery.of(context).padding.top - 66;
                         //尽量不要每次滚动都去setState
                         if (notification.metrics.pixels >= maxHight &&
                             lightTheme) {
@@ -176,8 +175,9 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                                 controller: refreshController,
                                 onRefresh: onRefresh,
                                 onLoading: onLoading,
-                                child: CustomScrollView(
-                                    slivers: <Widget>[MusicListWidget(list: list)]))
+                                child: CustomScrollView(slivers: <Widget>[
+                                  MusicListWidget(list: list)
+                                ]))
                             : const Loading()))),
             const PlayMusicBottomBar()
           ]))
@@ -196,8 +196,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       //合并后高度
       collapsedHeight: 66,
       //头部总高度
-      expandedHeight: Get.width -
-          MediaQuery.of(context).padding.top,
+      expandedHeight: Get.width - MediaQuery.of(context).padding.top,
       //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
       forceElevated: innerBoxIsScrolled,
       //阴影深度
@@ -335,9 +334,12 @@ class FixToolBarWidget extends StatelessWidget {
                                     margin:
                                         const EdgeInsets.fromLTRB(10, 0, 5, 0),
                                     child: const Icon(Icons.play_circle_outline,
-                                        color: Color(0xff999999)),
+                                        color: Color(0xff333333)),
                                   ),
-                                  Text('播放全部(' + list.length.toString() + ')首'),
+                                  Text(
+                                    '播放全部/' + list.length.toString() + '首',
+                                    style: const TextStyle(fontSize: 18),
+                                  ),
                                 ]),
                               ],
                             ),

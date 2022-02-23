@@ -101,7 +101,7 @@ class _TabbarComponentState extends State<TabbarComponent>
               ? InputComponent(
                   controller: textController,
                   height: 40,
-                  hasBorder: false,
+                  hasBorder: true,
                   isCircle: true,
                   showSearchIcon: true,
                   placeholder: "歌曲/歌手/歌单/MV",
@@ -119,7 +119,7 @@ class _TabbarComponentState extends State<TabbarComponent>
           appBarHeight: currentIndex == 0 ? 70 : 66.0,
           elevation: 0,
           shadowColor: Colors.transparent,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Colors.white,
         ),
         body: router[currentIndex],
         //tabbar

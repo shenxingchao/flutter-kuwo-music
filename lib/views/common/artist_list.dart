@@ -24,7 +24,7 @@ class ArtistListWidget extends StatelessWidget {
               return FractionallySizedBox(
                   widthFactor: 1 / 4,
                   child: Padding(
-                    padding: const EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(20),
                     child: GestureDetector(
                       child: Column(
                         children: [
@@ -42,7 +42,7 @@ class ArtistListWidget extends StatelessWidget {
                                       ]),
                                   child: ClipOval(
                                       child: FadeInImage.assetNetwork(
-                                    alignment: Alignment.topRight,
+                                    alignment: Alignment.center,
                                     //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
                                     fit: BoxFit.cover,
                                     placeholder: 'assets/images/default.png',

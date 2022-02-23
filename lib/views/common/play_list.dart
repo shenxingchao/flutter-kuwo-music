@@ -41,24 +41,15 @@ class PlayListWidget extends StatelessWidget {
                         children: [
                           AspectRatio(
                               aspectRatio: 1 / 1,
-                              child: Container(
-                                  decoration: const BoxDecoration(boxShadow: [
-                                    BoxShadow(
-                                      offset: Offset(0, 4), //x,y轴
-                                      color: Color(0xffcccccc), //投影颜色
-                                      blurRadius: 4, //投影距离
-                                    )
-                                  ]),
-                                  child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: FadeInImage.assetNetwork(
-                                        alignment: Alignment.topRight,
-                                        //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                                        fit: BoxFit.cover,
-                                        placeholder:
-                                            'assets/images/default.png',
-                                        image: item["img"],
-                                      )))),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: FadeInImage.assetNetwork(
+                                    alignment: Alignment.center,
+                                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
+                                    fit: BoxFit.cover,
+                                    placeholder: 'assets/images/default.png',
+                                    image: item["img"],
+                                  ))),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
                             child:

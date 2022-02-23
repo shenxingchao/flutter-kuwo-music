@@ -406,7 +406,8 @@ class _HomeComponentState extends State<HomeComponent>
             enablePullDown: true,
             //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
             header: WaterDropMaterialHeader(
-                backgroundColor: Theme.of(context).colorScheme.primary),
+                backgroundColor: Colors.white,
+                color: Theme.of(context).colorScheme.primary),
             controller: refreshController,
             onRefresh: onRefresh,
             child: Scrollbar(
@@ -421,7 +422,7 @@ class _HomeComponentState extends State<HomeComponent>
                   //推荐歌单
                   Column(children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: Container(
                         alignment: Alignment.centerLeft,
                         child: const Text(
@@ -525,7 +526,7 @@ class CarouselWidget extends StatelessWidget {
                 return Builder(
                   builder: (BuildContext context) {
                     return FadeInImage.assetNetwork(
-                      alignment: Alignment.topRight,
+                      alignment: Alignment.center,
                       //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
                       fit: BoxFit.cover,
                       placeholder: 'assets/images/default_banner.png',

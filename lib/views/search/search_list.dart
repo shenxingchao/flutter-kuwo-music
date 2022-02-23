@@ -359,9 +359,12 @@ class PlayMusicListWidget extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.fromLTRB(10, 0, 5, 0),
                             child: const Icon(Icons.play_circle_outline,
-                                color: Color(0xff999999)),
+                                color: Color(0xff333333)),
                           ),
-                          Text('播放全部(' + list.length.toString() + ')首'),
+                          Text(
+                            '播放全部/' + list.length.toString() + '首',
+                            style: const TextStyle(fontSize: 18),
+                          ),
                         ]),
                       ],
                     ),

@@ -98,7 +98,7 @@ class MusicListWidget extends StatelessWidget {
                                           padding: const EdgeInsets.all(5),
                                           child: const Icon(
                                               Icons.play_circle_outline_rounded,
-                                              color: Color(0xffcccccc)),
+                                              color: Color(0xff999999)),
                                         ),
                                         onTap: () => {
                                           Get.toNamed('/mv_detail', arguments: {
@@ -111,7 +111,7 @@ class MusicListWidget extends StatelessWidget {
                                       behavior: HitTestBehavior.opaque,
                                       child: Container(
                                         padding: const EdgeInsets.all(5),
-                                        child: const Icon(Icons.more_horiz,
+                                        child: const Icon(Icons.more_vert,
                                             color: Color(0xffcccccc)),
                                       ),
                                       onTap: () => {
