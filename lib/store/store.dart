@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -28,9 +29,12 @@ List<Color> themeList = [
 class Store extends GetxController {
   //首屏缓存
   Map<String, List> homeCache = {
-    "homeBannerList":[],
-    "homePlayList":[],
+    "homeBannerList": [],
+    "homePlayList": [],
   };
+
+  //通知插件
+  FlutterLocalNotificationsPlugin?flutterLocalNotificationsPlugin;
 
   //主题色
   Color primary = box.read('primary') != null
@@ -49,10 +53,15 @@ class Store extends GetxController {
   //播放模式 默认列表循环
   PlayMode playMode = PlayMode.LIST_FOR_MODE;
 
-
   //更换首屏缓存
   void changeHomeCache(Map<String, List> homeCacheObj) {
     homeCache = homeCacheObj;
+    update();
+  }
+
+  //初始化通知插件
+  void changeFlutterLocalNotificationsPlugin(FlutterLocalNotificationsPlugin changeFlutterLocalNotificationsPluginObj) {
+    flutterLocalNotificationsPlugin = changeFlutterLocalNotificationsPluginObj;
     update();
   }
 

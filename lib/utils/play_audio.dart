@@ -24,7 +24,7 @@ class PlayAudio {
   //开始播放
   //url mp3路径
   Future<int> playAudio({String url = ''}) async {
-    int result = await audioPlayer.play(url);
+    int result = await audioPlayer.play(url, stayAwake: true);
     if (result != 1) {
       Fluttertoast.showToast(
         msg: "播放失败",
@@ -36,7 +36,8 @@ class PlayAudio {
   //播放本地音乐
   //localPath 本地音乐路径
   Future<int> playLocalAudio({String localPath = ''}) async {
-    int result = await audioPlayer.play(localPath, isLocal: true);
+    int result =
+        await audioPlayer.play(localPath, stayAwake: true, isLocal: true);
     if (result != 1) {
       Fluttertoast.showToast(
         msg: "播放失败",

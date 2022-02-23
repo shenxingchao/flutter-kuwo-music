@@ -31,8 +31,14 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <!-- 网络 -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 允许程序写入外部存储,如SD卡上写文件 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 程序可以读取设备外部存储空间  如果您的App已经添加了“WRITE_EXTERNAL_STORAGE ”权限 ，则就没必要添加读的权限了，写权限已经包含了读权限了-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 请求安装未知来源应用程序 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 保持屏幕常亮 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 </manifest>

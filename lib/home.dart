@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
@@ -69,6 +70,7 @@ class _HomeComponentState extends State<HomeComponent>
     }
 
     WidgetsBinding.instance!.addObserver(this);
+    //更新app
     updateApp();
   }
 
@@ -257,25 +259,68 @@ class _HomeComponentState extends State<HomeComponent>
                                                 });
                                               });
 
+                                          //显示通知
+                                          showNotification() async {
+                                            AndroidNotificationDetails
+                                                androidPlatformChannelSpecifics =
+                                                AndroidNotificationDetails(
+                                                    'your channel id',
+                                                    'your channel name',
+                                                    channelDescription:
+                                                        'your channel description',
+                                                    autoCancel: false,
+                                                    onlyAlertOnce: true,
+                                                    showProgress: true,
+                                                    maxProgress: 100,
+                                                    progress:
+                                                        (downloadPercent * 100)
+                                                            .floor(),
+                                                    importance: Importance.high,
+                                                    priority: Priority.high,
+                                                    ticker: 'ticker');
+                                            NotificationDetails
+                                                platformChannelSpecifics =
+                                                NotificationDetails(
+                                                    android:
+                                                        androidPlatformChannelSpecifics);
+                                            await Get.find<Store>()
+                                                .flutterLocalNotificationsPlugin
+                                                ?.show(0, '下载提醒', '当前下载进度',
+                                                    platformChannelSpecifics,
+                                                    payload: '');
+                                          }
+
                                           //创建下载任务
-                                          Dio dio = Dio();
-                                          await dio.download(
-                                              appUpdate.downloadUrl,
-                                              appUpdate.savePath,
-                                              onReceiveProgress:
-                                                  (received, total) {
-                                            if (total != -1) {
-                                              //当前下载的百分比例
-                                              double percentValue =
-                                                  double.parse(
-                                                      (received / total)
-                                                          .toStringAsFixed(2));
-                                              dialogState(() {
-                                                downloadPercent = percentValue;
-                                              });
-                                            }
-                                          });
-                                          await appUpdate.installApk();
+                                          try {
+                                            Dio dio = Dio();
+                                            await dio.download(
+                                                appUpdate.downloadUrl,
+                                                appUpdate.savePath,
+                                                onReceiveProgress:
+                                                    (received, total) {
+                                              if (total != -1) {
+                                                //当前下载的百分比例
+                                                double percentValue =
+                                                    double.parse((received /
+                                                            total)
+                                                        .toStringAsFixed(2));
+                                                dialogState(() {
+                                                  downloadPercent =
+                                                      percentValue;
+                                                  showNotification();
+                                                });
+                                              }
+                                            });
+
+                                            await appUpdate.installApk();
+                                          } catch (e) {
+                                            Get.find<Store>()
+                                                .flutterLocalNotificationsPlugin
+                                                ?.cancel(0);
+                                            Fluttertoast.showToast(
+                                              msg: "已取消更新",
+                                            );
+                                          }
                                         },
                                       ),
                                     ],

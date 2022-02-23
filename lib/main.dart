@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import './router/router.dart';
@@ -17,6 +18,8 @@ void main() async {
   Get.put(Store());
   //打开APP就开始监听音频播放状态 只需要监听一次
   listenAudio();
+  //初始化通知插件
+  initNotification();
   runApp(const MyApp());
 }
 
@@ -36,6 +39,24 @@ listenAudio() {
       Get.find<Store>().changeAudioPlayState(PlayerState.COMPLETED);
     }
   });
+}
+
+//初始化通知插件
+initNotification() async {
+  //初始化
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/launcher_icon');
+  final IOSInitializationSettings initializationSettingsIOS =
+      // ignore: prefer_const_constructors
+      IOSInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings, onSelectNotification: (e) {});
+  //保存到store
+  Get.find<Store>()
+      .changeFlutterLocalNotificationsPlugin(flutterLocalNotificationsPlugin);
 }
 
 class MyApp extends StatefulWidget {

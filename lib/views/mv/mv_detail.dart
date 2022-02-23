@@ -65,6 +65,9 @@ class _MvDetailComponentState extends State<MvDetailComponent> {
       aspectRatio: 853 / 480,
       autoPlay: true,
       looping: true,
+      //播放时不允许休眠
+      allowedScreenSleep:false,
+      //进度条颜色
       materialProgressColors: ChewieProgressColors(
           bufferedColor: const Color(0xff666666),
           backgroundColor: const Color(0xff333333),
