@@ -7,8 +7,12 @@ import 'package:get_storage/get_storage.dart';
 import './router/router.dart';
 import './store/store.dart';
 import 'utils/play_audio.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() async {
+  //保留启动图，直到首页加载完成，删除
+   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   //透明状态栏
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
