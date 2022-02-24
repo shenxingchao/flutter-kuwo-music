@@ -52,15 +52,24 @@ class PlayListWidget extends StatelessWidget {
                                   ))),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
-                            child:
-                                //返回类型不一致 这里一致处理
-                                Text(
-                              (int.parse(item["listencnt"].toString()) / 10000)
-                                      .toStringAsFixed(2) +
-                                  "万",
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          )
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.play_arrow_outlined,
+                                    size: 18,
+                                    color: Colors.white,
+                                  ),
+                                  //返回类型不一致 这里一致处理
+                                  Text(
+                                    (int.parse(item["listencnt"].toString()) /
+                                                10000)
+                                            .toStringAsFixed(2) +
+                                        "万",
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ]),
+                          ),
                         ],
                       ),
                       Container(
