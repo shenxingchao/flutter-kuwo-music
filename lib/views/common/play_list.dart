@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PlayListWidget extends StatelessWidget {
+  final List list;
+  //显示的列数
+  final int? column;
+
   const PlayListWidget({
     Key? key,
     required this.list,
+    this.column = 3,
   }) : super(key: key);
-
-  final List list;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +33,7 @@ class PlayListWidget extends StatelessWidget {
             return const SizedBox();
           }
           return FractionallySizedBox(
-              widthFactor: 1 / 3,
+              widthFactor: 1 / column!,
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: GestureDetector(

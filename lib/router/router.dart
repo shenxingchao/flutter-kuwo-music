@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import '../tabbar.dart';
 import '../views/theme.dart';
 import '../views/play_list/play_list_detail.dart';
+import '../views/play_list/play_list_index.dart';
 import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
@@ -15,6 +16,10 @@ class Routers {
     GetPage(
         name: '/',
         page: () => const TabbarComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/play_list_index',
+        page: () => const PlayListIndexComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/theme',

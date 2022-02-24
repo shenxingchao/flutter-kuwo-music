@@ -476,10 +476,11 @@ class CategoryWidget extends StatelessWidget {
                   ],
                 ),
                 onTap: () {
-                  // Get.toNamed('/book_chapter',
-                  //     arguments: Book(
-                  //         id: item["id"],
-                  //         bookName: item["book_name"]));
+                  switch (item["title"]) {
+                    case '歌单':
+                      Get.toNamed('/play_list_index');
+                      break;
+                  }
                 },
               );
             },
