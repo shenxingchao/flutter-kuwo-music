@@ -257,14 +257,14 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                         Text(
                           playList["uname"],
                           style: const TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
                         Text(
                           '共' + playList["total"].toString() + "首",
                           style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -274,7 +274,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                                   .toStringAsFixed(2) +
                               "万",
                           style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -311,18 +311,8 @@ class FixToolBarWidget extends StatelessWidget {
                     return Container(
                       height: 50,
                       color: Colors.white,
-                      child: Container(
-                          height: 49.5,
-                          //定义样式
-                          decoration: const BoxDecoration(
-                            //边框
-                            border: Border(
-                              bottom: BorderSide(
-                                width: 0.5, //宽度
-                                color: Color(0xffcccccc), //边框颜色
-                              ),
-                            ),
-                          ),
+                      child: SizedBox(
+                          height: 50,
                           child: GestureDetector(
                             //保证空白范围可点击 这里点击一行
                             behavior: HitTestBehavior.opaque,
@@ -338,7 +328,7 @@ class FixToolBarWidget extends StatelessWidget {
                                   ),
                                   Text(
                                     '播放全部/' + list.length.toString() + '首',
-                                    style: const TextStyle(fontSize: 18),
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                 ]),
                               ],

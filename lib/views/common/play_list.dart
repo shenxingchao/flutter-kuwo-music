@@ -42,7 +42,7 @@ class PlayListWidget extends StatelessWidget {
                           AspectRatio(
                               aspectRatio: 1 / 1,
                               child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(4),
                                   child: FadeInImage.assetNetwork(
                                     alignment: Alignment.center,
                                     //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
@@ -66,18 +66,11 @@ class PlayListWidget extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(
-                          item["name"],
-                          maxLines: 1,
+                          (item["name"] as String).replaceAll('&nbsp;', ' '),
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                         ),
-                      ),
-                      Text(
-                        item["uname"],
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 14, color: Color(0xff999999)),
                       ),
                     ],
                   ),

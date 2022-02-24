@@ -58,7 +58,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                           //边框
                           border: Border(
                             top: BorderSide(
-                              width: 0.5, //宽度
+                              width: 0.4, //宽度
                               color: Color(0xffcccccc), //边框颜色
                             ),
                           ),
@@ -131,7 +131,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              fontSize: 12.0,
+                                              fontSize: 10.0,
                                               color: Color(0xff999999)),
                                         ),
                                       ),
@@ -139,7 +139,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                               )),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Material(
                                   color: Colors.white,
@@ -152,8 +152,10 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                               ? Icons
                                                   .pause_circle_outline_rounded
                                               : Icons.play_arrow_rounded,
-                                          size: 30,
-                                          color: const Color(0xff333333)),
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                     onTap: () {
                                       if (store.audioPlayState ==
@@ -175,8 +177,11 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                   child: InkWell(
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
-                                      child: const Icon(Icons.skip_next_rounded,
-                                          size: 30, color: Color(0xff333333)),
+                                      child: Icon(Icons.skip_next_rounded,
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                     onTap: () => {
                                       //播放下一首
@@ -188,8 +193,11 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                   child: InkWell(
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
-                                      child: const Icon(Icons.menu,
-                                          size: 30, color: Color(0xff333333)),
+                                      child: Icon(Icons.menu,
+                                          size: 24,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
                                     ),
                                     onTap: () => {
                                       //显示下拉弹出方法
@@ -259,7 +267,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
     int playingIndex = Get.find<Store>().getPlayingIndex();
 
     scrollController =
-        ScrollController(initialScrollOffset: 73.0 * playingIndex);
+        ScrollController(initialScrollOffset: 72.0 * playingIndex);
   }
 
   @override
@@ -273,18 +281,8 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
               color: Colors.white,
               child: Column(
                 children: [
-                  Container(
-                    height: 49.5,
-                    //定义样式
-                    decoration: const BoxDecoration(
-                      //边框
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 0.5, //宽度
-                          color: Color(0xffcccccc), //边框颜色
-                        ),
-                      ),
-                    ),
+                  SizedBox(
+                    height: 50,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -297,9 +295,14 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                 Container(
                                   margin: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                                   child: const Icon(Icons.play_circle_outline,
-                                      color: Color(0xff999999)),
+                                      color: Color(0xff333333)),
                                 ),
-                                const Text('播放全部')
+                                Text(
+                                  '播放全部/' +
+                                      store.playListMusic.length.toString() +
+                                      '首',
+                                  style: const TextStyle(fontSize: 16),
+                                )
                               ]),
                             ),
                             onTap: () {
@@ -376,14 +379,16 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                item.name,
+                                                item.name
+                                                    .replaceAll('&nbsp;', ' '),
                                                 style: const TextStyle(
                                                     fontSize: 18),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               Text(
-                                                item.artist,
+                                                item.artist
+                                                    .replaceAll('&nbsp;', ' '),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -434,10 +439,6 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                       )
                                     ],
                                   ),
-                                ),
-                                const Divider(
-                                  height: 1,
-                                  color: Color(0xffdddddd),
                                 )
                               ]),
                               onTap: () {

@@ -18,11 +18,15 @@ import '../utils/play_audio.dart';
 var box = GetStorage();
 //主题色列表
 List<Color> themeList = [
+  const Color(0xff009EFF),
   const Color(0xffFFDF1F),
-  const Color(0xff40A7FF),
-  const Color(0xff00ED93),
-  const Color(0xffFF9B9D),
-  const Color(0xffC986FF),
+  const Color(0xffFF3439),
+  const Color(0xffFF3EC6),
+  const Color(0xffB23BFF),
+  const Color(0xff00CEFF),
+  const Color(0xff00FFA0),
+  const Color(0xffC4FF00),
+  const Color(0xffFA981C),
 ];
 //全局变量end
 
@@ -112,6 +116,9 @@ class Store extends GetxController {
       }
       //获取音乐详情
       var music = await CommonApi().getMusicDetail(mid: rid);
+      if (music == null || music.data == null) {
+        return;
+      }
       //变更当前播放对象
       playMusicInfo = PlayMusicInfo(
           artist: music.data["data"]["artist"],

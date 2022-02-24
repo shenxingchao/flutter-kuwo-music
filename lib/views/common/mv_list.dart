@@ -75,7 +75,7 @@ class MVListWidget extends StatelessWidget {
                           item["name"],
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ),
                     ],

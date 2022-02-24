@@ -82,13 +82,13 @@ class _MyAppState extends State<MyApp> {
                       primary: store.primary,
                       //图标颜色
                       onPrimary: const Color(0Xff333333)),
-                  fontFamily: "PingFangSC",
+                  // fontFamily: "PingFangSC",
                   textTheme: const TextTheme(
                       //Material 正文字体
                       bodyText2: TextStyle(
-                    fontSize: 14.0,
+                    fontSize: 12.0,
                     color: Color(0xff333333),
-                    fontFamily: "PingFangSC",
+                    // fontFamily: "PingFangSC",
                   ))),
               //隐藏debug字样
               debugShowCheckedModeBanner: false,

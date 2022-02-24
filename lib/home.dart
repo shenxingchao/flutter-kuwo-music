@@ -426,7 +426,7 @@ class _HomeComponentState extends State<HomeComponent>
                       child: Container(
                         alignment: Alignment.centerLeft,
                         child: const Text(
-                          '歌单推荐',
+                          '推荐歌单',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -451,7 +451,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
       child: Row(
         //相当于css justifly
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -464,8 +464,8 @@ class CategoryWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 30,
+                      height: 30,
                       child: Image.asset(
                         item["icon"],
                         fit: BoxFit.cover,
@@ -512,7 +512,7 @@ class CarouselWidget extends StatelessWidget {
             )
           ]),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(4),
             child: CarouselSlider(
               options: CarouselOptions(
                 //宽高比

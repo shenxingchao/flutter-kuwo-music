@@ -95,6 +95,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
       if (mounted &&
           res != null &&
           res.data != null &&
+          res.data["data"] != null &&
           res.data["data"]["lrclist"] != null) {
         setState(() {
           lrcList = res.data["data"]["lrclist"];
@@ -222,7 +223,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                   )),
                   //高斯模糊滤镜
                   BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 50.0, sigmaY: 50.0),
+                    filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
                     child: Center(
                       child: Container(
                         color: Colors.black.withOpacity(0.5),
@@ -395,8 +396,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                     flex: 1,
                                     child: SliderTheme(
                                       data: SliderTheme.of(context).copyWith(
-                                        trackHeight: 2,
-                                      ),
+                                          trackHeight: 0.2,
+                                          inactiveTrackColor: Colors.white),
                                       child: Slider(
                                         value: audioPercent,
                                         onChanged: (v) {
@@ -439,8 +440,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                     PlayMode.SINGLE_MODE,
                                                 child: const Icon(
                                                     Icons.looks_one_outlined,
-                                                    size: 30,
-                                                    color: Colors.white),
+                                                    size: 20,
+                                                    color: Color(0xaaffffff)),
                                               ),
                                               //循环播放
                                               Offstage(
@@ -448,8 +449,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                     PlayMode.LIST_FOR_MODE,
                                                 child: const Icon(
                                                     Icons.repeat_rounded,
-                                                    size: 30,
-                                                    color: Colors.white),
+                                                    size: 20,
+                                                    color: Color(0xaaffffff)),
                                               ),
                                               //顺序播放
                                               Offstage(
@@ -457,8 +458,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                     PlayMode.LIST_MODE,
                                                 child: const Icon(
                                                     Icons.playlist_play_rounded,
-                                                    size: 30,
-                                                    color: Colors.white),
+                                                    size: 20,
+                                                    color: Color(0xaaffffff)),
                                               ),
                                               //单曲循环
                                               Offstage(
@@ -466,8 +467,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                     PlayMode.SINGLE_FOR_MODE,
                                                 child: const Icon(
                                                     Icons.repeat_one_rounded,
-                                                    size: 30,
-                                                    color: Colors.white),
+                                                    size: 20,
+                                                    color: Color(0xaaffffff)),
                                               ),
                                               //随机播放
                                               Offstage(
@@ -475,8 +476,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                     PlayMode.RANDOM_MODE,
                                                 child: const Icon(
                                                     Icons.shuffle_rounded,
-                                                    size: 30,
-                                                    color: Colors.white),
+                                                    size: 20,
+                                                    color: Color(0xaaffffff)),
                                               )
                                             ],
                                           )),
@@ -557,7 +558,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                     child: Container(
                                       padding: const EdgeInsets.all(10),
                                       child: const Icon(Icons.menu_rounded,
-                                          size: 30, color: Colors.white),
+                                          size: 20, color: Color(0xaaffffff)),
                                     ),
                                     onTap: () => {
                                       //显示下拉弹出方法

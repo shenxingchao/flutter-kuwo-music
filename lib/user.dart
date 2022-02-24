@@ -55,41 +55,41 @@ class _UserCommponentState extends State<UserCommponent> {
                   ],
                 ),
               ),
-              Container(
-                width: Get.width,
-                padding: const EdgeInsets.fromLTRB(30, 50, 30, 50),
-                color: Colors.white,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            child: Column(children: const [
-                              Icon(Icons.favorite_rounded,
-                                  size: 30, color: Colors.red),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text("收藏")
-                            ]),
-                            onTap: () {
-                              Get.toNamed(
-                                '/favourite_list',
-                              );
-                            },
-                          ))
-                    ]),
-              ),
-              const Divider(
-                height: 1,
-                color: Color(0xffdddddd),
+              ListTile(
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //背景颜色
+                      color: const Color(0xffFE9EB3),
+                      borderRadius: BorderRadius.circular(4)),
+                  child: const Icon(
+                    Icons.favorite_rounded,
+                    size: 30,
+                    color: Colors.red,
+                  ),
+                ),
+                trailing: const Icon(Icons.keyboard_arrow_right,
+                    color: Color(0xff999999)),
+                title: const Text('我喜欢'),
+                tileColor: Colors.white,
+                onTap: () {
+                  Get.toNamed(
+                    '/favourite_list',
+                  );
+                },
               ),
               ListTile(
-                leading: Icon(
-                  Icons.history,
-                  color: Theme.of(context).colorScheme.primary,
+                leading: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      //背景颜色
+                      color: const Color(0xfff1f1f1),
+                      borderRadius: BorderRadius.circular(4)),
+                  child: Icon(
+                    Icons.history,
+                    size: 30,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
                 trailing: const Icon(Icons.keyboard_arrow_right,
                     color: Color(0xff999999)),

@@ -48,7 +48,7 @@ class _HistroyComponentState extends State<HistroyComponent> {
                       margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
                       //圆角 必须要定义下面2项才能控制4个圆角
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
+                          borderRadius: BorderRadius.circular(4)),
                       clipBehavior: Clip.antiAlias,
                       child: Container(
                           color: Colors.white,

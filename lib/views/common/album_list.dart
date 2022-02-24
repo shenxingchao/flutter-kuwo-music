@@ -57,10 +57,10 @@ class AlbumListWidget extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                             child: Text(
-                              item["album"],
-                              maxLines: 1,
+                              (item["album"] as String).replaceAll('&nbsp;', ' '),
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 14),
                             ),
                           ),
                         ],

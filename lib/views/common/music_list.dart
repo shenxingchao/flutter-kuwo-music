@@ -26,7 +26,7 @@ class MusicListWidget extends StatelessWidget {
                         child: Column(children: [
                           Container(
                             padding: const EdgeInsets.all(10),
-                            height: 73,
+                            height: 72,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,8 +44,9 @@ class MusicListWidget extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          entry.value["name"],
-                                          style: const TextStyle(fontSize: 18),
+                                          (entry.value["name"] as String)
+                                              .replaceAll('&nbsp;', ' '),
+                                          style: const TextStyle(fontSize: 16),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -71,7 +72,10 @@ class MusicListWidget extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                    entry.value["artist"],
+                                                    (entry.value["artist"]
+                                                            as String)
+                                                        .replaceAll(
+                                                            '&nbsp;', ' '),
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -86,7 +90,7 @@ class MusicListWidget extends StatelessWidget {
                                     )),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Offstage(
                                       offstage: entry.value["hasmv"] != 1,
@@ -112,7 +116,7 @@ class MusicListWidget extends StatelessWidget {
                                       child: Container(
                                         padding: const EdgeInsets.all(5),
                                         child: const Icon(Icons.more_vert,
-                                            color: Color(0xffcccccc)),
+                                            size: 16, color: Color(0xffcccccc)),
                                       ),
                                       onTap: () => {
                                         //print("弹出下载")
@@ -123,10 +127,6 @@ class MusicListWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                          const Divider(
-                            height: 1,
-                            color: Color(0xffdddddd),
-                          )
                         ]),
                         onTap: () async {
                           //添加到播放列表

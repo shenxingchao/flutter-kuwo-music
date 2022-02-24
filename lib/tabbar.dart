@@ -83,7 +83,7 @@ class _TabbarComponentState extends State<TabbarComponent>
       mainScreenTapClose: true,
       //主屏幕覆盖层颜色
       overlayColor: const Color(0xcc000000),
-      overlayBlend:BlendMode.srcOver,
+      overlayBlend: BlendMode.srcOver,
       //主屏幕模糊量
       overlayBlur: 0,
       //侧边栏
@@ -130,16 +130,16 @@ class _TabbarComponentState extends State<TabbarComponent>
               audioListen(store);
               return BottomNavigationBar(
                 //图标大小
-                iconSize: 26,
+                iconSize: 28,
                 //当前激活项
                 currentIndex: currentIndex,
                 //布局类型
                 type: BottomNavigationBarType.fixed,
                 //选中字体
-                selectedFontSize: 14,
-                selectedItemColor: const Color(0xff333333),
+                selectedFontSize: 10,
+                selectedItemColor: Theme.of(context).colorScheme.primary,
                 //没选中字体
-                unselectedFontSize: 14,
+                unselectedFontSize: 10,
                 //背景颜色
                 backgroundColor: Colors.white,
                 //子节点
@@ -157,7 +157,7 @@ class _TabbarComponentState extends State<TabbarComponent>
                             height: 0,
                           ),
                           Positioned(
-                            top: -15,
+                            top: -19,
                             child: RotationTransition(
                               turns: animationController
                                 ..addStatusListener((status) {
