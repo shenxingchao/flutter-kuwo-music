@@ -21,6 +21,9 @@ class MusicDetailComponent extends StatefulWidget {
 }
 
 class _MusicDetailComponentState extends State<MusicDetailComponent> {
+  //歌词容器key 用于获取容器高度
+  GlobalKey lrcContinerKey = GlobalKey();
+  double lrcContainerHeight = 0;
   //歌词列表
   List lrcList = [];
   //当前播放进度 秒
@@ -47,8 +50,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
   @override
   void initState() {
     super.initState();
-    //获取歌词
-    getLrcList();
+    //初始化歌词容器高度 并获取歌词
+    initLrcContainerHeight();
     //播放进度监听
     audioProgressListen();
     //初始化歌曲收藏状态
@@ -61,6 +64,19 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
     scrollController.dispose();
     audioPositionListen.cancel();
     super.dispose();
+  }
+
+  //初始化歌词容器高度 并获取歌词
+  initLrcContainerHeight() async {
+    //获取歌词
+    await getLrcList();
+    if (mounted) {
+      setState(() {
+        RenderBox? renderBox =
+            lrcContinerKey.currentContext?.findRenderObject() as RenderBox;
+        lrcContainerHeight = renderBox.size.height;
+      });
+    }
   }
 
   //获取歌词
@@ -128,8 +144,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
               (scrollController.position.pixels <
                       scrollController.position.maxScrollExtent ||
                   positionIndex < lrcList.length - 6)) {
-            double offsetScroll = ((positionIndex - 5) *
-                ((Get.height - Get.statusBarHeight) / 10 * 6 / 11));
+            double offsetScroll =
+                (positionIndex - 5) * (lrcContainerHeight / 11);
             scrollController.animateTo(
               offsetScroll,
               duration: const Duration(milliseconds: 200),
@@ -242,341 +258,322 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                           },
                         ),
                       ),
-                      Offstage(
-                        offstage: showCover,
-                        child: GestureDetector(
-                            child: SizedBox(
-                              width: Get.width,
-                              height:
-                                  (Get.height - Get.statusBarHeight) / 10 * 6,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: SingleChildScrollView(
-                                          controller: scrollController,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              ...lrcList
-                                                  .asMap()
-                                                  .entries
-                                                  .map((entry) => Container(
-                                                        height: ((Get.height -
-                                                                Get.statusBarHeight) /
-                                                            10 *
-                                                            6 /
-                                                            11),
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Text(
-                                                          entry.value[
-                                                              "lineLyric"],
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                              fontSize:
-                                                                  positionIndex ==
-                                                                          entry
-                                                                              .key
-                                                                      ? 20
-                                                                      : 16,
-                                                              color: positionIndex ==
-                                                                      entry.key
-                                                                  ? Colors.white
-                                                                  : const Color(
-                                                                      0xff999999)),
-                                                        ),
-                                                      ))
-                                                  .toList(),
-                                            ],
-                                          )),
-                                    ),
-                                  ]),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                showCover = true;
-                              });
-                            }),
-                      ),
                       Expanded(
                           flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: Row(children: [
-                                                  isLike
-                                                      ? const Icon(
-                                                          Icons
-                                                              .favorite_rounded,
-                                                          size: 30,
-                                                          color: Colors.red)
-                                                      : const Icon(
-                                                          Icons
-                                                              .favorite_border_rounded,
-                                                          size: 30,
-                                                          color: Colors.grey),
-                                                ])),
-                                            onTap: () {
-                                              if (store.playMusicInfo != null) {
-                                                setState(() {
-                                                  isLike = !isLike;
-                                                  var favouriteMusicList = box.read(
-                                                          'favouriteMusicList') ??
-                                                      [];
-                                                  //记录缓存
-                                                  if (isLike) {
-                                                    favouriteMusicList.add(store
-                                                        .playMusicInfo
-                                                        ?.toMap());
-                                                    box.write(
-                                                        'favouriteMusicList',
-                                                        favouriteMusicList);
-                                                  }
-                                                  //删除缓存
-                                                  else {
-                                                    favouriteMusicList
-                                                        .removeWhere((item) {
-                                                      return item == null ||
-                                                          item["rid"] ==
-                                                              store
-                                                                  .playMusicInfo
-                                                                  ?.rid;
-                                                    });
-                                                    box.write(
-                                                        'favouriteMusicList',
-                                                        favouriteMusicList);
-                                                  }
+                          child: Offstage(
+                            offstage: showCover,
+                            child: LayoutBuilder(builder: (BuildContext context,
+                                BoxConstraints constraints) {
+                              //利用LayoutBuilder获取父容器宽高constraints.maxHeight 457
+                              return GestureDetector(
+                                  key: lrcContinerKey,
+                                  child: SizedBox(
+                                    width: Get.width,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: SingleChildScrollView(
+                                                controller: scrollController,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    ...lrcList
+                                                        .asMap()
+                                                        .entries
+                                                        .map(
+                                                            (entry) =>
+                                                                Container(
+                                                                  height: constraints
+                                                                          .maxHeight /
+                                                                      11,
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: Text(
+                                                                    entry.value[
+                                                                        "lineLyric"],
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: TextStyle(
+                                                                        fontSize: positionIndex == entry.key
+                                                                            ? 20
+                                                                            : 16,
+                                                                        color: positionIndex ==
+                                                                                entry.key
+                                                                            ? Colors.white
+                                                                            : const Color(0xff999999)),
+                                                                  ),
+                                                                ))
+                                                        .toList(),
+                                                  ],
+                                                )),
+                                          ),
+                                        ]),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      showCover = true;
+                                    });
+                                  });
+                            }),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(children: [
+                                              isLike
+                                                  ? const Icon(
+                                                      Icons.favorite_rounded,
+                                                      size: 30,
+                                                      color: Colors.red)
+                                                  : const Icon(
+                                                      Icons
+                                                          .favorite_border_rounded,
+                                                      size: 30,
+                                                      color: Colors.grey),
+                                            ])),
+                                        onTap: () {
+                                          if (store.playMusicInfo != null) {
+                                            setState(() {
+                                              isLike = !isLike;
+                                              var favouriteMusicList = box.read(
+                                                      'favouriteMusicList') ??
+                                                  [];
+                                              //记录缓存
+                                              if (isLike) {
+                                                favouriteMusicList.add(store
+                                                    .playMusicInfo
+                                                    ?.toMap());
+                                                box.write('favouriteMusicList',
+                                                    favouriteMusicList);
+                                              }
+                                              //删除缓存
+                                              else {
+                                                favouriteMusicList
+                                                    .removeWhere((item) {
+                                                  return item == null ||
+                                                      item["rid"] ==
+                                                          store.playMusicInfo
+                                                              ?.rid;
                                                 });
+                                                box.write('favouriteMusicList',
+                                                    favouriteMusicList);
                                               }
-                                            },
-                                          ))
-                                    ]),
-                                Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        audioDurationFormat,
-                                        style: const TextStyle(
-                                            color: Colors.white),
+                                            });
+                                          }
+                                        },
+                                      ))
+                                ]),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    audioDurationFormat,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: SliderTheme(
+                                      data: SliderTheme.of(context).copyWith(
+                                        trackHeight: 2,
                                       ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: SliderTheme(
-                                          data:
-                                              SliderTheme.of(context).copyWith(
-                                            trackHeight: 2,
-                                          ),
-                                          child: Slider(
-                                            value: audioPercent,
-                                            onChanged: (v) {
-                                              if (store.playMusicInfo != null) {
-                                                //拖动后毫秒数
-                                                double second = store
-                                                        .playMusicInfo!
-                                                        .duration *
+                                      child: Slider(
+                                        value: audioPercent,
+                                        onChanged: (v) {
+                                          if (store.playMusicInfo != null) {
+                                            //拖动后毫秒数
+                                            double second =
+                                                store.playMusicInfo!.duration *
                                                     v;
-                                                int microseconds =
-                                                    (second * 1000 * 1000)
-                                                        .round();
-                                                PlayAudio.instance.seekAudio(
-                                                    microseconds: microseconds);
-                                              }
-                                            },
-                                            max: 1.0,
-                                            min: 0,
-                                          ),
-                                        ),
+                                            int microseconds =
+                                                (second * 1000 * 1000).round();
+                                            PlayAudio.instance.seekAudio(
+                                                microseconds: microseconds);
+                                          }
+                                        },
+                                        max: 1.0,
+                                        min: 0,
                                       ),
-                                      Text(
-                                        store.playMusicInfo != null
-                                            ? store
-                                                .playMusicInfo!.songTimeMinutes
-                                            : '00:00',
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                    ]),
+                                    ),
+                                  ),
+                                  Text(
+                                    store.playMusicInfo != null
+                                        ? store.playMusicInfo!.songTimeMinutes
+                                        : '00:00',
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ]),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          child: Row(
+                                            children: [
+                                              //单曲播放
+                                              Offstage(
+                                                offstage: store.playMode !=
+                                                    PlayMode.SINGLE_MODE,
+                                                child: const Icon(
+                                                    Icons.looks_one_outlined,
+                                                    size: 30,
+                                                    color: Colors.white),
+                                              ),
+                                              //循环播放
+                                              Offstage(
+                                                offstage: store.playMode !=
+                                                    PlayMode.LIST_FOR_MODE,
+                                                child: const Icon(
+                                                    Icons.repeat_rounded,
+                                                    size: 30,
+                                                    color: Colors.white),
+                                              ),
+                                              //顺序播放
+                                              Offstage(
+                                                offstage: store.playMode !=
+                                                    PlayMode.LIST_MODE,
+                                                child: const Icon(
+                                                    Icons.playlist_play_rounded,
+                                                    size: 30,
+                                                    color: Colors.white),
+                                              ),
+                                              //单曲循环
+                                              Offstage(
+                                                offstage: store.playMode !=
+                                                    PlayMode.SINGLE_FOR_MODE,
+                                                child: const Icon(
+                                                    Icons.repeat_one_rounded,
+                                                    size: 30,
+                                                    color: Colors.white),
+                                              ),
+                                              //随机播放
+                                              Offstage(
+                                                offstage: store.playMode !=
+                                                    PlayMode.RANDOM_MODE,
+                                                child: const Icon(
+                                                    Icons.shuffle_rounded,
+                                                    size: 30,
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          )),
+                                      onTap: () {
+                                        //切换下一种播放模式
+                                        store.changePlayMode();
+                                      },
+                                    )),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Material(
                                         color: Colors.transparent,
                                         child: InkWell(
                                           child: Container(
-                                              padding: const EdgeInsets.all(10),
-                                              child: Row(
-                                                children: [
-                                                  //单曲播放
-                                                  Offstage(
-                                                    offstage: store.playMode !=
-                                                        PlayMode.SINGLE_MODE,
-                                                    child: const Icon(
-                                                        Icons
-                                                            .looks_one_outlined,
-                                                        size: 30,
-                                                        color: Colors.white),
-                                                  ),
-                                                  //循环播放
-                                                  Offstage(
-                                                    offstage: store.playMode !=
-                                                        PlayMode.LIST_FOR_MODE,
-                                                    child: const Icon(
-                                                        Icons.repeat_rounded,
-                                                        size: 30,
-                                                        color: Colors.white),
-                                                  ),
-                                                  //顺序播放
-                                                  Offstage(
-                                                    offstage: store.playMode !=
-                                                        PlayMode.LIST_MODE,
-                                                    child: const Icon(
-                                                        Icons
-                                                            .playlist_play_rounded,
-                                                        size: 30,
-                                                        color: Colors.white),
-                                                  ),
-                                                  //单曲循环
-                                                  Offstage(
-                                                    offstage: store.playMode !=
-                                                        PlayMode
-                                                            .SINGLE_FOR_MODE,
-                                                    child: const Icon(
-                                                        Icons
-                                                            .repeat_one_rounded,
-                                                        size: 30,
-                                                        color: Colors.white),
-                                                  ),
-                                                  //随机播放
-                                                  Offstage(
-                                                    offstage: store.playMode !=
-                                                        PlayMode.RANDOM_MODE,
-                                                    child: const Icon(
-                                                        Icons.shuffle_rounded,
-                                                        size: 30,
-                                                        color: Colors.white),
-                                                  )
-                                                ],
-                                              )),
-                                          onTap: () {
-                                            //切换下一种播放模式
-                                            store.changePlayMode();
+                                            padding: const EdgeInsets.all(10),
+                                            child: const Icon(
+                                                Icons.skip_previous_rounded,
+                                                size: 40,
+                                                color: Colors.white),
+                                          ),
+                                          onTap: () => {
+                                            //播放上一首
+                                            store.playPrevMusic()
                                           },
                                         )),
-                                    Row(
-                                      children: [
-                                        Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: const Icon(
-                                                    Icons.skip_previous_rounded,
-                                                    size: 40,
-                                                    color: Colors.white),
-                                              ),
-                                              onTap: () => {
-                                                //播放上一首
-                                                store.playPrevMusic()
-                                              },
-                                            )),
-                                        Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: Icon(
-                                                    store.audioPlayState ==
-                                                            PlayerState.PLAYING
-                                                        ? Icons
-                                                            .pause_circle_filled_rounded
-                                                        : Icons
-                                                            .play_circle_filled_rounded,
-                                                    size: 70,
-                                                    color: Colors.white),
-                                              ),
-                                              onTap: () {
-                                                if (store.audioPlayState ==
-                                                    PlayerState.PLAYING) {
-                                                  //暂停
-                                                  PlayAudio.instance.audioPlayer
-                                                      .pause();
-                                                }
-                                                if (store.audioPlayState ==
-                                                        PlayerState.PAUSED ||
-                                                    store.audioPlayState ==
-                                                        PlayerState.COMPLETED) {
-                                                  //播放完了再继续播放
-                                                  PlayAudio.instance.audioPlayer
-                                                      .resume();
-                                                }
-                                              },
-                                            )),
-                                        Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                child: const Icon(
-                                                    Icons.skip_next_rounded,
-                                                    size: 40,
-                                                    color: Colors.white),
-                                              ),
-                                              onTap: () => {
-                                                //播放下一首
-                                                store.playNextMusic()
-                                              },
-                                            )),
-                                      ],
-                                    ),
                                     Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          child: const Icon(Icons.menu_rounded,
-                                              size: 30, color: Colors.white),
-                                        ),
-                                        onTap: () => {
-                                          //显示下拉弹出方法
-                                          showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return const PlayListBottomSheetWidget();
-                                              })
-                                        },
-                                      ),
-                                    )
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Icon(
+                                                store.audioPlayState ==
+                                                        PlayerState.PLAYING
+                                                    ? Icons
+                                                        .pause_circle_filled_rounded
+                                                    : Icons
+                                                        .play_circle_filled_rounded,
+                                                size: 70,
+                                                color: Colors.white),
+                                          ),
+                                          onTap: () {
+                                            if (store.audioPlayState ==
+                                                PlayerState.PLAYING) {
+                                              //暂停
+                                              PlayAudio.instance.audioPlayer
+                                                  .pause();
+                                            }
+                                            if (store.audioPlayState ==
+                                                    PlayerState.PAUSED ||
+                                                store.audioPlayState ==
+                                                    PlayerState.COMPLETED) {
+                                              //播放完了再继续播放
+                                              PlayAudio.instance.audioPlayer
+                                                  .resume();
+                                            }
+                                          },
+                                        )),
+                                    Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: const Icon(
+                                                Icons.skip_next_rounded,
+                                                size: 40,
+                                                color: Colors.white),
+                                          ),
+                                          onTap: () => {
+                                            //播放下一首
+                                            store.playNextMusic()
+                                          },
+                                        )),
                                   ],
+                                ),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      child: const Icon(Icons.menu_rounded,
+                                          size: 30, color: Colors.white),
+                                    ),
+                                    onTap: () => {
+                                      //显示下拉弹出方法
+                                      showModalBottomSheet<void>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const PlayListBottomSheetWidget();
+                                          })
+                                    },
+                                  ),
                                 )
                               ],
-                            ),
-                          ))
+                            )
+                          ],
+                        ),
+                      )
                     ],
                   ))
                 ],
