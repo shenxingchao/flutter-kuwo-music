@@ -15,7 +15,8 @@ class PlayListIndexComponent extends StatefulWidget {
   _PlayListIndexComponentState createState() => _PlayListIndexComponentState();
 }
 
-class _PlayListIndexComponentState extends State<PlayListIndexComponent> {
+class _PlayListIndexComponentState extends State<PlayListIndexComponent>
+    with SingleTickerProviderStateMixin {
   //歌单列表
   List list = [];
 
@@ -34,12 +35,29 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent> {
   //搜索条件
   String order = 'hot';
 
+  //tab控制器
+  late TabController tabController;
+  //tab选项卡列表
+  List tabItemList = [
+    '最热',
+    '最新',
+  ];
+
   @override
   void initState() {
     super.initState();
     onRefresh();
+    //初始化tab控制器
+    tabController = TabController(length: tabItemList.length, vsync: this);
     //获取歌单列表
     getGoodPlayList();
+  }
+
+  @override
+  void dispose() {
+    //释放controller
+    tabController.dispose();
+    super.dispose();
   }
 
   //下拉刷新方法
@@ -111,113 +129,83 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarComponent(
-          const Text('精选歌单'),
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          rightIcon: [
-            Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: const Icon(
-                      Icons.menu,
+        appBar: AppBarComponent(const Text('精选歌单'),
+            appBarHeight: 116,
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            rightIcon: [
+              Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      child: const Icon(
+                        Icons.menu,
+                      ),
                     ),
-                  ),
-                  onTap: () {},
-                )),
-          ],
-        ),
-        body: list.isNotEmpty
-            ? Column(children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+                    onTap: () {},
+                  )),
+            ],
+            bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(50),
+                child: Material(
+                  //这里设置tab的背景色
                   color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextButtonComponent(
-                          text: '最热',
-                          size: Size(Get.width / 2 - 30, 30),
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: order == 'hot'
-                                ? Theme.of(context).colorScheme.primary
-                                : const Color(0xff999999),
-                          ),
-                          color: order == 'hot'
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color(0xff999999),
-                          overlayColor: const Color(0xffeeeeee),
-                          onPressed: () {
-                            if (order != 'hot') {
-                              setState(() {
-                                order = 'hot';
-                                onRefresh();
-                              });
-                            }
-                          }),
-                      TextButtonComponent(
-                          text: '最新',
-                          size: Size(Get.width / 2 - 30, 30),
-                          textStyle: TextStyle(
-                            fontSize: 16,
-                            color: order == 'new'
-                                ? Theme.of(context).colorScheme.primary
-                                : const Color(0xff999999),
-                          ),
-                          color: order == 'new'
-                              ? Theme.of(context).colorScheme.primary
-                              : const Color(0xff999999),
-                          overlayColor: const Color(0xffeeeeee),
-                          onPressed: () {
-                            if (order != 'new') {
-                              setState(() {
-                                order = 'new';
-                                onRefresh();
-                              });
-                            }
-                          }),
-                    ],
+                  child: TabBar(
+                    controller: tabController,
+                    indicatorColor: Theme.of(context).colorScheme.primary,
+                    labelColor: const Color(0xff333333),
+                    unselectedLabelColor: const Color(0xff999999),
+                    tabs: tabItemList
+                        .map((tabItem) => Tab(text: tabItem))
+                        .toList(),
+                    onTap: (tabIndex) {
+                      if (tabIndex == 0 && order != 'hot') {
+                        setState(() {
+                          order = 'hot';
+                          onRefresh();
+                        });
+                      } else if (tabIndex == 1 && order != 'new') {
+                        setState(() {
+                          order = 'new';
+                          onRefresh();
+                        });
+                      }
+                    },
                   ),
+                ))),
+        body: list.isNotEmpty
+            ? SmartRefresher(
+                //下拉刷新
+                enablePullDown: true,
+                //上拉加载
+                enablePullUp: true,
+                //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+                header: const ClassicHeader(
+                  releaseText: "松开刷新",
+                  refreshingText: '刷新中...',
+                  completeText: '刷新完成',
+                  idleText: '下拉刷新',
                 ),
-                Expanded(
-                  flex: 1,
-                  child: SmartRefresher(
-                      //下拉刷新
-                      enablePullDown: true,
-                      //上拉加载
-                      enablePullUp: true,
-                      //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
-                      header: const ClassicHeader(
-                        releaseText: "松开刷新",
-                        refreshingText: '刷新中...',
-                        completeText: '刷新完成',
-                        idleText: '下拉刷新',
-                      ),
-                      footer: const ClassicFooter(
-                        canLoadingText: '松开加载',
-                        loadingText: '加载中...',
-                        idleText: '上拉加载',
-                        noDataText: '没有更多了^_^',
-                      ),
-                      controller: refreshController,
-                      onRefresh: onRefresh,
-                      onLoading: onLoading,
-                      child: CustomScrollView(slivers: <Widget>[
-                        SliverList(
-                            delegate: SliverChildListDelegate([
-                          PlayListWidget(
-                            list: list,
-                            column: 2,
-                          )
-                        ]))
-                      ])),
+                footer: const ClassicFooter(
+                  canLoadingText: '松开加载',
+                  loadingText: '加载中...',
+                  idleText: '上拉加载',
+                  noDataText: '没有更多了^_^',
                 ),
-              ])
+                controller: refreshController,
+                onRefresh: onRefresh,
+                onLoading: onLoading,
+                child: CustomScrollView(slivers: <Widget>[
+                  SliverList(
+                      delegate: SliverChildListDelegate([
+                    PlayListWidget(
+                      list: list,
+                      column: 2,
+                    )
+                  ]))
+                ]))
             : const Loading());
   }
 }

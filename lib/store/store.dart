@@ -311,4 +311,72 @@ class Store extends GetxController {
     }
     playMode = playModeList[index];
   }
+
+  //查询歌曲是否已经收藏
+  bool getMusicLikeState(int? rid) {
+    var isLike = false;
+    if (rid == null) {
+      return isLike;
+    }
+    if (box.read('favouriteMusicList') != null) {
+      var favouriteMusicList = box.read('favouriteMusicList');
+      //每次进入清除null歌曲
+      favouriteMusicList.removeWhere((item) {
+        return item == null;
+      });
+      //查找当前歌曲是否在收藏列表
+      for (var item in favouriteMusicList) {
+        if (item["rid"] == rid) {
+          isLike = true;
+        }
+      }
+    }
+    return isLike;
+  }
+
+  //设置歌曲加入收藏
+  Future setLikeState(int? rid) async {
+    if (rid == null) {
+      return;
+    }
+    //获取音乐详情
+    var music = await CommonApi().getMusicDetail(mid: rid);
+    if (music == null || music.data == null) {
+      return;
+    }
+
+    //变更当前播放对象
+    PlayMusicInfo muiscInfo = PlayMusicInfo(
+        artist: music.data["data"]["artist"],
+        pic: music.data["data"]["pic"],
+        rid: music.data["data"]["rid"],
+        duration: music.data["data"]["duration"],
+        mvPlayCnt: music.data["data"]["mvPlayCnt"],
+        hasLossless: music.data["data"]["hasLossless"],
+        hasmv: music.data["data"]["hasmv"],
+        releaseDate: music.data["data"]["releaseDate"],
+        album: music.data["data"]["album"],
+        albumid: music.data["data"]["albumid"],
+        artistid: music.data["data"]["artistid"],
+        songTimeMinutes: music.data["data"]["songTimeMinutes"],
+        isListenFee: music.data["data"]["isListenFee"],
+        pic120: music.data["data"]["pic120"],
+        albuminfo: music.data["data"]["albuminfo"],
+        name: music.data["data"]["name"]);
+
+    var favouriteMusicList = await box.read('favouriteMusicList') ?? [];
+
+    //记录缓存
+    if (!getMusicLikeState(rid)) {
+      favouriteMusicList.add(muiscInfo.toMap());
+      await box.write('favouriteMusicList', favouriteMusicList);
+    }
+    //删除缓存
+    else {
+      favouriteMusicList.removeWhere((item) {
+        return item == null || item["rid"] == rid;
+      });
+      await box.write('favouriteMusicList', favouriteMusicList);
+    }
+  }
 }

@@ -35,7 +35,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
   void initAnimation() {
     //初始化动画控制器
     animationController =
-        AnimationController(duration: const Duration(seconds: 6), vsync: this);
+        AnimationController(duration: const Duration(seconds: 12), vsync: this);
   }
 
   @override
@@ -402,6 +402,34 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
+                                          //当前播放歌曲才显示收藏按钮
+                                          store.playMusicInfo?.rid == item.rid
+                                              ? Offstage(
+                                                  offstage: store
+                                                          .playMusicInfo?.rid !=
+                                                      item.rid,
+                                                  child: GestureDetector(
+                                                      child: store
+                                                              .getMusicLikeState(
+                                                                  item.rid)
+                                                          ? const Icon(
+                                                              Icons
+                                                                  .favorite_rounded,
+                                                              size: 30,
+                                                              color: Colors.red)
+                                                          : const Icon(
+                                                              Icons
+                                                                  .favorite_border_rounded,
+                                                              size: 30,
+                                                              color: Color(
+                                                                  0xffC3CADE)),
+                                                      onTap: () async {
+                                                        await store
+                                                            .setLikeState(
+                                                                item.rid);
+                                                        setState(() {});
+                                                      }))
+                                              : const SizedBox(),
                                           GestureDetector(
                                             child: Icon(
                                                 store.playMusicInfo?.rid ==

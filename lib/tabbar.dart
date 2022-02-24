@@ -55,7 +55,7 @@ class _TabbarComponentState extends State<TabbarComponent>
   void initAnimation() {
     //初始化动画控制器
     animationController =
-        AnimationController(duration: const Duration(seconds: 6), vsync: this);
+        AnimationController(duration: const Duration(seconds: 12), vsync: this);
   }
 
   @override
