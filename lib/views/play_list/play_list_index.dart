@@ -133,16 +133,17 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent> {
         body: list.isNotEmpty
             ? Column(children: [
                 Container(
-                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
                   color: Colors.white,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButtonComponent(
                           text: '最热',
+                          size: Size(Get.width / 2 - 30, 30),
                           textStyle: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: order == 'hot'
                                 ? Theme.of(context).colorScheme.primary
                                 : const Color(0xff999999),
@@ -159,13 +160,11 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent> {
                               });
                             }
                           }),
-                      const SizedBox(
-                        width: 10,
-                      ),
                       TextButtonComponent(
                           text: '最新',
+                          size: Size(Get.width / 2 - 30, 30),
                           textStyle: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             color: order == 'new'
                                 ? Theme.of(context).colorScheme.primary
                                 : const Color(0xff999999),
