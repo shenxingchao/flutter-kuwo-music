@@ -122,8 +122,8 @@ class _TabbarComponentState extends State<TabbarComponent>
           shadowColor: Colors.transparent,
           //状态栏样式
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.light,
-            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
           ),
           backgroundColor: Colors.white,
           leftIconColor: const Color(0xff333333),
