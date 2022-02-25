@@ -313,7 +313,12 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                             behavior: HitTestBehavior.opaque,
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
-                              child: Row(children: const [Text('清空列表')]),
+                              child: Row(children: const [
+                                Text(
+                                  '清空列表',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ]),
                             ),
                             onTap: () {
                               store.changePlayListMusic([]);

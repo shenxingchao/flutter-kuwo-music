@@ -46,11 +46,28 @@ class _FavouriteListComponentState extends State<FavouriteListComponent> {
         body: list.isNotEmpty
             ? Column(
                 children: [
-                  PlayAllMusicWidget(list: list),
+                  PlayAllMusicWidget(
+                      list: list,
+                      pageType: 1,
+                      callback: () {
+                        //删除全部后更新状态
+                        setState(() {
+                          list = box.read('favouriteMusicList') ?? [];
+                        });
+                      }),
                   Expanded(
                     flex: 1,
-                    child: CustomScrollView(
-                        slivers: <Widget>[MusicListWidget(list: list)]),
+                    child: CustomScrollView(slivers: <Widget>[
+                      MusicListWidget(
+                          list: list,
+                          pageType: 1,
+                          callback: () {
+                            //删除一条后更新状态
+                            setState(() {
+                              list = box.read('favouriteMusicList') ?? [];
+                            });
+                          })
+                    ]),
                   ),
                   const PlayMusicBottomBar()
                 ],

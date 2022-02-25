@@ -334,7 +334,6 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                           if (store.playMusicInfo != null) {
                                             await store.setLikeState(
                                                 store.playMusicInfo?.rid);
-                                            setState(() {});
                                           }
                                         },
                                       ))

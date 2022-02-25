@@ -9,9 +9,16 @@ class PlayAllMusicWidget extends StatelessWidget {
   const PlayAllMusicWidget({
     Key? key,
     required this.list,
+    this.pageType = 0,
+    this.callback,
   }) : super(key: key);
 
+  //列表
   final List list;
+  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）
+  final int pageType;
+
+  final dynamic callback;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +35,7 @@ class PlayAllMusicWidget extends StatelessWidget {
                   //保证空白范围可点击 这里点击一行
                   behavior: HitTestBehavior.opaque,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(children: [
@@ -41,6 +49,27 @@ class PlayAllMusicWidget extends StatelessWidget {
                           style: const TextStyle(fontSize: 16),
                         ),
                       ]),
+                      Offstage(
+                          offstage: pageType != 1,
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Row(children: const [
+                                  Text(
+                                    '清空收藏列表',
+                                    style: TextStyle(fontSize: 16),
+                                  )
+                                ]),
+                              ),
+                              onTap: () async {
+                                //清空收藏列表
+                                await store.deleteFavouriteMusicList();
+                                //回调函数
+                                if (callback != null) {
+                                  callback();
+                                }
+                              }))
                     ],
                   ),
                   onTap: () {

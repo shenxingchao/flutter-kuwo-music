@@ -379,4 +379,19 @@ class Store extends GetxController {
       await box.write('favouriteMusicList', favouriteMusicList);
     }
   }
+
+  //删除指定idList的收藏歌曲
+  Future deleteFavouriteMusicList({List? idList}) async {
+    if (idList == null) {
+      //删除全部
+      await box.write('favouriteMusicList', []);
+    } else {
+      var favouriteMusicList = await box.read('favouriteMusicList') ?? [];
+      favouriteMusicList.removeWhere((item) {
+        return idList.contains(item["rid"]);
+      });
+      await box.write('favouriteMusicList', favouriteMusicList);
+    }
+    return true;
+  }
 }
