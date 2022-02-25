@@ -12,6 +12,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;
   final Color leftIconColor;
   final SystemUiOverlayStyle? systemOverlayStyle;
+  final TextStyle? titleTextStyle;
   final bool centerTitle;
   final PreferredSizeWidget? bottom;
   const AppBarComponent(this.title,
@@ -21,12 +22,13 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       this.appBarHeight = 66.0,
       this.elevation = 4,
       this.shadowColor = const Color(0xfffefefe),
-      this.backgroundColor = Colors.white,
-      this.leftIconColor = Colors.black,
+      this.backgroundColor = const Color(0xff333333),
+      this.leftIconColor = Colors.white,
       this.systemOverlayStyle = const SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
       ),
+      this.titleTextStyle = const TextStyle(fontSize: 20, color: Colors.white),
       this.centerTitle = false,
       this.bottom})
       : super(key: key);
@@ -50,14 +52,14 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       //状态栏文字样式
       systemOverlayStyle: systemOverlayStyle,
       //标题样式
-      titleTextStyle: const TextStyle(fontSize: 20, color: Color(0xff333333)),
+      titleTextStyle: titleTextStyle,
       //左侧图标
       leading: leading,
       //右侧icon list
       actions: rightIcon,
       //右侧icon主题
       actionsIconTheme: const IconThemeData(
-          color: Colors.black,
+          color:  Color(0xff333333),
           //透明度
           opacity: 100),
       //左侧icon主题

@@ -18,15 +18,15 @@ import '../utils/play_audio.dart';
 var box = GetStorage();
 //主题色列表
 List<Color> themeList = [
-  const Color(0xff36AFFF),
-  const Color(0xffFFDF1F),
-  const Color(0xffFF7E7E),
-  const Color(0xffFF7ED8),
-  const Color(0xffC97EFA),
-  const Color(0xff00CEFF),
-  const Color(0xff21E39B),
-  const Color(0xffB9E32C),
-  const Color(0xffE39536),
+  const Color(0xff1295ED),
+  const Color(0xffC62F2F),
+  const Color(0xffC6318E),
+  const Color(0xff8331C6),
+  const Color(0xff24AFB9),
+  const Color(0xff24B46C),
+  const Color(0xff90B41A),
+  const Color(0xffC66231),
+  const Color(0xff333333),
 ];
 //全局变量end
 

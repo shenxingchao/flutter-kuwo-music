@@ -83,13 +83,11 @@ class _MvDetailComponentState extends State<MvDetailComponent> {
     return Scaffold(
         appBar: const AppBarComponent(
           Text(
-            'MV详情',
-            style: TextStyle(color: Colors.white),
+            'MV详情'
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
           backgroundColor: Colors.black,
-          leftIconColor: Colors.white,
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarBrightness: Brightness.light,
             statusBarIconBrightness: Brightness.light,

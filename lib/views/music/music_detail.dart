@@ -169,14 +169,12 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                   store.playMusicInfo != null
                       ? store.playMusicInfo!.name
                       : '暂无',
-                  style: const TextStyle(color: Colors.white),
                 ),
                 centerTitle: true,
                 appBarHeight: 66.0,
                 elevation: 0,
                 shadowColor: Colors.transparent,
                 backgroundColor: Colors.transparent,
-                leftIconColor: Colors.white,
                 //状态栏样式
                 systemOverlayStyle: const SystemUiOverlayStyle(
                   statusBarBrightness: Brightness.light,

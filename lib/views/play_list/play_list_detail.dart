@@ -190,7 +190,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       title: Text(
         playList["name"],
       ),
-      foregroundColor: lightTheme ? Colors.white : const Color(0xff333333),
+      foregroundColor: lightTheme ? Colors.white : Colors.white,
       //appbar滚动后保持可见
       pinned: true,
       //合并后高度
@@ -203,9 +203,9 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
       elevation: 0,
       //状态栏样式
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: lightTheme ? Brightness.light : Brightness.dark,
+        statusBarBrightness: lightTheme ? Brightness.light : Brightness.light,
         statusBarIconBrightness:
-            lightTheme ? Brightness.light : Brightness.dark,
+            lightTheme ? Brightness.light : Brightness.light,
       ),
       //堆栈容器,高度就是expandedHeight的高度
       flexibleSpace: FlexibleSpaceBar(

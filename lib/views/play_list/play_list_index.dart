@@ -140,6 +140,7 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
                       padding: const EdgeInsets.all(10),
                       child: const Icon(
                         Icons.menu,
+                        color: Colors.white,
                       ),
                     ),
                     onTap: () {},
@@ -147,8 +148,8 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
             ],
             //状态栏样式
             systemOverlayStyle: const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.dark,
-              statusBarIconBrightness: Brightness.dark,
+              statusBarBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.light,
             ),
             bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50),

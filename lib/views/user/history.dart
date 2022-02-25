@@ -42,8 +42,8 @@ class _HistroyComponentState extends State<HistroyComponent> {
           backgroundColor: Theme.of(context).colorScheme.primary,
           //状态栏样式
           systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+            statusBarIconBrightness: Brightness.light,
           ),
         ),
         body: _historyList.isNotEmpty
