@@ -121,28 +121,30 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
             body: Column(children: [
             Expanded(
                 flex: 1,
-                child: NotificationListener(
-                    onNotification: (ScrollNotification notification) {
-                      if (notification is ScrollUpdateNotification &&
-                          notification.depth == 0) {
-                        double maxHight =
-                            Get.width - MediaQuery.of(context).padding.top - 66;
-                        //尽量不要每次滚动都去setState
-                        if (notification.metrics.pixels >= maxHight &&
-                            lightTheme) {
-                          setState(() {
-                            lightTheme = false;
-                          });
-                        } else if (notification.metrics.pixels < maxHight &&
-                            !lightTheme) {
-                          setState(() {
-                            lightTheme = true;
-                          });
-                        }
-                      }
-                      return true;
-                    },
-                    child: NestedScrollView(
+                child:
+                    // NotificationListener(
+                    // onNotification: (ScrollNotification notification) {
+                    //   if (notification is ScrollUpdateNotification &&
+                    //       notification.depth == 0) {
+                    //     double maxHight =
+                    //         Get.width - MediaQuery.of(context).padding.top - 66;
+                    //     //尽量不要每次滚动都去setState
+                    //     if (notification.metrics.pixels >= maxHight &&
+                    //         lightTheme) {
+                    //       setState(() {
+                    //         lightTheme = false;
+                    //       });
+                    //     } else if (notification.metrics.pixels < maxHight &&
+                    //         !lightTheme) {
+                    //       setState(() {
+                    //         lightTheme = true;
+                    //       });
+                    //     }
+                    //   }
+                    //   return true;
+                    // },
+                    // child:       // ),
+                    NestedScrollView(
                         floatHeaderSlivers: false,
                         headerSliverBuilder:
                             (BuildContext context, bool innerBoxIsScrolled) {
@@ -178,7 +180,7 @@ class _PlayListDetailComponenetState extends State<PlayListDetailComponenet> {
                                 child: CustomScrollView(slivers: <Widget>[
                                   MusicListWidget(list: list)
                                 ]))
-                            : const Loading()))),
+                            : const Loading())),
             const PlayMusicBottomBar()
           ]))
         : const Loading();
