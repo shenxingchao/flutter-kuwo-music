@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/component/appbar.dart';
 import 'package:flutterkuwomusic/interface/play_mode.dart';
 import 'package:flutterkuwomusic/utils/play_audio.dart';
@@ -164,18 +165,24 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
           return Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBarComponent(
-                  Text(
-                    store.playMusicInfo != null
-                        ? store.playMusicInfo!.name
-                        : '暂无',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  centerTitle: true,
-                  appBarHeight: 66.0,
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                  backgroundColor: Colors.transparent,
-                  leftIconColor: Colors.white),
+                Text(
+                  store.playMusicInfo != null
+                      ? store.playMusicInfo!.name
+                      : '暂无',
+                  style: const TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                appBarHeight: 66.0,
+                elevation: 0,
+                shadowColor: Colors.transparent,
+                backgroundColor: Colors.transparent,
+                leftIconColor: Colors.white,
+                //状态栏样式
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.light,
+                  statusBarIconBrightness: Brightness.light,
+                ),
+              ),
               body: Stack(
                 children: [
                   Positioned(

@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:get/get.dart';
 import './home.dart';
@@ -119,6 +120,11 @@ class _TabbarComponentState extends State<TabbarComponent>
           appBarHeight: currentIndex == 0 ? 70 : 66.0,
           elevation: 0,
           shadowColor: Colors.transparent,
+          //状态栏样式
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          ),
           backgroundColor: Colors.white,
         ),
         body: router[currentIndex],

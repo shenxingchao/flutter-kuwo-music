@@ -72,7 +72,7 @@ class _HomeComponentState extends State<HomeComponent>
 
     WidgetsBinding.instance!.addObserver(this);
     //关闭启动屏
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 1), () {
       FlutterNativeSplash.remove();
     });
     //更新app

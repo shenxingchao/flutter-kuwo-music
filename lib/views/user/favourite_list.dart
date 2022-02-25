@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/views/common/music_list.dart';
 import '../../component/loading.dart';
 import '../../component/appbar.dart';
@@ -36,6 +37,11 @@ class _FavouriteListComponentState extends State<FavouriteListComponent> {
           elevation: 0,
           shadowColor: Colors.transparent,
           backgroundColor: Theme.of(context).colorScheme.primary,
+          //状态栏样式
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
         body: list.isNotEmpty
             ? Column(

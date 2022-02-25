@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import '../component/appbar.dart';
-import '../store/store.dart';
+import '../../component/appbar.dart';
+import '../../store/store.dart';
 
 class ThemeComponent extends StatefulWidget {
   const ThemeComponent({Key? key}) : super(key: key);
@@ -29,6 +30,11 @@ class _ThemeComponentState extends State<ThemeComponent> {
                 elevation: 0,
                 shadowColor: Colors.transparent,
                 backgroundColor: Theme.of(context).colorScheme.primary,
+                //状态栏样式
+                systemOverlayStyle: const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.dark,
+                  statusBarIconBrightness: Brightness.dark,
+                ),
               ),
               body: GridView.count(
                 //2列

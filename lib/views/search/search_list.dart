@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -214,6 +215,11 @@ class _SearchListComponentState extends State<SearchListComponent>
             elevation: 0,
             shadowColor: Colors.transparent,
             backgroundColor: Theme.of(context).colorScheme.primary,
+            //状态栏样式
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarBrightness: Brightness.dark,
+              statusBarIconBrightness: Brightness.dark,
+            ),
             bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: Material(

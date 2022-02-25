@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../component/loading.dart';
 import '../../component/appbar.dart';
 import '../../utils/request.dart';
@@ -39,6 +40,11 @@ class _HistroyComponentState extends State<HistroyComponent> {
           elevation: 0,
           shadowColor: Colors.transparent,
           backgroundColor: Theme.of(context).colorScheme.primary,
+          //状态栏样式
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+          ),
         ),
         body: _historyList.isNotEmpty
             ? ListView(

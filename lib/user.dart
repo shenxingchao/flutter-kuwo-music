@@ -83,7 +83,7 @@ class _UserCommponentState extends State<UserCommponent> {
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       //背景颜色
-                      color: const Color(0xfff1f1f1),
+                      color: const Color(0xfff7f7f7),
                       borderRadius: BorderRadius.circular(4)),
                   child: Icon(
                     Icons.history,

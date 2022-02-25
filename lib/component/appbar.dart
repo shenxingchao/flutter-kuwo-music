@@ -23,7 +23,10 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       this.shadowColor = const Color(0xfffefefe),
       this.backgroundColor = Colors.white,
       this.leftIconColor = Colors.black,
-      this.systemOverlayStyle,
+      this.systemOverlayStyle = const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       this.centerTitle = false,
       this.bottom})
       : super(key: key);

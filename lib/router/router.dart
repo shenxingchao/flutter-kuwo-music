@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import '../tabbar.dart';
-import '../views/theme.dart';
+import '../views/drawer/theme.dart';
 import '../views/play_list/play_list_detail.dart';
 import '../views/play_list/play_list_index.dart';
 import '../views/music/music_detail.dart';
