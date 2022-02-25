@@ -16,6 +16,9 @@ class _UserCommponentState extends State<UserCommponent> {
 
   bool _showLoading = true;
 
+  //显示自定义歌单
+  bool showCustomPlayList = false;
+
   @override
   void initState() {
     super.initState();
@@ -99,6 +102,37 @@ class _UserCommponentState extends State<UserCommponent> {
                   Get.toNamed(
                     '/history',
                   );
+                },
+              ),
+              ListTile(
+                leading: GestureDetector(
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        //背景颜色
+                        color: const Color(0xfff7f7f7),
+                        borderRadius: BorderRadius.circular(4)),
+                    child: const Icon(
+                      Icons.add,
+                      size: 30,
+                      color: Color(0xff333333),
+                    ),
+                  ),
+                  onTap: () {
+                    //新建歌单
+                  },
+                ),
+                trailing: Icon(
+                    showCustomPlayList
+                        ? Icons.keyboard_arrow_up_outlined
+                        : Icons.keyboard_arrow_down_outlined,
+                    color: const Color(0xff999999)),
+                title: const Text('自定义歌单'),
+                tileColor: Colors.white,
+                onTap: () {
+                  setState(() {
+                    showCustomPlayList = !showCustomPlayList;
+                  });
                 },
               ),
             ],

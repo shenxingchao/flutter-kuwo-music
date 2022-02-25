@@ -196,7 +196,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                         : Image.asset(
                             'assets/images/icons/music.png',
                             alignment: Alignment.center,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                           ),
                   )),
                   //高斯模糊滤镜
