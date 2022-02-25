@@ -74,9 +74,11 @@ class _SearchListComponentState extends State<SearchListComponent>
     tabController = TabController(length: tabItemList.length, vsync: this)
       ..addListener(() {
         setState(() {
-          tabItemIndex = tabController.index;
-          if (list[tabItemIndex].isEmpty) {
-            onRefresh();
+          if (tabController.index == tabController.animation?.value) {
+            tabItemIndex = tabController.index;
+            if (list[tabItemIndex].isEmpty) {
+              onRefresh();
+            }
           }
         });
       });

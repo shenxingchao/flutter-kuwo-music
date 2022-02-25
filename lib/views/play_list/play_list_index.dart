@@ -44,11 +44,10 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
   @override
   void initState() {
     super.initState();
-    onRefresh();
     //初始化tab控制器
     tabController = TabController(length: tabItemList.length, vsync: this);
-    //获取歌单列表
-    getGoodPlayList();
+    //下拉刷新
+    onRefresh();
   }
 
   @override
