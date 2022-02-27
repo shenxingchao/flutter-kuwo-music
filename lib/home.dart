@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
@@ -71,10 +70,6 @@ class _HomeComponentState extends State<HomeComponent>
     }
 
     WidgetsBinding.instance!.addObserver(this);
-    //关闭启动屏
-    Future.delayed(const Duration(seconds: 1), () {
-      FlutterNativeSplash.remove();
-    });
     //更新app
     updateApp();
   }
