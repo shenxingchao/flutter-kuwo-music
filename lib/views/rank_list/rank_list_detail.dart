@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/views/common/bottom_bar.dart';
@@ -174,7 +176,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
       //合并后高度
       collapsedHeight: 66,
       //头部总高度
-      expandedHeight: Get.width/2 - MediaQuery.of(context).padding.top,
+      expandedHeight: Get.width / 2 - MediaQuery.of(context).padding.top,
       //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
       forceElevated: innerBoxIsScrolled,
       //阴影深度
@@ -205,6 +207,11 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
                   fit: BoxFit.cover,
                   width: Get.width,
                 ),
+                Center(
+                  child: Container(
+                    color: Colors.black.withOpacity(0.2),
+                  ),
+                ),
                 Positioned(
                     bottom: 5,
                     right: 10,
@@ -212,7 +219,11 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '共' + rankList["num"].toString() + "首" + " 更新时间"+rankList["pub"],
+                          '共' +
+                              rankList["num"].toString() +
+                              "首" +
+                              " 更新时间" +
+                              rankList["pub"],
                           style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
