@@ -73,7 +73,6 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
     return res;
   }
 
-  //查询更新日志
   @override
   Widget build(BuildContext context) {
     return Scaffold(

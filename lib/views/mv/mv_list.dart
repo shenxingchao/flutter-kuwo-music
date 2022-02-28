@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterkuwomusic/views/common/mv_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -8,16 +9,16 @@ import '../../component/appbar.dart';
 import '../../utils/request.dart';
 import '../common/play_list.dart';
 
-class PlayListIndexComponent extends StatefulWidget {
-  const PlayListIndexComponent({Key? key}) : super(key: key);
+class MVListComponent extends StatefulWidget {
+  const MVListComponent({Key? key}) : super(key: key);
 
   @override
-  _PlayListIndexComponentState createState() => _PlayListIndexComponentState();
+  _MVListComponentState createState() => _MVListComponentState();
 }
 
-class _PlayListIndexComponentState extends State<PlayListIndexComponent>
+class _MVListComponentState extends State<MVListComponent>
     with SingleTickerProviderStateMixin {
-  //歌单列表
+  //列表
   List list = [];
 
   //当前页
@@ -32,15 +33,48 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  //搜索条件
-  String order = 'hot';
-
   //tab控制器
   late TabController tabController;
+  //tabIndex
+  int tabIndex = 0;
   //tab选项卡列表
   List tabItemList = [
-    '最热',
-    '最新',
+    {
+      "id": 236682871,
+      "name": '首播',
+    },
+    {
+      "id": 236682731,
+      "name": '华语',
+    },
+    {
+      "id": 236742444,
+      "name": '日韩',
+    },
+    {
+      "id": 236682773,
+      "name": '网络',
+    },
+    {
+      "id": 236682735,
+      "name": '欧美',
+    },
+    {
+      "id": 236742576,
+      "name": '现场',
+    },
+    {
+      "id": 36682777,
+      "name": '热舞',
+    },
+    {
+      "id": 236742508,
+      "name": '伤感',
+    },
+    {
+      "id": 236742578,
+      "name": '剧情',
+    },
   ];
 
   @override
@@ -69,7 +103,7 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
         list.clear();
         refreshController.loadComplete();
       });
-      await getGoodPlayList();
+      await getMVListByCategoryId();
       //下拉刷新完成
       refreshController.refreshCompleted();
       //首次渲染完成
@@ -84,7 +118,7 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
       setState(() {
         page++;
       });
-      await getGoodPlayList();
+      await getMVListByCategoryId();
       if (loadFinished) {
         //数据加载完毕
         refreshController.loadNoData();
@@ -95,12 +129,16 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
     }
   }
 
-  //获取歌单列表
-  Future getGoodPlayList() async {
+  //获取MV列表
+  Future getMVListByCategoryId() async {
     var res = await Request.http(
-        url: 'playList/getGoodPlayList',
+        url: 'mv/getMVListByCategoryId',
         type: 'get',
-        data: {"order": order, "pn": page, "rn": pageSize}).then((res) {
+        data: {
+          "pid": tabItemList[tabIndex]["id"],
+          "pn": page,
+          "rn": pageSize
+        }).then((res) {
       if (res.data["code"] != 200) {
         Fluttertoast.showToast(
           msg: res.data["msg"],
@@ -114,10 +152,10 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
     });
     if (mounted && res != null) {
       setState(() {
-        if (res.data["data"]["data"].length == 0) {
+        if (res.data["data"]["mvlist"].length == 0) {
           loadFinished = true;
         } else {
-          list.addAll(res.data["data"]["data"]);
+          list.addAll(res.data["data"]["mvlist"]);
         }
       });
     }
@@ -127,27 +165,11 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBarComponent(const Text('精选歌单'),
+        appBar: AppBarComponent(const Text('MV'),
             appBarHeight: 116,
             elevation: 0,
             shadowColor: Colors.transparent,
             backgroundColor: Theme.of(context).colorScheme.primary,
-            rightIcon: [
-              Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: const Icon(
-                        Icons.menu,
-                        color: Colors.white,
-                      ),
-                    ),
-                    onTap: () {
-                      Get.toNamed('play_list_category');
-                    },
-                  )),
-            ],
             //状态栏样式
             systemOverlayStyle: const SystemUiOverlayStyle(
               statusBarBrightness: Brightness.light,
@@ -160,24 +182,18 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
                   color: Colors.white,
                   child: TabBar(
                     controller: tabController,
+                    isScrollable: true,
                     indicatorColor: Theme.of(context).colorScheme.primary,
                     labelColor: const Color(0xff333333),
                     unselectedLabelColor: const Color(0xff999999),
                     tabs: tabItemList
-                        .map((tabItem) => Tab(text: tabItem))
+                        .map((tabItem) => Tab(text: tabItem["name"]))
                         .toList(),
-                    onTap: (tabIndex) {
-                      if (tabIndex == 0 && order != 'hot') {
-                        setState(() {
-                          order = 'hot';
-                          onRefresh();
-                        });
-                      } else if (tabIndex == 1 && order != 'new') {
-                        setState(() {
-                          order = 'new';
-                          onRefresh();
-                        });
-                      }
+                    onTap: (index) {
+                      setState(() {
+                        tabIndex = index;
+                        onRefresh();
+                      });
                     },
                   ),
                 ))),
@@ -205,12 +221,8 @@ class _PlayListIndexComponentState extends State<PlayListIndexComponent>
                 onLoading: onLoading,
                 child: CustomScrollView(slivers: <Widget>[
                   SliverList(
-                      delegate: SliverChildListDelegate([
-                    PlayListWidget(
-                      list: list,
-                      column: 2,
-                    )
-                  ]))
+                      delegate:
+                          SliverChildListDelegate([MVListWidget(list: list)]))
                 ]))
             : const Loading());
   }

@@ -491,6 +491,9 @@ class CategoryWidget extends StatelessWidget {
                     case '排行榜':
                       Get.toNamed('/rank_list_index');
                       break;
+                    case 'MV':
+                      Get.toNamed('/mv_list');
+                      break;
                   }
                 },
               );

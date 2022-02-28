@@ -70,7 +70,6 @@ class _RankListIndexComponentState extends State<RankListIndexComponent> {
     return res;
   }
 
-  //查询更新日志
   @override
   Widget build(BuildContext context) {
     return Scaffold(
