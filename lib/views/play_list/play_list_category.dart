@@ -118,7 +118,9 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
                               child: Text(
                                 row["name"],
                                 style: const TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold,color: Color(0xff999999)),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff999999)),
                               ),
                             ),
                           ),
@@ -162,7 +164,8 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
                                             ],
                                           ),
                                           onTap: () {
-                                            Get.toNamed('/play_list_category_list',
+                                            Get.toNamed(
+                                                '/play_list_category_list',
                                                 arguments: {
                                                   "id": int.parse(
                                                       item["id"].toString()),
