@@ -38,7 +38,7 @@ class _HomeComponentState extends State<HomeComponent>
     },
     {
       "title": '分类',
-      "icon": 'assets/images/icons/play_list.png',
+      "icon": 'assets/images/icons/category.png',
     },
     {
       "title": '排行榜',
