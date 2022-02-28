@@ -3,6 +3,7 @@ import '../tabbar.dart';
 import '../views/drawer/theme.dart';
 import '../views/play_list/play_list_detail.dart';
 import '../views/play_list/play_list_index.dart';
+import '../views/rank_list/rank_list_index.dart';
 import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
@@ -20,6 +21,10 @@ class Routers {
     GetPage(
         name: '/play_list_index',
         page: () => const PlayListIndexComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/rank_list_index',
+        page: () => const RankListIndexComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/theme',

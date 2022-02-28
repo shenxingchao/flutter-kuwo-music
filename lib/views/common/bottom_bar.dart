@@ -116,12 +116,14 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        store.playMusicInfo != null
-                                            ? store.playMusicInfo!.name
-                                            : '音乐就要免费听',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                          store.playMusicInfo != null
+                                              ? store.playMusicInfo!.name
+                                              : '音乐就要免费听',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                          )),
                                       Offstage(
                                         offstage: store.playMusicInfo == null,
                                         child: Text(
@@ -131,7 +133,7 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
-                                              fontSize: 10.0,
+                                              fontSize: 12.0,
                                               color: Color(0xff999999)),
                                         ),
                                       ),
@@ -387,7 +389,7 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                                 item.name
                                                     .replaceAll('&nbsp;', ' '),
                                                 style: const TextStyle(
-                                                    fontSize: 18),
+                                                    fontSize: 16),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),

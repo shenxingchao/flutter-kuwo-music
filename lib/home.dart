@@ -421,15 +421,13 @@ class _HomeComponentState extends State<HomeComponent>
                   CategoryWidget(categoryList: categoryList),
                   //推荐歌单
                   Column(children: [
-                    Padding(
+                    Container(
                       padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          '推荐歌单',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                      alignment: Alignment.centerLeft,
+                      child: const Text(
+                        '推荐歌单',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                     PlayListWidget(list: playList)
@@ -479,6 +477,9 @@ class CategoryWidget extends StatelessWidget {
                   switch (item["title"]) {
                     case '歌单':
                       Get.toNamed('/play_list_index');
+                      break;
+                    case '排行榜':
+                      Get.toNamed('/rank_list_index');
                       break;
                   }
                 },

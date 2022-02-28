@@ -67,6 +67,7 @@ class Request {
         if (response.data == null && count < numberOfRequest) {
           await Future.delayed(Duration(milliseconds: requestDelay), () async {
             count++;
+            print(count);
             response = await fn(count: count);
           });
         }
