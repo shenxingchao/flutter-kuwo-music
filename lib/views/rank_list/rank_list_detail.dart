@@ -11,21 +11,22 @@ import '../../store/store.dart';
 import '../../utils/request.dart';
 import '../common/music_list.dart';
 
-class PlayListDetailComponent extends StatefulWidget {
-  const PlayListDetailComponent({Key? key}) : super(key: key);
+class RankListDetailComponent extends StatefulWidget {
+  const RankListDetailComponent({Key? key}) : super(key: key);
 
   @override
-  _PlayListDetailComponentState createState() =>
-      _PlayListDetailComponentState();
+  _RankListDetailComponentState createState() =>
+      _RankListDetailComponentState();
 }
 
-class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
+class _RankListDetailComponentState extends State<RankListDetailComponent> {
   //路由参数
   late int id;
+  late String rankTitle;
   //歌曲列表
   List list = [];
-  //歌单信息
-  dynamic playList;
+  //排行榜信息
+  dynamic rankList;
   //当前页
   int page = 1;
   //分页数
@@ -37,14 +38,13 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
   //定义刷新控件
   final RefreshController refreshController =
       RefreshController(initialRefresh: false);
-  //标题和状态栏颜色 收缩时显示黑色 展开式显示白色
-  bool lightTheme = true;
 
   @override
   void initState() {
     super.initState();
     //获取路由参数
     id = Get.arguments["id"];
+    rankTitle = Get.arguments["name"];
     onRefresh();
   }
 
@@ -58,7 +58,7 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
         list.clear();
         refreshController.loadComplete();
       });
-      await getMusicListByPlayListId();
+      await getMusicListByRankListId();
       //下拉刷新完成
       refreshController.refreshCompleted();
       //首次渲染完成
@@ -73,7 +73,7 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
       setState(() {
         page++;
       });
-      await getMusicListByPlayListId();
+      await getMusicListByRankListId();
       if (loadFinished) {
         //数据加载完毕
         refreshController.loadNoData();
@@ -84,12 +84,12 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
     }
   }
 
-  //通过歌单Id获取音乐列表
-  Future getMusicListByPlayListId() async {
+  //通过榜单Id获取音乐列表
+  Future getMusicListByRankListId() async {
     var res = await Request.http(
-        url: 'playList/getMusicListByPlayListId',
+        url: 'rank/getRankMusicList',
         type: 'get',
-        data: {"pid": id, "pn": page, "rn": pageSize}).then((res) {
+        data: {"bangId": id, "pn": page, "rn": pageSize}).then((res) {
       if (res.data["code"] != 200) {
         Fluttertoast.showToast(
           msg: res.data["msg"],
@@ -103,7 +103,7 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
     });
     if (mounted && res != null) {
       setState(() {
-        playList ??= res.data["data"];
+        rankList ??= res.data["data"];
         if (res.data["data"]["musicList"].length == 0) {
           loadFinished = true;
         } else {
@@ -116,71 +116,47 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return playList != null
+    return rankList != null
         ? Scaffold(
             body: Column(children: [
             Expanded(
                 flex: 1,
-                child:
-                    // NotificationListener(
-                    // onNotification: (ScrollNotification notification) {
-                    //   if (notification is ScrollUpdateNotification &&
-                    //       notification.depth == 0) {
-                    //     double maxHight =
-                    //         Get.width - MediaQuery.of(context).padding.top - 66;
-                    //     //尽量不要每次滚动都去setState
-                    //     if (notification.metrics.pixels >= maxHight &&
-                    //         lightTheme) {
-                    //       setState(() {
-                    //         lightTheme = false;
-                    //       });
-                    //     } else if (notification.metrics.pixels < maxHight &&
-                    //         !lightTheme) {
-                    //       setState(() {
-                    //         lightTheme = true;
-                    //       });
-                    //     }
-                    //   }
-                    //   return true;
-                    // },
-                    // child:       // ),
-                    NestedScrollView(
-                        floatHeaderSlivers: false,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return [
-                            //AppBar
-                            getSliverAppBar(context, innerBoxIsScrolled),
-                            //吸顶工具栏
-                            FixToolBarWidget(list: list)
-                          ];
-                        },
-                        body: list.isNotEmpty
-                            ? SmartRefresher(
-                                //下拉刷新
-                                enablePullDown: true,
-                                //上拉加载
-                                enablePullUp: true,
-                                //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
-                                header: const ClassicHeader(
-                                  releaseText: "松开刷新",
-                                  refreshingText: '刷新中...',
-                                  completeText: '刷新完成',
-                                  idleText: '下拉刷新',
-                                ),
-                                footer: const ClassicFooter(
-                                  canLoadingText: '松开加载',
-                                  loadingText: '加载中...',
-                                  idleText: '上拉加载',
-                                  noDataText: '没有更多了^_^',
-                                ),
-                                controller: refreshController,
-                                onRefresh: onRefresh,
-                                onLoading: onLoading,
-                                child: CustomScrollView(slivers: <Widget>[
-                                  MusicListWidget(list: list)
-                                ]))
-                            : const Loading())),
+                child: NestedScrollView(
+                    floatHeaderSlivers: false,
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return [
+                        //AppBar
+                        getSliverAppBar(context, innerBoxIsScrolled),
+                        //吸顶工具栏
+                        FixToolBarWidget(list: list)
+                      ];
+                    },
+                    body: list.isNotEmpty
+                        ? SmartRefresher(
+                            //下拉刷新
+                            enablePullDown: true,
+                            //上拉加载
+                            enablePullUp: true,
+                            //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+                            header: const ClassicHeader(
+                              releaseText: "松开刷新",
+                              refreshingText: '刷新中...',
+                              completeText: '刷新完成',
+                              idleText: '下拉刷新',
+                            ),
+                            footer: const ClassicFooter(
+                              canLoadingText: '松开加载',
+                              loadingText: '加载中...',
+                              idleText: '上拉加载',
+                              noDataText: '没有更多了^_^',
+                            ),
+                            controller: refreshController,
+                            onRefresh: onRefresh,
+                            onLoading: onLoading,
+                            child: CustomScrollView(
+                                slivers: <Widget>[MusicListWidget(list: list)]))
+                        : const Loading())),
             const PlayMusicBottomBar()
           ]))
         : const Loading();
@@ -190,24 +166,23 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
   SliverAppBar getSliverAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
       title: Text(
-        playList["name"],
+        rankTitle,
       ),
-      foregroundColor: lightTheme ? Colors.white : Colors.white,
+      foregroundColor: Colors.white,
       //appbar滚动后保持可见
       pinned: true,
       //合并后高度
       collapsedHeight: 66,
       //头部总高度
-      expandedHeight: Get.width - MediaQuery.of(context).padding.top,
+      expandedHeight: Get.width/2 - MediaQuery.of(context).padding.top,
       //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
       forceElevated: innerBoxIsScrolled,
       //阴影深度
       elevation: 0,
       //状态栏样式
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarBrightness: lightTheme ? Brightness.light : Brightness.light,
-        statusBarIconBrightness:
-            lightTheme ? Brightness.light : Brightness.light,
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
       ),
       //堆栈容器,高度就是expandedHeight的高度
       flexibleSpace: FlexibleSpaceBar(
@@ -224,57 +199,20 @@ class _PlayListDetailComponentState extends State<PlayListDetailComponent> {
               alignment: Alignment.centerLeft,
               children: [
                 Image.network(
-                  playList["img700"],
+                  rankList["img"],
                   alignment: Alignment.center,
                   //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   width: Get.width,
-                  height: Get.width,
                 ),
                 Positioned(
-                    bottom: 50,
-                    left: 50,
+                    bottom: 5,
+                    right: 10,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ClipOval(
-                          child: Image.network(
-                            playList["uPic"],
-                            alignment: Alignment.center,
-                            //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                            fit: BoxFit.cover,
-                            width: 50,
-                            height: 50,
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return Image.asset(
-                                'assets/images/default.png',
-                                fit: BoxFit.cover,
-                                width: 50,
-                                height: 50,
-                              );
-                            },
-                          ),
-                        ),
                         Text(
-                          playList["uname"],
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          '共' + playList["total"].toString() + "首",
-                          style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                        Text(
-                          '播放' +
-                              (playList["listencnt"] / 10000)
-                                  .toStringAsFixed(2) +
-                              "万",
+                          '共' + rankList["num"].toString() + "首" + " 更新时间"+rankList["pub"],
                           style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

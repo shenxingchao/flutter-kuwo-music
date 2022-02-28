@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
 import '../../component/appbar.dart';
@@ -155,9 +156,13 @@ class _RankListIndexComponentState extends State<RankListIndexComponent> {
                                                                   item["pic"],
                                                             ))),
                                                     Padding(
-                                                      padding: const EdgeInsets.all(5.0),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5.0),
                                                       child: Row(
-                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .center,
@@ -190,11 +195,13 @@ class _RankListIndexComponentState extends State<RankListIndexComponent> {
                                               ],
                                             ),
                                             onTap: () {
-                                              // Get.toNamed('/rank_list_detail',
-                                              //     arguments: {
-                                              //       "id": int.parse(
-                                              //           item["id"].toString())
-                                              //     });
+                                              Get.toNamed('/rank_list_detail',
+                                                  arguments: {
+                                                    "id": int.parse(
+                                                        item["sourceid"]
+                                                            .toString()),
+                                                    "name": item["name"],
+                                                  });
                                             },
                                           ),
                                         ));

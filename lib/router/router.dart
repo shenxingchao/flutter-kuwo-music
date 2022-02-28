@@ -1,14 +1,15 @@
 import 'package:get/get.dart';
 import '../tabbar.dart';
 import '../views/drawer/theme.dart';
-import '../views/play_list/play_list_detail.dart';
 import '../views/play_list/play_list_index.dart';
+import '../views/play_list/play_list_detail.dart';
 import '../views/rank_list/rank_list_index.dart';
+import '../views/rank_list/rank_list_detail.dart';
 import '../views/music/music_detail.dart';
+import '../views/mv/mv_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
 import '../views/user/favourite_list.dart';
-import '../views/mv/mv_detail.dart';
 
 //抽离路由代码
 class Routers {
@@ -19,32 +20,36 @@ class Routers {
         page: () => const TabbarComponent(),
         transition: Transition.cupertino),
     GetPage(
+        name: '/theme',
+        page: () => const ThemeComponent(),
+        transition: Transition.cupertino),
+    GetPage(
         name: '/play_list_index',
         page: () => const PlayListIndexComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/play_list_detail',
+        page: () => const PlayListDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/rank_list_index',
         page: () => const RankListIndexComponent(),
         transition: Transition.cupertino),
     GetPage(
-        name: '/theme',
-        page: () => const ThemeComponent(),
-        transition: Transition.cupertino),
-    GetPage(
-        name: '/play_list_detail',
-        page: () => const PlayListDetailComponenet(),
+        name: '/rank_list_detail',
+        page: () => const RankListDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/music_detail',
         page: () => const MusicDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
-        name: '/search_list',
-        page: () => const SearchListComponent(),
-        transition: Transition.cupertino),
-    GetPage(
         name: '/mv_detail',
         page: () => const MvDetailComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/search_list',
+        page: () => const SearchListComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/history',
