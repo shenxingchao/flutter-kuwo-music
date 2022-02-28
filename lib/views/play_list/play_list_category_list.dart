@@ -60,7 +60,7 @@ class _PlayListCategoryListComponentState
         list.clear();
         refreshController.loadComplete();
       });
-      await getGoodPlayList();
+      await getPlayListByCategoryId();
       //下拉刷新完成
       refreshController.refreshCompleted();
       //首次渲染完成
@@ -75,7 +75,7 @@ class _PlayListCategoryListComponentState
       setState(() {
         page++;
       });
-      await getGoodPlayList();
+      await getPlayListByCategoryId();
       if (loadFinished) {
         //数据加载完毕
         refreshController.loadNoData();
@@ -87,7 +87,7 @@ class _PlayListCategoryListComponentState
   }
 
   //获取歌单列表
-  Future getGoodPlayList() async {
+  Future getPlayListByCategoryId() async {
     var res = await Request.http(
         url: 'playList/getPlayListByCategoryId',
         type: 'get',

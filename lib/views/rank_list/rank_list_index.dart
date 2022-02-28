@@ -41,14 +41,14 @@ class _RankListIndexComponentState extends State<RankListIndexComponent> {
         list.clear();
         refreshController.loadComplete();
       });
-      await getGoodPlayList();
+      await getRankList();
       //下拉刷新完成
       refreshController.refreshCompleted();
     }
   }
 
   //获取歌单列表
-  Future getGoodPlayList() async {
+  Future getRankList() async {
     var res = await Request.http(url: 'rank/getRankList', type: 'get', data: {})
         .then((res) {
       if (res.data["code"] != 200) {

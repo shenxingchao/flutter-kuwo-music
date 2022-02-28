@@ -52,6 +52,16 @@ class PlayListWidget extends StatelessWidget {
                                     fit: BoxFit.cover,
                                     placeholder: 'assets/images/default.png',
                                     image: item["img"],
+                                    imageErrorBuilder: (BuildContext context,
+                                        Object exception,
+                                        StackTrace? stackTrace) {
+                                      return Image.asset(
+                                        'assets/images/default.png',
+                                        fit: BoxFit.cover,
+                                        width: 50,
+                                        height: 50,
+                                      );
+                                    },
                                   ))),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),

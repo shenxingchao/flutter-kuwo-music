@@ -1,5 +1,6 @@
 //专辑列表
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AlbumListWidget extends StatelessWidget {
   final List list;
@@ -66,8 +67,8 @@ class AlbumListWidget extends StatelessWidget {
                         ],
                       ),
                       onTap: () {
-                        // Get.toNamed('/album_detail',
-                        //     arguments: {"id": item["albumid"].toString()});
+                        Get.toNamed('/album_detail',
+                            arguments: {"id": item["albumid"]});
                       },
                     ),
                   ));

@@ -11,22 +11,20 @@ import '../../store/store.dart';
 import '../../utils/request.dart';
 import '../common/music_list.dart';
 
-class RankListDetailComponent extends StatefulWidget {
-  const RankListDetailComponent({Key? key}) : super(key: key);
+class AlbumDetailComponent extends StatefulWidget {
+  const AlbumDetailComponent({Key? key}) : super(key: key);
 
   @override
-  _RankListDetailComponentState createState() =>
-      _RankListDetailComponentState();
+  _AlbumDetailComponentState createState() => _AlbumDetailComponentState();
 }
 
-class _RankListDetailComponentState extends State<RankListDetailComponent> {
+class _AlbumDetailComponentState extends State<AlbumDetailComponent> {
   //路由参数
   late int id;
-  late String rankTitle;
   //歌曲列表
   List list = [];
-  //排行榜信息
-  dynamic rankList;
+  //专辑信息
+  dynamic albumList;
   //当前页
   int page = 1;
   //分页数
@@ -44,7 +42,6 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
     super.initState();
     //获取路由参数
     id = Get.arguments["id"];
-    rankTitle = Get.arguments["name"];
     onRefresh();
   }
 
@@ -58,7 +55,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
         list.clear();
         refreshController.loadComplete();
       });
-      await getMusicListByRankListId();
+      await getMusicListByAlbumId();
       //下拉刷新完成
       refreshController.refreshCompleted();
       //首次渲染完成
@@ -73,7 +70,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
       setState(() {
         page++;
       });
-      await getMusicListByRankListId();
+      await getMusicListByAlbumId();
       if (loadFinished) {
         //数据加载完毕
         refreshController.loadNoData();
@@ -84,12 +81,12 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
     }
   }
 
-  //通过榜单Id获取音乐列表
-  Future getMusicListByRankListId() async {
+  //通过歌单Id获取音乐列表
+  Future getMusicListByAlbumId() async {
     var res = await Request.http(
-        url: 'rank/getRankMusicList',
+        url: 'album/getMusicListByAlbumId',
         type: 'get',
-        data: {"bangId": id, "pn": page, "rn": pageSize}).then((res) {
+        data: {"albumId": id, "pn": page, "rn": pageSize}).then((res) {
       if (res.data["code"] != 200) {
         Fluttertoast.showToast(
           msg: res.data["msg"],
@@ -103,8 +100,9 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
     });
     if (mounted && res != null) {
       setState(() {
-        rankList ??= res.data["data"];
-        if (res.data["data"]["musicList"].length == 0) {
+        albumList ??= res.data["data"];
+        if (res.data["data"] == null ||
+            res.data["data"]["musicList"].length == 0) {
           loadFinished = true;
         } else {
           list.addAll(res.data["data"]["musicList"]);
@@ -116,7 +114,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return rankList != null
+    return albumList != null
         ? Scaffold(
             body: Column(children: [
             Expanded(
@@ -166,7 +164,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
   SliverAppBar getSliverAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
       title: Text(
-        rankTitle,
+        albumList["album"],
       ),
       foregroundColor: Colors.white,
       //appbar滚动后保持可见
@@ -174,7 +172,7 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
       //合并后高度
       collapsedHeight: 66,
       //头部总高度
-      expandedHeight: Get.width / 2 - MediaQuery.of(context).padding.top,
+      expandedHeight: Get.width - MediaQuery.of(context).padding.top,
       //根据innerBoxIsScrolled 内部内容滚动后显示阴影 必须传否则他不知道什么时候加阴影
       forceElevated: innerBoxIsScrolled,
       //阴影深度
@@ -199,29 +197,48 @@ class _RankListDetailComponentState extends State<RankListDetailComponent> {
               alignment: Alignment.centerLeft,
               children: [
                 Image.network(
-                  rankList["img"],
+                  albumList["pic"],
                   alignment: Alignment.center,
                   //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   width: Get.width,
-                ),
-                Center(
-                  child: Container(
-                    color: Colors.black.withOpacity(0.2),
-                  ),
+                  height: Get.width,
                 ),
                 Positioned(
-                    bottom: 5,
-                    right: 10,
+                    bottom: 50,
+                    left: 50,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '共' +
-                              rankList["num"].toString() +
-                              "首" +
-                              " 更新时间" +
-                              rankList["pub"],
+                          albumList["artist"],
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        SizedBox(
+                          width: Get.width - 60,
+                          child: Text(
+                            albumList["albuminfo"],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.white),
+                          ),
+                        ),
+                        Text(
+                          '共' + albumList["total"].toString() + "首",
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          '播放' +
+                              (albumList["playCnt"] / 10000)
+                                  .toStringAsFixed(2) +
+                              "万",
                           style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,

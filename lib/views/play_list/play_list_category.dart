@@ -42,14 +42,14 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
         list.clear();
         refreshController.loadComplete();
       });
-      await getGoodPlayList();
+      await getPlayListCategoryList();
       //下拉刷新完成
       refreshController.refreshCompleted();
     }
   }
 
-  //获取歌单列表
-  Future getGoodPlayList() async {
+  //获取歌单分类列表
+  Future getPlayListCategoryList() async {
     var res = await Request.http(
         url: 'playList/getPlayListCategoryList',
         type: 'get',
