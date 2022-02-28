@@ -37,6 +37,10 @@ class _HomeComponentState extends State<HomeComponent>
       "icon": 'assets/images/icons/play_list.png',
     },
     {
+      "title": '分类',
+      "icon": 'assets/images/icons/play_list.png',
+    },
+    {
       "title": '排行榜',
       "icon": 'assets/images/icons/rank.png',
     },
@@ -449,7 +453,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+      padding:  const EdgeInsets.fromLTRB(10, 20, 10, 20),
       child: Row(
         //相当于css justifly
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -459,24 +463,30 @@ class CategoryWidget extends StatelessWidget {
           return Builder(
             builder: (BuildContext context) {
               return InkWell(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: 30,
-                      height: 30,
-                      child: Image.asset(
-                        item["icon"],
-                        fit: BoxFit.cover,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Image.asset(
+                          item["icon"],
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    Text(item['title'])
-                  ],
+                      const SizedBox(height: 5.0),
+                      Text(item['title'])
+                    ],
+                  ),
                 ),
                 onTap: () {
                   switch (item["title"]) {
                     case '歌单':
                       Get.toNamed('/play_list_index');
+                      break;
+                    case '分类':
+                      Get.toNamed('/play_list_category');
                       break;
                     case '排行榜':
                       Get.toNamed('/rank_list_index');
