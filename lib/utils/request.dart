@@ -53,10 +53,26 @@ class Request {
 
     //返回结果
     Response response;
+    //重新请求次数
+    int numberOfRequest = 4;
+    //重新请求间隙1000ms
+    int requestDelay = 1000;
+
     //捕获异常
     try {
-      response = await dio.request(url,
-          data: data ?? {}, options: Options(method: type));
+      Future<Response> fn({count = 1}) async {
+        response = await dio.request(url,
+            data: data ?? {}, options: Options(method: type));
+        //如果data 为null 也重新请求
+        if (response.data == null && count < numberOfRequest) {
+          await Future.delayed(Duration(milliseconds: requestDelay), () async {
+            count++;
+            response = await fn(count: count);
+          });
+        }
+        return response;
+      }
+      response = await fn();
       return response;
     } on DioError catch (e) {
       if (e.response!.statusCode != null) {

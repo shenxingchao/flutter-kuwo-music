@@ -31,7 +31,7 @@ class _MvDetailComponentState extends State<MvDetailComponent> {
     //获取路由参数
     id = Get.arguments["id"];
     //暂停音乐播放
-    PlayAudio.instance.audioPlayer.pause();
+    PlayAudio.instance.pauseAudio();
     initVideoPlayer();
   }
 
@@ -45,7 +45,7 @@ class _MvDetailComponentState extends State<MvDetailComponent> {
   //初始化视频播放器
   void initVideoPlayer() async {
     //获取视频地址
-    var res = await CommonApi().getMusicListByPlayListId(mid: id, type: 'mv');
+    var res = await CommonApi().getPlayUrlById(mid: id, type: 'mv');
 
     //请求失败了
     if (res == null || res.data == null) {

@@ -84,7 +84,7 @@ class Store extends GetxController {
     if (playListMusic.isEmpty) {
       //清空播放列表 停止所有播放音乐 并设置当前播放对象为空
       //停止之前播放的音乐
-      await PlayAudio.instance.audioPlayer.stop();
+      await PlayAudio.instance.stopAudio();
       //清空当前播放对象
       playMusicInfo = null;
     }
@@ -105,9 +105,9 @@ class Store extends GetxController {
     //网络音乐播放
     if (!isLocal) {
       //获取音频地址
-      var res = await CommonApi().getMusicListByPlayListId(mid: rid);
+      var res = await CommonApi().getPlayUrlById(mid: rid);
       //停止之前播放的音乐
-      await PlayAudio.instance.audioPlayer.stop();
+      await PlayAudio.instance.stopAudio();
       //清空当前播放对象
       playMusicInfo = null;
       //请求失败了
@@ -139,7 +139,7 @@ class Store extends GetxController {
           name: music.data["data"]["name"]);
       try {
         //播放新的音乐
-        await PlayAudio.instance.audioPlayer.play(res.data["data"]["url"]);
+        await PlayAudio.instance.playAudio(url:res.data["data"]["url"]);
       } catch (e) {
         Fluttertoast.showToast(
           msg: "播放接口出错，按太快了",

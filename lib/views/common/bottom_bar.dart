@@ -161,14 +161,14 @@ class _PlayMusicBottomBarState extends State<PlayMusicBottomBar>
                                       if (store.audioPlayState ==
                                           PlayerState.PLAYING) {
                                         //暂停
-                                        PlayAudio.instance.audioPlayer.pause();
+                                        PlayAudio.instance.pauseAudio();
                                       }
                                       if (store.audioPlayState ==
                                               PlayerState.PAUSED ||
                                           store.audioPlayState ==
                                               PlayerState.COMPLETED) {
                                         //播放完了再继续播放
-                                        PlayAudio.instance.audioPlayer.resume();
+                                        PlayAudio.instance.resumeAudio();
                                       }
                                     },
                                   )),
@@ -451,16 +451,16 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                                 if (store.audioPlayState ==
                                                     PlayerState.PLAYING) {
                                                   //暂停
-                                                  PlayAudio.instance.audioPlayer
-                                                      .pause();
+                                                  PlayAudio.instance
+                                                      .pauseAudio();
                                                 }
                                                 if (store.audioPlayState ==
                                                         PlayerState.PAUSED ||
                                                     store.audioPlayState ==
                                                         PlayerState.COMPLETED) {
                                                   //播放完了再继续播放
-                                                  PlayAudio.instance.audioPlayer
-                                                      .resume();
+                                                  PlayAudio.instance
+                                                      .resumeAudio();
                                                 }
                                               } else {
                                                 //直接播放

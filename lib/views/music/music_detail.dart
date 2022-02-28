@@ -204,7 +204,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                     filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
                     child: Center(
                       child: Container(
-                        color: Colors.black.withOpacity(0.5),
+                        color: Colors.black.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -477,16 +477,14 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                             if (store.audioPlayState ==
                                                 PlayerState.PLAYING) {
                                               //暂停
-                                              PlayAudio.instance.audioPlayer
-                                                  .pause();
+                                              PlayAudio.instance.pauseAudio();
                                             }
                                             if (store.audioPlayState ==
                                                     PlayerState.PAUSED ||
                                                 store.audioPlayState ==
                                                     PlayerState.COMPLETED) {
                                               //播放完了再继续播放
-                                              PlayAudio.instance.audioPlayer
-                                                  .resume();
+                                              PlayAudio.instance.resumeAudio();
                                             }
                                           },
                                         )),
