@@ -73,31 +73,28 @@ class MusicListWidget extends StatelessWidget {
                                                 style: const TextStyle(
                                                     color: Colors.orange),
                                               ),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  child: Text(
-                                                    (entry.value["artist"]
-                                                            as String)
-                                                        .replaceAll(
-                                                            '&nbsp;', ' '),
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .primary),
-                                                  ),
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                        '/artist_detail',
-                                                        arguments: {
-                                                          "id": entry
-                                                              .value["artistid"]
-                                                        });
-                                                  },
+                                              GestureDetector(
+                                                child: Text(
+                                                  (entry.value["artist"]
+                                                          as String)
+                                                      .replaceAll(
+                                                          '&nbsp;', ' '),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary),
                                                 ),
-                                              )
+                                                onTap: () {
+                                                  Get.toNamed('/artist_detail',
+                                                      arguments: {
+                                                        "id": entry
+                                                            .value["artistid"]
+                                                      });
+                                                },
+                                              ),
                                             ],
                                           ),
                                         ),
