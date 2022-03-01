@@ -73,27 +73,35 @@ class MusicListWidget extends StatelessWidget {
                                                 style: const TextStyle(
                                                     color: Colors.orange),
                                               ),
-                                              GestureDetector(
-                                                child: Text(
-                                                  (entry.value["artist"]
-                                                          as String)
-                                                      .replaceAll(
-                                                          '&nbsp;', ' '),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary),
+                                              Expanded(
+                                                flex: 1,
+                                                child: GestureDetector(
+                                                  child: Align(
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text(
+                                                      (entry.value["artist"]
+                                                              as String)
+                                                          .replaceAll(
+                                                              '&nbsp;', ' '),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      style: TextStyle(
+                                                          color: Theme.of(
+                                                                  context)
+                                                              .colorScheme
+                                                              .primary),
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        '/artist_detail',
+                                                        arguments: {
+                                                          "id": entry.value[
+                                                              "artistid"]
+                                                        });
+                                                  },
                                                 ),
-                                                onTap: () {
-                                                  Get.toNamed('/artist_detail',
-                                                      arguments: {
-                                                        "id": entry
-                                                            .value["artistid"]
-                                                      });
-                                                },
                                               ),
                                             ],
                                           ),

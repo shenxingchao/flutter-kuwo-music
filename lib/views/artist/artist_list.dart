@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/views/common/artist_list.dart';
-import 'package:flutterkuwomusic/views/common/mv_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
