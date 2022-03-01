@@ -292,174 +292,163 @@ class _ArtistDetailComponentState extends State<ArtistDetailComponent>
                                         )
                                       ]);
                                     }).toList(),
-                                    SingleChildScrollView(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
-                                                  children: [
-                                                    const Text(
-                                                      "出生地",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail[
-                                                          "birthplace"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "性别",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["gener"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "体重",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["weight"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    const Text(
-                                                      "星座",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail[
-                                                          "constellation"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "身高",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["tall"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "英文名",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["aartist"]
-                                                          .toString()
-                                                          .replaceAll(
-                                                              '&nbsp;', ' '),
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    const Text(
-                                                      "语言",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["language"],
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "粉丝数",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["artistFans"]
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "所属",
-                                                      style: TextStyle(
-                                                          fontSize: 18),
-                                                    ),
-                                                    Text(
-                                                      artistDetail["country"]
-                                                          .toString(),
-                                                      style: const TextStyle(
-                                                          fontSize: 14),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            const Text(
-                                              "歌手简介",
-                                              style: TextStyle(fontSize: 18),
-                                            ),
-                                            Text(
-                                              artistDetail["info"]
-                                                  .toString()
-                                                  .replaceAll('&nbsp;', ' ')
-                                                  .replaceAll('<br/>', '\n'),
-                                              style:
-                                                  const TextStyle(fontSize: 14),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                    getArticleInfoWidget(),
                                   ]);
                             })
                         : const Loading())),
             const PlayMusicBottomBar()
           ]))
         : const Loading();
+  }
+
+  //歌手简介
+  SingleChildScrollView getArticleInfoWidget() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "出生地",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["birthplace"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "性别",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["gener"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "体重",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["weight"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "星座",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["constellation"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "身高",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["tall"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "英文名",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["aartist"]
+                          .toString()
+                          .replaceAll('&nbsp;', ' '),
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "语言",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["language"],
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "粉丝数",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["artistFans"].toString(),
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Text(
+                      "所属",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      artistDetail["country"].toString(),
+                      style: const TextStyle(
+                          fontSize: 14, color: Color(0xff666666)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Text(
+              "歌手简介",
+              style: TextStyle(fontSize: 18),
+            ),
+            Text(
+              artistDetail["info"]
+                  .toString()
+                  .replaceAll('&nbsp;', ' ')
+                  .replaceAll('<br/>', '\n'),
+              style: const TextStyle(fontSize: 14, color: Color(0xff666666)),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   //AppBar
