@@ -81,7 +81,9 @@ class MVListWidget extends StatelessWidget {
                       Container(
                         margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                         child: Text(
-                          item["name"],
+                          item["name"]
+                              .toString()
+                              .replaceAll('&nbsp;', ' '),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 14),
