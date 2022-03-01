@@ -453,7 +453,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  const EdgeInsets.fromLTRB(10, 20, 10, 20),
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
       child: Row(
         //相当于css justifly
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -490,6 +490,9 @@ class CategoryWidget extends StatelessWidget {
                       break;
                     case '排行榜':
                       Get.toNamed('/rank_list_index');
+                      break;
+                    case '歌手':
+                      Get.toNamed('/artist_list');
                       break;
                     case 'MV':
                       Get.toNamed('/mv_list');

@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/views/common/mv_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../component/loading.dart';
 import '../../component/appbar.dart';
 import '../../utils/request.dart';
-import '../common/play_list.dart';
 
 class MVListComponent extends StatefulWidget {
   const MVListComponent({Key? key}) : super(key: key);

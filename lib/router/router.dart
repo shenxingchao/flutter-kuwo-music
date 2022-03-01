@@ -7,10 +7,11 @@ import '../views/play_list/play_list_category_list.dart';
 import '../views/play_list/play_list_detail.dart';
 import '../views/rank_list/rank_list_index.dart';
 import '../views/rank_list/rank_list_detail.dart';
-import '../views/music/music_detail.dart';
-import '../views/album/album_detail.dart';
+import '../views/artist/artist_list.dart';
 import '../views/mv/mv_list.dart';
 import '../views/mv/mv_detail.dart';
+import '../views/album/album_detail.dart';
+import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
 import '../views/user/favourite_list.dart';
@@ -52,12 +53,8 @@ class Routers {
         page: () => const RankListDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
-        name: '/music_detail',
-        page: () => const MusicDetailComponent(),
-        transition: Transition.cupertino),
-    GetPage(
-        name: '/album_detail',
-        page: () => const AlbumDetailComponent(),
+        name: '/artist_list',
+        page: () => const ArtistListComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/mv_list',
@@ -66,6 +63,14 @@ class Routers {
     GetPage(
         name: '/mv_detail',
         page: () => const MvDetailComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/album_detail',
+        page: () => const AlbumDetailComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/music_detail',
+        page: () => const MusicDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/search_list',

@@ -149,7 +149,7 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
                                                         0, 5, 0, 5),
                                                 padding:
                                                     const EdgeInsets.fromLTRB(
-                                                        20, 5, 20, 5),
+                                                        20, 10, 20, 10),
                                                 color: const Color(0xffeeeeee),
                                                 child: Text(
                                                   item["name"],
@@ -157,7 +157,7 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: const TextStyle(
-                                                      fontSize: 14),
+                                                      fontSize: 16),
                                                 ),
                                               ),
                                             ],
