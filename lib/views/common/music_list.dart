@@ -74,7 +74,8 @@ class MusicListWidget extends StatelessWidget {
                                                     color: Colors.orange),
                                               ),
                                               Expanded(
-                                                child: Text(
+                                                child: GestureDetector(
+                                                  child: Text(
                                                     (entry.value["artist"]
                                                             as String)
                                                         .replaceAll(
@@ -82,9 +83,20 @@ class MusicListWidget extends StatelessWidget {
                                                     maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            Color(0xff999999))),
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
+                                                  ),
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        '/artist_detail',
+                                                        arguments: {
+                                                          "id": entry
+                                                              .value["artistid"]
+                                                        });
+                                                  },
+                                                ),
                                               )
                                             ],
                                           ),
@@ -287,7 +299,7 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                     //局部刷新
                                     state(() {});
                                     //刷新收藏列表
-                                    if(pageType == 1 && callback!=null){
+                                    if (pageType == 1 && callback != null) {
                                       callback();
                                     }
                                   },

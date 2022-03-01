@@ -8,6 +8,7 @@ import '../views/play_list/play_list_detail.dart';
 import '../views/rank_list/rank_list_index.dart';
 import '../views/rank_list/rank_list_detail.dart';
 import '../views/artist/artist_list.dart';
+import '../views/artist/artist_detail.dart';
 import '../views/mv/mv_list.dart';
 import '../views/mv/mv_detail.dart';
 import '../views/album/album_detail.dart';
@@ -55,6 +56,10 @@ class Routers {
     GetPage(
         name: '/artist_list',
         page: () => const ArtistListComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/artist_detail',
+        page: () => const ArtistDetailComponent(),
         transition: Transition.cupertino),
     GetPage(
         name: '/mv_list',
