@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/component/appbar.dart';
 import 'package:flutterkuwomusic/interface/play_mode.dart';
 import 'package:flutterkuwomusic/utils/play_audio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../store/store.dart';
@@ -84,9 +84,10 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
           data: {"musicId": Get.find<Store>().playMusicInfo?.rid}).then((res) {
         return res;
       }).catchError((error) {
-        Fluttertoast.showToast(
-          msg: "请求服务器错误",
-        );
+        //PS：这里请求前用了取消请求，防止快速点击，会弹出这个错误，所以注释掉了
+        // Fluttertoast.showToast(
+        //   msg: "请求服务器错误",
+        // );
       });
       if (mounted &&
           res != null &&
@@ -165,10 +166,36 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
           return Scaffold(
               extendBodyBehindAppBar: true,
               appBar: AppBarComponent(
-                Text(
-                  store.playMusicInfo != null
-                      ? store.playMusicInfo!.name
-                      : '暂无',
+                Column(
+                  children: [
+                    Text(
+                      store.playMusicInfo != null
+                          ? store.playMusicInfo!.name
+                          : '暂无',
+                    ),
+                    Offstage(
+                      offstage: store.playMusicInfo == null,
+                      child: GestureDetector(
+                        child: Container(
+                          width: Get.width / 2,
+                          padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                          child: Text(
+                            store.playMusicInfo != null
+                                ? store.playMusicInfo!.artist
+                                : '暂无',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ),
+                        onTap: () {
+                          Get.toNamed('/artist_detail',
+                              arguments: {"id": store.playMusicInfo!.artistid});
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 centerTitle: true,
                 appBarHeight: 66.0,
@@ -272,6 +299,13 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                                   alignment:
                                                                       Alignment
                                                                           .center,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          10,
+                                                                          0,
+                                                                          10,
+                                                                          0),
                                                                   child: Text(
                                                                     entry.value[
                                                                         "lineLyric"],
@@ -280,6 +314,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                                                         TextOverflow
                                                                             .ellipsis,
                                                                     style: TextStyle(
+                                                                        fontFamily:
+                                                                            "PingFangSC",
                                                                         fontSize: positionIndex == entry.key
                                                                             ? 20
                                                                             : 16,

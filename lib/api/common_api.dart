@@ -21,9 +21,10 @@ class CommonApi {
       }
       return res;
     }).catchError((error) {
-      Fluttertoast.showToast(
-        msg: "请求服务器错误",
-      );
+      //PS：这里请求前用了取消请求，防止快速点击，会弹出这个错误，所以注释掉了
+      // Fluttertoast.showToast(
+      //   msg: "请求服务器错误",
+      // );
     });
     return res;
   }
@@ -46,9 +47,10 @@ class CommonApi {
       }
       return res;
     }).catchError((error) {
-      Fluttertoast.showToast(
-        msg: "请求服务器错误",
-      );
+      //PS：这里请求前用了取消请求，防止快速点击，会弹出这个错误，所以注释掉了
+      // Fluttertoast.showToast(
+      //   msg: "请求服务器错误",
+      // );
     });
     return res;
   }

@@ -45,8 +45,11 @@ class ArtistListWidget extends StatelessWidget {
                         Text(item["country"]),
                         Text(" 歌曲 " + item["musicNum"].toString()),
                       ]),
-            trailing: const Icon(Icons.keyboard_arrow_right,
-                color: Color(0xff999999)),
+            trailing: Offstage(
+              offstage: item["aartist"] != null,
+              child: const Icon(Icons.keyboard_arrow_right,
+                  color: Color(0xff999999)),
+            ),
             onTap: () {
               Get.toNamed('/artist_detail', arguments: {"id": item["id"]});
             },

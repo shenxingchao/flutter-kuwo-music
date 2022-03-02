@@ -344,7 +344,7 @@ class FixToolBarWidget extends StatelessWidget {
                                     rid: element["rid"],
                                     name: element["name"],
                                     isLocal: false,
-                                    pic120: element["pic120"]));
+                                    pic120:  element["pic120"] ?? ''));
                               }
 
                               store.playAudioList(audioList);

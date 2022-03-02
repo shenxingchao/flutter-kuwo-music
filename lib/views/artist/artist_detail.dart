@@ -455,7 +455,7 @@ class _ArtistDetailComponentState extends State<ArtistDetailComponent>
   SliverAppBar getSliverAppBar(BuildContext context, bool innerBoxIsScrolled) {
     return SliverAppBar(
         title: Text(
-          artistDetail["name"],
+          artistDetail["name"].toString().replaceAll('&nbsp;', ' '),
         ),
         foregroundColor: Colors.white,
         //appbar滚动后保持可见

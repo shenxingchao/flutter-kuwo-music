@@ -144,12 +144,12 @@ class _PlayListCategoryComponentState extends State<PlayListCategoryComponent> {
                                           child: Column(
                                             children: [
                                               Container(
+                                                width: Get.width/4 - 10,
+                                                height: 40,
+                                                alignment: Alignment.center,
                                                 margin:
                                                     const EdgeInsets.fromLTRB(
                                                         0, 5, 0, 5),
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        20, 10, 20, 10),
                                                 color: const Color(0xffeeeeee),
                                                 child: Text(
                                                   item["name"],

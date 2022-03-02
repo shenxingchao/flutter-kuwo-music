@@ -1,6 +1,25 @@
 import 'package:dio/dio.dart';
 
 class Request {
+  // 工厂模式
+  factory Request() => _getInstance();
+  static Request get instance => _getInstance();
+  static Request? _instance;
+
+  //取消接口请求token 单例
+  //音频播放器
+  late CancelToken cancelToken;
+
+  Request._internal() {
+    //全局AudioPlayer对象只有一个实例
+    cancelToken = CancelToken();
+  }
+
+  static Request _getInstance() {
+    _instance ??= Request._internal();
+    return _instance as Request;
+  }
+
   //初始化请求配置
   static final BaseOptions baseOptions = BaseOptions(
       //基础url
@@ -10,11 +29,14 @@ class Request {
       //超时时间ms
       connectTimeout: 5000);
 
-  static http({
-    url,
-    type,
-    data,
-  }) async {
+  //取消接口请求
+  void cancelHttp() {
+    cancelToken.cancel();
+    //重置不然所有请求都取消了
+    cancelToken = CancelToken();
+  }
+
+  static http({url, type, data}) async {
     if (type == 'get') {
       if (data != null && !data.isEmpty) {
         url += "?";
@@ -62,7 +84,9 @@ class Request {
     try {
       Future<Response> fn({count = 1}) async {
         response = await dio.request(url,
-            data: data ?? {}, options: Options(method: type));
+            data: data ?? {},
+            options: Options(method: type),
+            cancelToken: Request.instance.cancelToken);
         //如果data 为null 也重新请求
         if (response.data == null && count < numberOfRequest) {
           await Future.delayed(Duration(milliseconds: requestDelay), () async {
@@ -72,6 +96,7 @@ class Request {
         }
         return response;
       }
+
       response = await fn();
       return response;
     } on DioError catch (e) {

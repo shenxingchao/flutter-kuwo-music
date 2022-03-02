@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +13,7 @@ import '../interface/play_list_music.dart';
 import '../interface/play_music_info.dart';
 import '../interface/play_mode.dart';
 import '../utils/play_audio.dart';
+import '../utils/request.dart';
 
 //全局变量start
 //本地缓存对象
@@ -102,14 +104,15 @@ class Store extends GetxController {
       }
     }
 
+    //播放前取消前面的所有请求
+    Request().cancelHttp();
+
     //网络音乐播放
     if (!isLocal) {
       //获取音频地址
       var res = await CommonApi().getPlayUrlById(mid: rid);
       //停止之前播放的音乐
       await PlayAudio.instance.stopAudio();
-      //清空当前播放对象
-      playMusicInfo = null;
       //请求失败了
       if (res == null || res.data == null) {
         return;
@@ -139,7 +142,7 @@ class Store extends GetxController {
           name: music.data["data"]["name"]);
       try {
         //播放新的音乐
-        await PlayAudio.instance.playAudio(url:res.data["data"]["url"]);
+        await PlayAudio.instance.playAudio(url: res.data["data"]["url"]);
       } catch (e) {
         Fluttertoast.showToast(
           msg: "播放接口出错，按太快了",
@@ -230,7 +233,7 @@ class Store extends GetxController {
           break;
       }
 
-      if (playingIndex != -1) {
+      if (playingIndex != -1 && playMode != PlayMode.SINGLE_FOR_MODE) {
         playMusic(rid: playListMusic[playingIndex].rid);
       }
     }
@@ -267,7 +270,9 @@ class Store extends GetxController {
           break;
       }
 
-      playMusic(rid: playListMusic[playingIndex].rid);
+      if (playMode != PlayMode.SINGLE_FOR_MODE) {
+        playMusic(rid: playListMusic[playingIndex].rid);
+      }
     }
   }
 
