@@ -520,7 +520,7 @@ class CarouselWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10),
       child: Container(
           decoration: const BoxDecoration(boxShadow: [
             BoxShadow(
@@ -534,7 +534,7 @@ class CarouselWidget extends StatelessWidget {
             child: CarouselSlider(
               options: CarouselOptions(
                 //宽高比
-                aspectRatio: 1400 / 340,
+                aspectRatio: 1400 / 400,
                 //可见比例
                 viewportFraction: 1,
                 //自动播放

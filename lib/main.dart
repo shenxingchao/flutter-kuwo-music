@@ -74,9 +74,11 @@ class MyApp extends StatelessWidget {
           return GetMaterialApp(
               title: 'app',
               theme: ThemeData(
+                  //scaffold背景色
+                  scaffoldBackgroundColor: Colors.white,
                   //自定义主题色方式
                   colorScheme: ColorScheme.fromSwatch().copyWith(
-                      //背景色
+                      //主题色
                       primary: store.primary,
                       //图标颜色
                       onPrimary: const Color(0Xff333333)),

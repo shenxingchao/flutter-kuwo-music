@@ -219,7 +219,7 @@ class _ArtistListComponentState extends State<ArtistListComponent>
         body: list.isNotEmpty
             ? Stack(children: [
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 30, 0),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: SmartRefresher(
                       //下拉刷新
                       enablePullDown: true,
@@ -249,10 +249,10 @@ class _ArtistListComponentState extends State<ArtistListComponent>
                 ),
                 Positioned(
                   top: 10,
-                  right: 10,
+                  right: 0,
                   bottom: 10,
                   child: Container(
-                    color: const Color(0x0f000000),
+                    color: const Color(0x05000000),
                     child: Column(children: [
                       ...wordList.map((item) {
                         return Expanded(
