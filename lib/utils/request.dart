@@ -54,7 +54,7 @@ class Request {
     //返回结果
     Response response;
     //重新请求次数
-    int numberOfRequest = 4;
+    int numberOfRequest = 10;
     //重新请求间隙1000ms
     int requestDelay = 1000;
 
