@@ -27,6 +27,12 @@ class _SearchListComponentState extends State<SearchListComponent>
     with SingleTickerProviderStateMixin {
   //搜索关键词
   String keyword = '';
+  //是否显示搜索结果 输入框由内容 且不改变字符时显示 否则显示关键词列表
+  bool showContent = false;
+  //关键词列表
+  List keywordList = [];
+  //用于失去焦点
+  FocusNode inputFocus = FocusNode();
   //tab控制器
   late TabController tabController;
   //文本默认值控制器
@@ -69,8 +75,6 @@ class _SearchListComponentState extends State<SearchListComponent>
   @override
   void initState() {
     super.initState();
-    //获取搜索关键词
-    keyword = Get.arguments;
     //初始化tab控制器
     tabController = TabController(length: tabItemList.length, vsync: this)
       ..addListener(() {
@@ -83,11 +87,10 @@ class _SearchListComponentState extends State<SearchListComponent>
           }
         });
       });
-
     //初始化文本控制器
     textController.text = keyword;
-    //下拉刷新获取第一个tabview数据
-    onRefresh();
+    //获取搜索关键词
+    getSearchKey();
   }
 
   @override
@@ -185,6 +188,31 @@ class _SearchListComponentState extends State<SearchListComponent>
     return res;
   }
 
+  //获取关键词
+  Future getSearchKey() async {
+    var res =
+        await Request.http(url: 'search/getSearchKey', type: 'get', data: {
+      "key": keyword,
+    }).then((res) {
+      if (res.data["code"] != 200) {
+        Fluttertoast.showToast(
+          msg: res.data["msg"],
+        );
+      }
+      return res;
+    }).catchError((error) {
+      Fluttertoast.showToast(
+        msg: "请求服务器错误",
+      );
+    });
+    if (mounted && res != null) {
+      setState(() {
+        keywordList = res.data["data"];
+      });
+    }
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -192,26 +220,38 @@ class _SearchListComponentState extends State<SearchListComponent>
         resizeToAvoidBottomInset: false,
         appBar: AppBarComponent(
             InputComponent(
+                focusNode: inputFocus,
                 controller: textController,
+                autofocus: true,
                 height: 40,
                 hasBorder: false,
                 isCircle: true,
                 showSearchIcon: true,
+                showClearIcon: true,
                 placeholder: "歌曲/歌手/歌单/MV",
                 onSubmitted: (value) {
+                  if (keyword != '') {
+                    //状态初始化
+                    setState(() {
+                      list = [[], [], [], [], []];
+                      pages = [1, 1, 1, 1, 1];
+                      showContent = true;
+                    });
+                    onRefresh();
+                  }
+                },
+                onTap: () {
+                  setState(() {
+                    showContent = false;
+                  });
+                },
+                onChanged: (value) {
                   setState(() {
                     keyword = value;
-                    if (keyword != '') {
-                      //状态初始化
-                      setState(() {
-                        list = [[], [], [], [], []];
-                        pages = [1, 1, 1, 1, 1];
-                      });
-                      onRefresh();
-                    }
+                    getSearchKey();
                   });
                 }),
-            appBarHeight: 120.0,
+            appBarHeight: showContent ? 120 : 70,
             elevation: 0,
             shadowColor: Colors.transparent,
             backgroundColor: Theme.of(context).colorScheme.primary,
@@ -221,107 +261,140 @@ class _SearchListComponentState extends State<SearchListComponent>
               statusBarIconBrightness: Brightness.light,
             ),
             bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(50),
-                child: Material(
-                  //这里设置tab的背景色
-                  color: Colors.white,
-                  child: TabBar(
-                    controller: tabController,
-                    indicatorColor: Theme.of(context).colorScheme.primary,
-                    labelColor: const Color(0xff333333),
-                    unselectedLabelColor: const Color(0xff999999),
-                    tabs: tabItemList
-                        .map((tabItem) => Tab(text: tabItem))
-                        .toList(),
+                preferredSize: Size.fromHeight(showContent ? 50 : 0),
+                child: Offstage(
+                  offstage: !showContent,
+                  child: Material(
+                    //这里设置tab的背景色
+                    color: Colors.white,
+                    child: TabBar(
+                      controller: tabController,
+                      indicatorColor: Theme.of(context).colorScheme.primary,
+                      labelColor: const Color(0xff333333),
+                      unselectedLabelColor: const Color(0xff999999),
+                      tabs: tabItemList
+                          .map((tabItem) => Tab(text: tabItem))
+                          .toList(),
+                    ),
                   ),
                 ))),
-        body: list[tabItemIndex].isNotEmpty
-            ? GetBuilder<Store>(
-                //初始化store控制器
-                init: Store(),
-                builder: (store) {
-                  return Column(children: [
-                    Expanded(
-                      flex: 1,
-                      child: TabBarView(
-                        //构建
-                        controller: tabController,
-                        children: tabItemList.asMap().entries.map((entry) {
-                          var item = entry.value;
-                          var index = entry.key;
-                          return Column(children: [
-                            //播放全部工具栏
-                            PlayMusicListWidget(item: item, list: list[0]),
-                            //内容部分
-                            Expanded(
-                              flex: 1,
-                              child: SmartRefresher(
-                                  //下拉刷新
-                                  enablePullDown: true,
-                                  //上拉加载
-                                  enablePullUp: true,
-                                  //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
-                                  header: const ClassicHeader(
-                                    releaseText: "松开刷新",
-                                    refreshingText: '刷新中...',
-                                    completeText: '刷新完成',
-                                    idleText: '下拉刷新',
-                                  ),
-                                  footer: const ClassicFooter(
-                                    canLoadingText: '松开加载',
-                                    loadingText: '加载中...',
-                                    idleText: '上拉加载',
-                                    noDataText: '没有更多了^_^',
-                                  ),
-                                  controller: refreshControllers[index],
-                                  onRefresh: onRefresh,
-                                  onLoading: onLoading,
-                                  child: CustomScrollView(slivers: <Widget>[
-                                    Builder(
-                                      builder: (context) {
-                                        if (item == '单曲') {
-                                          return MusicListWidget(list: list[0]);
-                                        } else if (item == '专辑') {
-                                          return SliverList(
-                                              delegate:
-                                                  SliverChildListDelegate([
-                                            AlbumListWidget(list: list[1])
-                                          ]));
-                                        } else if (item == 'MV') {
-                                          return SliverList(
-                                              delegate:
-                                                  SliverChildListDelegate([
-                                            MVListWidget(list: list[2])
-                                          ]));
-                                        } else if (item == '歌单') {
-                                          return SliverList(
-                                              delegate:
-                                                  SliverChildListDelegate([
-                                            PlayListWidget(list: list[3])
-                                          ]));
-                                        } else if (item == '歌手') {
-                                          return SliverList(
-                                              delegate:
-                                                  SliverChildListDelegate([
-                                            ArtistListWidget(list: list[4])
-                                          ]));
-                                        } else {
-                                          return SliverList(
-                                              delegate:
-                                                  SliverChildListDelegate([]));
-                                        }
-                                      },
-                                    )
-                                  ])),
-                            )
-                          ]);
-                        }).toList(),
-                      ),
-                    ),
-                    const PlayMusicBottomBar()
-                  ]);
-                })
-            : const Loading());
+        body: showContent
+            ? (list[tabItemIndex].isNotEmpty
+                ? GetBuilder<Store>(
+                    //初始化store控制器
+                    init: Store(),
+                    builder: (store) {
+                      return Column(children: [
+                        Expanded(
+                          flex: 1,
+                          child: TabBarView(
+                            //构建
+                            controller: tabController,
+                            children: tabItemList.asMap().entries.map((entry) {
+                              var item = entry.value;
+                              var index = entry.key;
+                              return Column(children: [
+                                //播放全部工具栏
+                                PlayMusicListWidget(item: item, list: list[0]),
+                                //内容部分
+                                Expanded(
+                                  flex: 1,
+                                  child: SmartRefresher(
+                                      //下拉刷新
+                                      enablePullDown: true,
+                                      //上拉加载
+                                      enablePullUp: true,
+                                      //经典header 其他[ClassicHeader],[WaterDropMaterialHeader],[MaterialClassicHeader],[WaterDropHeader],[BezierCircleHeader]
+                                      header: const ClassicHeader(
+                                        releaseText: "松开刷新",
+                                        refreshingText: '刷新中...',
+                                        completeText: '刷新完成',
+                                        idleText: '下拉刷新',
+                                      ),
+                                      footer: const ClassicFooter(
+                                        canLoadingText: '松开加载',
+                                        loadingText: '加载中...',
+                                        idleText: '上拉加载',
+                                        noDataText: '没有更多了^_^',
+                                      ),
+                                      controller: refreshControllers[index],
+                                      onRefresh: onRefresh,
+                                      onLoading: onLoading,
+                                      child: CustomScrollView(slivers: <Widget>[
+                                        Builder(
+                                          builder: (context) {
+                                            if (item == '单曲') {
+                                              return MusicListWidget(
+                                                  list: list[0]);
+                                            } else if (item == '专辑') {
+                                              return SliverList(
+                                                  delegate:
+                                                      SliverChildListDelegate([
+                                                AlbumListWidget(list: list[1])
+                                              ]));
+                                            } else if (item == 'MV') {
+                                              return SliverList(
+                                                  delegate:
+                                                      SliverChildListDelegate([
+                                                MVListWidget(list: list[2])
+                                              ]));
+                                            } else if (item == '歌单') {
+                                              return SliverList(
+                                                  delegate:
+                                                      SliverChildListDelegate([
+                                                PlayListWidget(list: list[3])
+                                              ]));
+                                            } else if (item == '歌手') {
+                                              return SliverList(
+                                                  delegate:
+                                                      SliverChildListDelegate([
+                                                ArtistListWidget(list: list[4])
+                                              ]));
+                                            } else {
+                                              return SliverList(
+                                                  delegate:
+                                                      SliverChildListDelegate(
+                                                          []));
+                                            }
+                                          },
+                                        )
+                                      ])),
+                                )
+                              ]);
+                            }).toList(),
+                          ),
+                        ),
+                        const PlayMusicBottomBar()
+                      ]);
+                    })
+                : const Loading())
+            : ListView.builder(
+                //list长度必填
+                itemCount: keywordList.length,
+                //创建回调函数
+                itemBuilder: (context, index) {
+                  RegExp reg = RegExp(r"RELWORD=(.*)\r\nSNUM=.*");
+                  RegExpMatch? res = reg.firstMatch(keywordList[index]);
+                  String title =
+                      res != null ? res.group(1) as String : keywordList[index];
+
+                  return ListTile(
+                    title: Text(title),
+                    onTap: () {
+                      //失去焦点
+                      inputFocus.unfocus();
+                      //点击直接搜索
+                      setState(() {
+                        list = [[], [], [], [], []];
+                        pages = [1, 1, 1, 1, 1];
+                        keyword = title;
+                        textController.text = keyword;
+                        showContent = true;
+                      });
+                      onRefresh();
+                    },
+                  );
+                }));
   }
 }
 

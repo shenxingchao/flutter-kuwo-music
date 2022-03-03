@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 // 无敌封装输入框
 class InputComponent extends StatelessWidget {
+  //焦点控制
+  final FocusNode? focusNode;
+  //控制器
   final TextEditingController? controller;
+  //是否自动获取焦点
+  final bool autofocus;
+  //是否启用
+  final bool enabled;
   //输入框高度
   final double height;
   //背景颜色
@@ -23,12 +30,21 @@ class InputComponent extends StatelessWidget {
   final String placeholder;
   //是否显示搜索图标
   final bool showSearchIcon;
-  // 回车提交事件
+  //是否显示清除图标
+  final bool showClearIcon;
+  //回车提交事件
   final void Function(String)? onSubmitted;
+  //点击事件
+  final void Function()? onTap;
+  //内容改变事件
+  final void Function(String)? onChanged;
 
   const InputComponent(
       {Key? key,
+      this.focusNode,
       this.controller,
+      this.enabled = true,
+      this.autofocus = false,
       this.height = 40,
       this.backgroundColor = Colors.white,
       this.borderColor = const Color(0xffdddddd),
@@ -39,7 +55,10 @@ class InputComponent extends StatelessWidget {
       this.contentPadding = const EdgeInsets.all(10),
       this.placeholder = '请输入',
       this.showSearchIcon = false,
-      this.onSubmitted})
+      this.showClearIcon = false,
+      this.onSubmitted,
+      this.onTap,
+      this.onChanged,})
       : super(key: key);
 
   @override
@@ -55,10 +74,13 @@ class InputComponent extends StatelessWidget {
                 width: hasBorder ? 1 : 0),
             borderRadius: BorderRadius.circular(isCircle ? 30 : 4)),
         child: TextField(
+          focusNode:focusNode,
           controller: controller,
           maxLines: 1,
           style: TextStyle(color: color, fontSize: fontSize),
+          autofocus:autofocus,
           decoration: InputDecoration(
+            enabled:enabled,
             filled: true,
             //填充配景色 必须设置filled: true
             fillColor: Colors.transparent,
@@ -79,16 +101,21 @@ class InputComponent extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-            suffixIcon: IconButton(
-              onPressed: controller?.clear,
-              icon: const Icon(
-                Icons.clear,
-                size: 14,
-                color: Colors.grey,
+            suffixIcon: Offstage(
+              offstage: !showClearIcon,
+              child: IconButton(
+                onPressed: controller?.clear,
+                icon: const Icon(
+                  Icons.clear,
+                  size: 14,
+                  color: Colors.grey,
+                ),
               ),
             ),
           ),
           onSubmitted: onSubmitted,
+          onTap: onTap,
+          onChanged: onChanged,
         ));
   }
 }

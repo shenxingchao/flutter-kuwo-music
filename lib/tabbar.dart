@@ -99,18 +99,19 @@ class _TabbarComponentState extends State<TabbarComponent>
     return Scaffold(
         appBar: AppBarComponent(
           currentIndex == 0
-              ? InputComponent(
-                  controller: textController,
-                  height: 40,
-                  hasBorder: true,
-                  isCircle: true,
-                  showSearchIcon: true,
-                  placeholder: "歌曲/歌手/歌单/MV",
-                  onSubmitted: (value) {
-                    if (value != '') {
-                      Get.toNamed('/search_list', arguments: value);
-                    }
-                  })
+              ? GestureDetector(
+                  child: InputComponent(
+                      controller: textController,
+                      enabled: false,
+                      height: 40,
+                      hasBorder: true,
+                      isCircle: true,
+                      showSearchIcon: true,
+                      placeholder: "歌曲/歌手/歌单/MV"),
+                  onTap: () {
+                    Get.toNamed('/search_list');
+                  },
+                )
               : Text(appBarTitle[currentIndex]),
           leading: GestureDetector(
               child: const Icon(Icons.menu),
