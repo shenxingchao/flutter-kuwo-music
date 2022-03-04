@@ -16,6 +16,7 @@ import '../views/music/music_detail.dart';
 import '../views/search/search_list.dart';
 import '../views/user/history.dart';
 import '../views/user/favourite_list.dart';
+import '../views/user/download_list.dart';
 
 //抽离路由代码
 class Routers {
@@ -88,6 +89,10 @@ class Routers {
     GetPage(
         name: '/favourite_list',
         page: () => const FavouriteListComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/download_list',
+        page: () => const DownloadListComponent(),
         transition: Transition.cupertino),
   ];
 }

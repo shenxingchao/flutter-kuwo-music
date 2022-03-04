@@ -9,7 +9,7 @@ class MusicListWidget extends StatelessWidget {
       : super(key: key);
 
   final List list;
-  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）
+  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载
   final int pageType;
   //回调函数
   final dynamic callback;
@@ -53,104 +53,115 @@ class MusicListWidget extends StatelessWidget {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        //副标题
-                                        Container(
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 5, 0, 0),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                entry.value["hasLossless"]
-                                                    ? '无损 '
-                                                    : '',
-                                                style: const TextStyle(
-                                                    color: Colors.orange),
-                                              ),
-                                              Text(
-                                                entry.value["hasmv"] == 1
-                                                    ? 'MV '
-                                                    : '',
-                                                style: const TextStyle(
-                                                    color: Colors.orange),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: GestureDetector(
-                                                  child: Align(
-                                                    alignment: Alignment.centerLeft,
-                                                    child: Text(
-                                                      (entry.value["artist"]
-                                                              as String)
-                                                          .replaceAll(
-                                                              '&nbsp;', ' '),
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                      style: TextStyle(
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .colorScheme
-                                                              .primary),
-                                                    ),
-                                                  ),
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                        '/artist_detail',
-                                                        arguments: {
-                                                          "id": entry.value[
-                                                              "artistid"]
-                                                        });
-                                                  },
+                                        //副标题 下载页面隐藏，没那么多数据
+                                        Offstage(
+                                          offstage: pageType == 2,
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 5, 0, 0),
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  entry.value["hasLossless"]
+                                                      ? '无损 '
+                                                      : '',
+                                                  style: const TextStyle(
+                                                      color: Colors.orange),
                                                 ),
-                                              ),
-                                            ],
+                                                Text(
+                                                  entry.value["hasmv"] == 1
+                                                      ? 'MV '
+                                                      : '',
+                                                  style: const TextStyle(
+                                                      color: Colors.orange),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: GestureDetector(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Text(
+                                                        (entry.value["artist"]
+                                                                as String)
+                                                            .replaceAll(
+                                                                '&nbsp;', ' '),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .primary),
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      Get.toNamed(
+                                                          '/artist_detail',
+                                                          arguments: {
+                                                            "id": entry.value[
+                                                                "artistid"]
+                                                          });
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
                                     )),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Offstage(
-                                      offstage: entry.value["hasmv"] != 1,
-                                      child: GestureDetector(
+                                Offstage(
+                                  offstage: pageType == 2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Offstage(
+                                        offstage: entry.value["hasmv"] != 1,
+                                        child: GestureDetector(
+                                          behavior: HitTestBehavior.opaque,
+                                          child: Container(
+                                            margin: const EdgeInsets.fromLTRB(
+                                                0, 0, 5, 0),
+                                            padding: const EdgeInsets.all(5),
+                                            child: const Icon(
+                                                Icons
+                                                    .play_circle_outline_rounded,
+                                                color: Color(0xff999999)),
+                                          ),
+                                          onTap: () => {
+                                            Get.toNamed('/mv_detail',
+                                                arguments: {
+                                                  "id": entry.value["rid"]
+                                                })
+                                          },
+                                        ),
+                                      ),
+                                      GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         child: Container(
-                                          margin: const EdgeInsets.fromLTRB(
-                                              0, 0, 5, 0),
                                           padding: const EdgeInsets.all(5),
-                                          child: const Icon(
-                                              Icons.play_circle_outline_rounded,
-                                              color: Color(0xff999999)),
+                                          child: const Icon(Icons.more_vert,
+                                              size: 16,
+                                              color: Color(0xffcccccc)),
                                         ),
                                         onTap: () => {
-                                          Get.toNamed('/mv_detail', arguments: {
-                                            "id": entry.value["rid"]
-                                          })
+                                          //显示下拉弹出方法
+                                          showModalBottomSheet<void>(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return MoreBottomSheetWidget(
+                                                    item: entry.value,
+                                                    pageType: pageType,
+                                                    callback: callback);
+                                              })
                                         },
                                       ),
-                                    ),
-                                    GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        child: const Icon(Icons.more_vert,
-                                            size: 16, color: Color(0xffcccccc)),
-                                      ),
-                                      onTap: () => {
-                                        //显示下拉弹出方法
-                                        showModalBottomSheet<void>(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return MoreBottomSheetWidget(
-                                                  item: entry.value,
-                                                  pageType: pageType,
-                                                  callback: callback);
-                                            })
-                                      },
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
@@ -158,18 +169,24 @@ class MusicListWidget extends StatelessWidget {
                         ]),
                         onTap: () async {
                           //添加到播放列表
-                          store.playMusic(rid: entry.value["rid"]);
+                          store.playMusic(
+                            rid: entry.value["rid"],
+                            isLocal: pageType == 2,
+                          );
                         },
                         onLongPress: () => {
-                              //显示下拉弹出方法
-                              showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return MoreBottomSheetWidget(
-                                        item: entry.value,
-                                        pageType: pageType,
-                                        callback: callback);
-                                  })
+                              if (pageType != 2)
+                                {
+                                  //显示下拉弹出方法
+                                  showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MoreBottomSheetWidget(
+                                            item: entry.value,
+                                            pageType: pageType,
+                                            callback: callback);
+                                      })
+                                }
                             }),
                   ))
             ])
@@ -360,7 +377,10 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            onTap: () {},
+                            onTap: () {
+                              store.downloadMp3(
+                                  rid: item["rid"], name: item["name"]);
+                            },
                           ),
                         ),
                       ],

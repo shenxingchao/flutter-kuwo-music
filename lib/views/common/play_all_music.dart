@@ -15,7 +15,7 @@ class PlayAllMusicWidget extends StatelessWidget {
 
   //列表
   final List list;
-  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）
+  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载
   final int pageType;
 
   final dynamic callback;

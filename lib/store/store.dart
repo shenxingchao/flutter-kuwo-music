@@ -1,11 +1,15 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../api/common_api.dart';
 import '../interface/play_list_music.dart';
@@ -161,9 +165,63 @@ class Store extends GetxController {
         ]);
       }
     } else {
-      //本地音频播放
+      //停止之前播放的音乐
+      await PlayAudio.instance.stopAudio();
+      //获取音乐详情
+      var music = await CommonApi().getMusicDetail(mid: rid);
+      if (music == null || music.data == null) {
+        return;
+      }
+      //变更当前播放对象
+      playMusicInfo = PlayMusicInfo(
+          artist: music.data["data"]["artist"],
+          pic: music.data["data"]["pic"],
+          rid: music.data["data"]["rid"],
+          duration: music.data["data"]["duration"],
+          mvPlayCnt: music.data["data"]["mvPlayCnt"],
+          hasLossless: music.data["data"]["hasLossless"],
+          hasmv: music.data["data"]["hasmv"],
+          releaseDate: music.data["data"]["releaseDate"],
+          album: music.data["data"]["album"],
+          albumid: music.data["data"]["albumid"],
+          artistid: music.data["data"]["artistid"],
+          songTimeMinutes: music.data["data"]["songTimeMinutes"],
+          isListenFee: music.data["data"]["isListenFee"],
+          pic120: music.data["data"]["pic120"],
+          albuminfo: music.data["data"]["albuminfo"],
+          name: music.data["data"]["name"]);
+
+      //获取播放地址
+      var directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
+      String path = directory!.path +
+          "/download/" +
+          music.data["data"]["name"] +
+          "-" +
+          rid.toString() +
+          ".mp3";
+      try {
+        //播放新的音乐
+        await PlayAudio.instance.playLocalAudio(localPath: path);
+      } catch (e) {
+        Fluttertoast.showToast(
+          msg: "播放接口出错，按太快了",
+        );
+      }
+
       //添加到播放列表，如果已经添加，则不再添加
-      if (!isExsit) {}
+      if (!isExsit) {
+        changePlayListMusic([
+          ...playListMusic,
+          PlayListMusic(
+              artist: music.data["data"]["artist"],
+              rid: music.data["data"]["rid"],
+              name: music.data["data"]["name"],
+              isLocal: false,
+              pic120: music.data["data"]["pic120"])
+        ]);
+      }
     }
 
     update();
@@ -397,5 +455,41 @@ class Store extends GetxController {
       await box.write('favouriteMusicList', favouriteMusicList);
     }
     return true;
+  }
+
+  //下载歌曲
+  void downloadMp3({required int rid, required String name}) async {
+    //获取音频地址
+    var res = await CommonApi().getPlayUrlById(mid: rid);
+    //请求失败了
+    if (res == null || res.data == null) {
+      return;
+    }
+    var downloadUrl = res.data["data"]["url"];
+    //新建下载
+    String filename = name + "-" + rid.toString() + ".mp3";
+    var directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    //下载目录
+    String savePath = directory!.path + "/download/" + filename;
+    try {
+      Fluttertoast.showToast(
+        msg: "开始下载",
+      );
+      Dio dio = Dio();
+      await dio.download(downloadUrl, savePath,
+          onReceiveProgress: (received, total) {
+        if (received == total) {
+          Fluttertoast.showToast(
+            msg: "下载完成",
+          );
+        }
+      });
+    } catch (e) {
+      Fluttertoast.showToast(
+        msg: "已取消下载",
+      );
+    }
   }
 }
