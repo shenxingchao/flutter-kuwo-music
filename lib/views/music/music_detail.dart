@@ -78,29 +78,43 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
   //获取歌词
   Future getLrcList() async {
     if (Get.find<Store>().playMusicInfo != null) {
-      var res = await Request.http(
-          url: 'music/getLrcList',
-          type: 'get',
-          data: {"musicId": Get.find<Store>().playMusicInfo?.rid}).then((res) {
-        return res;
-      }).catchError((error) {
-        //PS：这里请求前用了取消请求，防止快速点击，会弹出这个错误，所以注释掉了
-        // Fluttertoast.showToast(
-        //   msg: "请求服务器错误",
-        // );
-      });
-      if (mounted &&
-          res != null &&
-          res.data != null &&
-          res.data["data"] != null &&
-          res.data["data"]["lrclist"] != null) {
-        setState(() {
-          lrcList = res.data["data"]["lrclist"];
-          positionIndex = 0;
-          scrollController.jumpTo(0.0);
+      var rid = Get.find<Store>().playMusicInfo?.rid;
+      //先查查找缓存是否存在，存在则直接读缓存里的歌词
+      var storage = await box.read(rid.toString());
+      if (storage != null) {
+        if (mounted) {
+          setState(() {
+            lrcList = storage["lrcList"];
+            positionIndex = 0;
+            scrollController.jumpTo(0.0);
+          });
+        }
+      } else {
+        var res = await Request.http(
+                url: 'music/getLrcList',
+                type: 'get',
+                data: {"musicId": Get.find<Store>().playMusicInfo?.rid})
+            .then((res) {
+          return res;
+        }).catchError((error) {
+          //PS：这里请求前用了取消请求，防止快速点击，会弹出这个错误，所以注释掉了
+          // Fluttertoast.showToast(
+          //   msg: "请求服务器错误",
+          // );
         });
+        if (mounted &&
+            res != null &&
+            res.data != null &&
+            res.data["data"] != null &&
+            res.data["data"]["lrclist"] != null) {
+          setState(() {
+            lrcList = res.data["data"]["lrclist"];
+            positionIndex = 0;
+            scrollController.jumpTo(0.0);
+          });
+        }
+        return lrcList;
       }
-      return res;
     }
   }
 
@@ -219,6 +233,14 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                             store.playMusicInfo!.pic,
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Image.asset(
+                                'assets/images/icons/music.png',
+                                alignment: Alignment.center,
+                                fit: BoxFit.fitWidth,
+                              );
+                            },
                           )
                         : Image.asset(
                             'assets/images/icons/music.png',
@@ -253,6 +275,15 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                       fit: BoxFit.cover,
                                       width: Get.width / 5 * 3,
                                       height: Get.width / 5 * 3,
+                                      errorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return Image.asset(
+                                          'assets/images/icons/music.png',
+                                          alignment: Alignment.center,
+                                          fit: BoxFit.fitWidth,
+                                        );
+                                      },
                                     ),
                                   )
                                 : const SizedBox(),

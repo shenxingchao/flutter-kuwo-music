@@ -109,7 +109,6 @@ class Store extends GetxController {
 
     //播放前取消前面的所有请求
     Request().cancelHttp();
-
     //网络音乐播放
     if (!isLocal) {
       //获取音频地址
@@ -167,29 +166,38 @@ class Store extends GetxController {
     } else {
       //停止之前播放的音乐
       await PlayAudio.instance.stopAudio();
-      //获取音乐详情
-      var music = await CommonApi().getMusicDetail(mid: rid);
-      if (music == null || music.data == null) {
-        return;
+      //先从缓存换取
+      dynamic data;
+      if (box.read(rid.toString()) != null) {
+        var storage = await box.read(rid.toString());
+        data = storage["music"];
+      } else {
+        //获取音乐详情
+        var music = await CommonApi().getMusicDetail(mid: rid);
+        if (music == null || music.data == null) {
+          return;
+        }
+        data = music.data["data"];
       }
+
       //变更当前播放对象
       playMusicInfo = PlayMusicInfo(
-          artist: music.data["data"]["artist"],
-          pic: music.data["data"]["pic"],
-          rid: music.data["data"]["rid"],
-          duration: music.data["data"]["duration"],
-          mvPlayCnt: music.data["data"]["mvPlayCnt"],
-          hasLossless: music.data["data"]["hasLossless"],
-          hasmv: music.data["data"]["hasmv"],
-          releaseDate: music.data["data"]["releaseDate"],
-          album: music.data["data"]["album"],
-          albumid: music.data["data"]["albumid"],
-          artistid: music.data["data"]["artistid"],
-          songTimeMinutes: music.data["data"]["songTimeMinutes"],
-          isListenFee: music.data["data"]["isListenFee"],
-          pic120: music.data["data"]["pic120"],
-          albuminfo: music.data["data"]["albuminfo"],
-          name: music.data["data"]["name"]);
+          artist: data["artist"],
+          pic: data["pic"],
+          rid: data["rid"],
+          duration: data["duration"],
+          mvPlayCnt: data["mvPlayCnt"],
+          hasLossless: data["hasLossless"],
+          hasmv: data["hasmv"],
+          releaseDate: data["releaseDate"],
+          album: data["album"],
+          albumid: data["albumid"],
+          artistid: data["artistid"],
+          songTimeMinutes: data["songTimeMinutes"],
+          isListenFee: data["isListenFee"],
+          pic120: data["pic120"],
+          albuminfo: data["albuminfo"],
+          name: data["name"]);
 
       //获取播放地址
       var directory = Platform.isAndroid
@@ -197,7 +205,7 @@ class Store extends GetxController {
           : await getApplicationDocumentsDirectory();
       String path = directory!.path +
           "/download/" +
-          music.data["data"]["name"] +
+          data["name"] +
           "-" +
           rid.toString() +
           ".mp3";
@@ -215,11 +223,11 @@ class Store extends GetxController {
         changePlayListMusic([
           ...playListMusic,
           PlayListMusic(
-              artist: music.data["data"]["artist"],
-              rid: music.data["data"]["rid"],
-              name: music.data["data"]["name"],
-              isLocal: false,
-              pic120: music.data["data"]["pic120"])
+              artist: data["artist"],
+              rid: data["rid"],
+              name: data["name"],
+              isLocal: true,
+              pic120: data["pic120"])
         ]);
       }
     }
@@ -459,12 +467,39 @@ class Store extends GetxController {
 
   //下载歌曲
   void downloadMp3({required int rid, required String name}) async {
+    //获取音乐详情
+    var music = await CommonApi().getMusicDetail(mid: rid);
+    if (music == null || music.data == null) {
+      return;
+    }
+    //获取歌词
+    var lrcRes = await Request.http(
+        url: 'music/getLrcList',
+        type: 'get',
+        data: {"musicId": Get.find<Store>().playMusicInfo?.rid}).then((res) {
+      return res;
+    }).catchError((error) {});
+    List lrcList = [];
+    if (lrcRes != null &&
+        lrcRes.data != null &&
+        lrcRes.data["data"] != null &&
+        lrcRes.data["data"]["lrclist"] != null) {
+      lrcList = lrcRes.data["data"]["lrclist"];
+    }
+    //把音乐详情和歌词缓存起来，下次播放的时候直接读缓存，保证下载的歌曲没有流量也能播放
+    var storage = {
+      "music": music.data["data"],
+      "lrcList": lrcList,
+    };
+    await box.write(rid.toString(), storage);
+
     //获取音频地址
     var res = await CommonApi().getPlayUrlById(mid: rid);
     //请求失败了
     if (res == null || res.data == null) {
       return;
     }
+
     var downloadUrl = res.data["data"]["url"];
     //新建下载
     String filename = name + "-" + rid.toString() + ".mp3";
