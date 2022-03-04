@@ -1,4 +1,5 @@
 //歌单列表
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -46,23 +47,17 @@ class PlayListWidget extends StatelessWidget {
                               aspectRatio: 1 / 1,
                               child: ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
-                                  child: FadeInImage.assetNetwork(
-                                    alignment: Alignment.center,
-                                    //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                                    fit: BoxFit.cover,
-                                    placeholder: 'assets/images/default.png',
-                                    image: item["img"],
-                                    imageErrorBuilder: (BuildContext context,
-                                        Object exception,
-                                        StackTrace? stackTrace) {
-                                      return Image.asset(
-                                        'assets/images/default.png',
-                                        fit: BoxFit.cover,
-                                        width: 50,
-                                        height: 50,
-                                      );
-                                    },
-                                  ))),
+                                  child: CachedNetworkImage(
+                                      imageUrl: item["img"],
+                                      alignment: Alignment.center,
+                                      fit: BoxFit.cover,
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                            'assets/images/default.png',
+                                            fit: BoxFit.cover,
+                                            width: 50,
+                                            height: 50,
+                                          )))),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(5, 0, 0, 5),
                             child: Row(

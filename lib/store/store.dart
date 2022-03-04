@@ -39,8 +39,8 @@ List<Color> themeList = [
 class Store extends GetxController {
   //首屏缓存
   Map<String, List> homeCache = {
-    "homeBannerList": [],
-    "homePlayList": [],
+    "homeBannerList": box.read('homeBannerList') ?? [],
+    "homePlayList": box.read('homePlayList') ?? [],
   };
 
   //通知插件
@@ -65,6 +65,8 @@ class Store extends GetxController {
 
   //更换首屏缓存
   void changeHomeCache(Map<String, List> homeCacheObj) {
+    box.write('homeBannerList', homeCacheObj["homeBannerList"]);
+    box.write('homePlayList', homeCacheObj["homePlayList"]);
     homeCache = homeCacheObj;
     update();
   }

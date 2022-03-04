@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/component/appbar.dart';
@@ -229,18 +230,15 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                     width: Get.width,
                     height: Get.height,
                     child: store.playMusicInfo != null
-                        ? Image.network(
-                            store.playMusicInfo!.pic,
+                        ? CachedNetworkImage(
+                            imageUrl: store.playMusicInfo!.pic,
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
-                            errorBuilder: (BuildContext context,
-                                Object exception, StackTrace? stackTrace) {
-                              return Image.asset(
-                                'assets/images/icons/music.png',
-                                alignment: Alignment.center,
-                                fit: BoxFit.fitWidth,
-                              );
-                            },
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/icons/music.png',
+                              alignment: Alignment.center,
+                              fit: BoxFit.fitWidth,
+                            ),
                           )
                         : Image.asset(
                             'assets/images/icons/music.png',
@@ -269,23 +267,19 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                             height: Get.width,
                             child: store.playMusicInfo != null
                                 ? Center(
-                                    child: Image.network(
-                                      store.playMusicInfo!.pic,
+                                    child: CachedNetworkImage(
+                                    imageUrl: store.playMusicInfo!.pic,
+                                    alignment: Alignment.center,
+                                    fit: BoxFit.cover,
+                                    width: Get.width / 5 * 3,
+                                    height: Get.width / 5 * 3,
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/images/icons/music.png',
                                       alignment: Alignment.center,
-                                      fit: BoxFit.cover,
-                                      width: Get.width / 5 * 3,
-                                      height: Get.width / 5 * 3,
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return Image.asset(
-                                          'assets/images/icons/music.png',
-                                          alignment: Alignment.center,
-                                          fit: BoxFit.fitWidth,
-                                        );
-                                      },
+                                      fit: BoxFit.fitWidth,
                                     ),
-                                  )
+                                  ))
                                 : const SizedBox(),
                           ),
                           onTap: () {

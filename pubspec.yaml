@@ -62,6 +62,8 @@ dependencies:
   video_player: ^2.2.18
   # 通知栏
   flutter_local_notifications: ^9.3.2
+  # 图片缓存
+  cached_network_image: ^3.2.0
 
 
   # The following adds the Cupertino Icons font to your application.

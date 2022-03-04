@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
@@ -185,24 +186,19 @@ class _TabbarComponentState extends State<TabbarComponent>
                               child: ClipOval(
                                   child: store.playMusicInfo != null &&
                                           store.playMusicInfo!.pic120 != ''
-                                      ? Image.network(
-                                          store.playMusicInfo!.pic120,
+                                      ? CachedNetworkImage(
+                                          imageUrl: store.playMusicInfo!.pic120,
                                           alignment: Alignment.center,
-                                          //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
                                           fit: BoxFit.cover,
                                           width: 50,
                                           height: 50,
-                                          errorBuilder: (BuildContext context,
-                                              Object exception,
-                                              StackTrace? stackTrace) {
-                                            return Image.asset(
-                                              'assets/images/default.png',
-                                              fit: BoxFit.cover,
-                                              width: 50,
-                                              height: 50,
-                                            );
-                                          },
-                                        )
+                                          errorWidget: (context, url, error) =>
+                                              Image.asset(
+                                                'assets/images/default.png',
+                                                fit: BoxFit.cover,
+                                                width: 50,
+                                                height: 50,
+                                              ))
                                       : Image.asset(
                                           'assets/images/icons/music.png',
                                           fit: BoxFit.cover,

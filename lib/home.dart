@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -543,13 +544,14 @@ class CarouselWidget extends StatelessWidget {
               items: bannerList.map((item) {
                 return Builder(
                   builder: (BuildContext context) {
-                    return FadeInImage.assetNetwork(
-                      alignment: Alignment.center,
-                      //图片适应父组件方式  cover:等比缩放水平垂直直到2者都填满父组件 其他的没啥用了
-                      fit: BoxFit.cover,
-                      placeholder: 'assets/images/default_banner.png',
-                      image: item["pic"] as String,
-                    );
+                    return CachedNetworkImage(
+                        imageUrl: item["pic"] as String,
+                        alignment: Alignment.center,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/default_banner.png',
+                              fit: BoxFit.cover,
+                            ));
                   },
                 );
               }).toList(),
