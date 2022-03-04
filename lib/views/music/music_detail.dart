@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -235,20 +236,24 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
                             errorWidget: (context, url, error) => Image.asset(
-                              'assets/images/icons/music.png',
+                              'assets/images/music_bg_1.jpg',
                               alignment: Alignment.center,
                               fit: BoxFit.fitWidth,
                             ),
                           )
                         : Image.asset(
-                            'assets/images/icons/music.png',
+                            'assets/images/music_bg_' +
+                                Random().nextInt(6).toString() +
+                                '.jpg',
                             alignment: Alignment.center,
-                            fit: BoxFit.fitWidth,
+                            fit: BoxFit.cover,
                           ),
                   )),
                   //高斯模糊滤镜
                   BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 30.0, sigmaY: 30.0),
+                    filter: ImageFilter.blur(
+                        sigmaX: store.playMusicInfo != null ? 30.0 : 0.0,
+                        sigmaY: store.playMusicInfo != null ? 30.0 : 0.0),
                     child: Center(
                       child: Container(
                         color: Colors.black.withOpacity(0.6),
@@ -369,8 +374,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Material(
@@ -395,6 +399,24 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                           if (store.playMusicInfo != null) {
                                             await store.setLikeState(
                                                 store.playMusicInfo?.rid);
+                                          }
+                                        },
+                                      )),
+                                  Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(children: const [
+                                              Icon(Icons.download,
+                                                  size: 30, color: Colors.grey),
+                                            ])),
+                                        onTap: () {
+                                          if (store.playMusicInfo != null) {
+                                            store.downloadMp3(
+                                                rid: store.playMusicInfo!.rid,
+                                                name:
+                                                    store.playMusicInfo!.name);
                                           }
                                         },
                                       ))

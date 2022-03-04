@@ -112,56 +112,49 @@ class MusicListWidget extends StatelessWidget {
                                         ),
                                       ],
                                     )),
-                                Offstage(
-                                  offstage: pageType == 2,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Offstage(
-                                        offstage: entry.value["hasmv"] != 1,
-                                        child: GestureDetector(
-                                          behavior: HitTestBehavior.opaque,
-                                          child: Container(
-                                            margin: const EdgeInsets.fromLTRB(
-                                                0, 0, 5, 0),
-                                            padding: const EdgeInsets.all(5),
-                                            child: const Icon(
-                                                Icons
-                                                    .play_circle_outline_rounded,
-                                                color: Color(0xff999999)),
-                                          ),
-                                          onTap: () => {
-                                            Get.toNamed('/mv_detail',
-                                                arguments: {
-                                                  "id": entry.value["rid"]
-                                                })
-                                          },
-                                        ),
-                                      ),
-                                      GestureDetector(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Offstage(
+                                      offstage: entry.value["hasmv"] != 1,
+                                      child: GestureDetector(
                                         behavior: HitTestBehavior.opaque,
                                         child: Container(
+                                          margin: const EdgeInsets.fromLTRB(
+                                              0, 0, 5, 0),
                                           padding: const EdgeInsets.all(5),
-                                          child: const Icon(Icons.more_vert,
-                                              size: 16,
-                                              color: Color(0xffcccccc)),
+                                          child: const Icon(
+                                              Icons.play_circle_outline_rounded,
+                                              color: Color(0xff999999)),
                                         ),
                                         onTap: () => {
-                                          //显示下拉弹出方法
-                                          showModalBottomSheet<void>(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return MoreBottomSheetWidget(
-                                                    item: entry.value,
-                                                    pageType: pageType,
-                                                    callback: callback);
-                                              })
+                                          Get.toNamed('/mv_detail', arguments: {
+                                            "id": entry.value["rid"]
+                                          })
                                         },
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(5),
+                                        child: const Icon(Icons.more_vert,
+                                            size: 16, color: Color(0xffcccccc)),
+                                      ),
+                                      onTap: () => {
+                                        //显示下拉弹出方法
+                                        showModalBottomSheet<void>(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return MoreBottomSheetWidget(
+                                                  item: entry.value,
+                                                  pageType: pageType,
+                                                  callback: callback);
+                                            })
+                                      },
+                                    ),
+                                  ],
                                 )
                               ],
                             ),
@@ -175,18 +168,15 @@ class MusicListWidget extends StatelessWidget {
                           );
                         },
                         onLongPress: () => {
-                              if (pageType != 2)
-                                {
-                                  //显示下拉弹出方法
-                                  showModalBottomSheet<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return MoreBottomSheetWidget(
-                                            item: entry.value,
-                                            pageType: pageType,
-                                            callback: callback);
-                                      })
-                                }
+                              //显示下拉弹出方法
+                              showModalBottomSheet<void>(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return MoreBottomSheetWidget(
+                                        item: entry.value,
+                                        pageType: pageType,
+                                        callback: callback);
+                                  })
                             }),
                   ))
             ])
@@ -226,7 +216,7 @@ class MoreBottomSheetWidget extends StatelessWidget {
                       //children可以放任意的组件
                       children: [
                         Offstage(
-                          offstage: pageType != 1,
+                          offstage: pageType != 1 && pageType != 2,
                           child: Material(
                             color: Colors.white,
                             child: InkWell(
@@ -252,8 +242,20 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                store.deleteFavouriteMusicList(
-                                    idList: [item["rid"]]);
+                                //删除收藏
+                                if (pageType == 1) {
+                                  store.deleteFavouriteMusicList(
+                                      idList: [item["rid"]]);
+                                }
+                                //删除下载的歌曲和缓存
+                                if (pageType == 2) {
+                                  store.deleteDownloadMusicList(list: [
+                                    {
+                                      "rid": item["rid"],
+                                      "name": item["name"],
+                                    }
+                                  ]);
+                                }
                                 if (callback != null) {
                                   callback();
                                 }
@@ -354,33 +356,36 @@ class MoreBottomSheetWidget extends StatelessWidget {
                             onTap: () {},
                           ),
                         ),
-                        Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            child: Container(
-                              height: 50,
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                children: const [
-                                  Icon(
-                                    Icons.download_outlined,
-                                    size: 30,
-                                    color: Color(0xff333333),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '下载',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                        Offstage(
+                          offstage: pageType == 2,
+                          child: Material(
+                            color: Colors.white,
+                            child: InkWell(
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.download_outlined,
+                                      size: 30,
+                                      color: Color(0xff333333),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      '下载',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              onTap: () {
+                                store.downloadMp3(
+                                    rid: item["rid"], name: item["name"]);
+                              },
                             ),
-                            onTap: () {
-                              store.downloadMp3(
-                                  rid: item["rid"], name: item["name"]);
-                            },
                           ),
                         ),
                       ],

@@ -529,4 +529,26 @@ class Store extends GetxController {
       );
     }
   }
+
+  //删除指定idList的下载歌曲
+  Future deleteDownloadMusicList({required List list}) async {
+    List idList = [];
+    for (var item in list) {
+      String filename = item["name"] + "-" + item["rid"].toString() + ".mp3";
+      var directory = Platform.isAndroid
+          ? await getExternalStorageDirectory()
+          : await getApplicationDocumentsDirectory();
+      //删除文件路径
+      String path = directory!.path + "/download/" + filename;
+      File(path).deleteSync();
+      await box.write(item["rid"].toString(), null);
+      idList.add(item["rid"]);
+    }
+
+    //删除播放列表里对应的本地歌曲
+    playListMusic.removeWhere((item) {
+      return idList.contains(item.rid) && item.isLocal;
+    });
+    return true;
+  }
 }

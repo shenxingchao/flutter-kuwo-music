@@ -79,7 +79,7 @@ class PlayAllMusicWidget extends StatelessWidget {
                           artist: element["artist"],
                           rid: element["rid"],
                           name: element["name"],
-                          isLocal: false,
+                          isLocal: pageType == 2 ? true : false,
                           pic120: element["pic120"]));
                     }
                     store.playAudioList(audioList);
