@@ -382,8 +382,7 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                 ),
                               ),
                               onTap: () {
-                                store.downloadMp3(
-                                    rid: item["rid"], name: item["name"]);
+                                store.downloadMp3(rid: item["rid"]);
                               },
                             ),
                           ),

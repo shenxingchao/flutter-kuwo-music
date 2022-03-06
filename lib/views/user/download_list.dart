@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterkuwomusic/store/store.dart';
 import 'package:flutterkuwomusic/views/common/music_list.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../component/loading.dart';
@@ -38,13 +39,15 @@ class _DownloadListComponentState extends State<DownloadListComponent> {
     //遍历文件夹下文件
     await for (FileSystemEntity fileSystemEntity in fileList) {
       //正则匹配文件歌曲名称和rid
-      RegExp reg = RegExp(r".*/download/(.*)-(\d+).mp3");
+      RegExp reg = RegExp(r".*/download/(\d+).mp3");
 
       RegExpMatch? res = reg.firstMatch(fileSystemEntity.path);
 
       if (res != null) {
-        String name = res.group(1) as String;
-        int rid = int.parse(res.group(2).toString());
+        int rid = int.parse(res.group(1).toString());
+        String name = box.read(rid.toString()) != null
+            ? box.read(rid.toString())["music"]["name"]
+            : "未知";
 
         list.add({
           "artist": "未知",

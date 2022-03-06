@@ -414,9 +414,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                         onTap: () {
                                           if (store.playMusicInfo != null) {
                                             store.downloadMp3(
-                                                rid: store.playMusicInfo!.rid,
-                                                name:
-                                                    store.playMusicInfo!.name);
+                                              rid: store.playMusicInfo!.rid,
+                                            );
                                           }
                                         },
                                       ))

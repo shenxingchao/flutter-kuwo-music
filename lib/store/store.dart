@@ -205,12 +205,7 @@ class Store extends GetxController {
       var directory = Platform.isAndroid
           ? await getExternalStorageDirectory()
           : await getApplicationDocumentsDirectory();
-      String path = directory!.path +
-          "/download/" +
-          data["name"] +
-          "-" +
-          rid.toString() +
-          ".mp3";
+      String path = directory!.path + "/download/" + rid.toString() + ".mp3";
       try {
         //播放新的音乐
         await PlayAudio.instance.playLocalAudio(localPath: path);
@@ -468,7 +463,7 @@ class Store extends GetxController {
   }
 
   //下载歌曲
-  void downloadMp3({required int rid, required String name}) async {
+  void downloadMp3({required int rid}) async {
     //获取音乐详情
     var music = await CommonApi().getMusicDetail(mid: rid);
     if (music == null || music.data == null) {
@@ -504,7 +499,7 @@ class Store extends GetxController {
 
     var downloadUrl = res.data["data"]["url"];
     //新建下载
-    String filename = name + "-" + rid.toString() + ".mp3";
+    String filename = rid.toString() + ".mp3";
     var directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
@@ -534,7 +529,7 @@ class Store extends GetxController {
   Future deleteDownloadMusicList({required List list}) async {
     List idList = [];
     for (var item in list) {
-      String filename = item["name"] + "-" + item["rid"].toString() + ".mp3";
+      String filename = item["rid"].toString() + ".mp3";
       var directory = Platform.isAndroid
           ? await getExternalStorageDirectory()
           : await getApplicationDocumentsDirectory();
