@@ -402,9 +402,11 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                                           //当前播放歌曲才显示收藏按钮
                                           store.playMusicInfo?.rid == item.rid
                                               ? Offstage(
-                                                  offstage: store
-                                                          .playMusicInfo?.rid !=
-                                                      item.rid,
+                                                  offstage: store.playMusicInfo
+                                                              ?.rid !=
+                                                          item.rid ||
+                                                      Get.currentRoute ==
+                                                          '/favourite_list',
                                                   child: GestureDetector(
                                                       child: store
                                                               .getMusicLikeState(
