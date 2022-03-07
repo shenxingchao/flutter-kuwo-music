@@ -259,6 +259,7 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                 if (callback != null) {
                                   callback();
                                 }
+                                Get.back();
                               },
                             ),
                           ),
@@ -383,6 +384,7 @@ class MoreBottomSheetWidget extends StatelessWidget {
                               ),
                               onTap: () {
                                 store.downloadMp3(rid: item["rid"]);
+                                Get.back();
                               },
                             ),
                           ),
