@@ -316,6 +316,12 @@ class _UserCommponentState extends State<UserCommponent> {
                                         TextButton(
                                           onPressed: () async {
                                             Database db = await Db.instance.db;
+                                            //删除歌单里的所有歌曲
+                                            await db.delete(
+                                                'custom_play_list_content',
+                                                where:
+                                                    'custom_play_list_id = ?',
+                                                whereArgs: [item["id"]]);
 
                                             int deleteCount = await db.delete(
                                                 'custom_play_list',
