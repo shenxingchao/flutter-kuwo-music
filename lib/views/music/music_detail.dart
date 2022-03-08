@@ -256,7 +256,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                         sigmaY: store.playMusicInfo != null ? 30.0 : 0.0),
                     child: Center(
                       child: Container(
-                        color: Colors.black.withOpacity(0.6),
+                        color: Colors.black.withOpacity(
+                            store.playMusicInfo != null ? 0.6 : 0.2),
                       ),
                     ),
                   ),
