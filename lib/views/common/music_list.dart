@@ -13,7 +13,7 @@ class MusicListWidget extends StatelessWidget {
       : super(key: key);
 
   final List list;
-  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载
+  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载 3自定义歌单
   final int pageType;
   //回调函数
   final dynamic callback;
@@ -220,7 +220,8 @@ class MoreBottomSheetWidget extends StatelessWidget {
                       //children可以放任意的组件
                       children: [
                         Offstage(
-                          offstage: pageType != 1 && pageType != 2,
+                          offstage:
+                              pageType != 1 && pageType != 2 && pageType != 3,
                           child: Material(
                             color: Colors.white,
                             child: InkWell(
@@ -259,6 +260,12 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                       "name": item["name"],
                                     }
                                   ]);
+                                }
+                                //删除自定义歌单列表歌曲
+                                if (pageType == 3) {
+                                  callback(item["rid"]);
+                                  Get.back();
+                                  return;
                                 }
                                 if (callback != null) {
                                   callback();
@@ -335,56 +342,59 @@ class MoreBottomSheetWidget extends StatelessWidget {
                                 ));
                           },
                         ),
-                        Material(
-                          color: Colors.white,
-                          child: InkWell(
-                            child: Container(
-                              height: 50,
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                children: const [
-                                  Icon(
-                                    Icons.add_box_outlined,
-                                    size: 30,
-                                    color: Color(0xff333333),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '添加到歌单',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                ],
+                        Offstage(
+                          offstage: pageType == 3,
+                          child: Material(
+                            color: Colors.white,
+                            child: InkWell(
+                              child: Container(
+                                height: 50,
+                                padding: const EdgeInsets.all(10),
+                                child: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.add_box_outlined,
+                                      size: 30,
+                                      color: Color(0xff333333),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      '添加到歌单',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
                               ),
+                              onTap: () async {
+                                Get.back();
+                                //查询自定义歌单列表
+                                Database db = await Db.instance.db;
+                                List<Map<String, Object?>> res =
+                                    await db.rawQuery('''
+                                  SELECT a.*,b.rowCount,b.pic120
+                                  FROM custom_play_list AS a
+                                    LEFT JOIN (
+                                      SELECT custom_play_list_id,pic120,COUNT(id) AS rowCount FROM custom_play_list_content 
+                                      GROUP BY custom_play_list_id
+                                    ) AS b
+                                    ON a.id = b.custom_play_list_id 
+                                ''');
+
+                                List customPlayList = res.isNotEmpty ? res : [];
+
+                                //添加到自定义歌单
+                                showModalBottomSheet<void>(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AddBottomSheetWidget(
+                                          customPlayList: customPlayList,
+                                          item: item,
+                                          db: db);
+                                    });
+                              },
                             ),
-                            onTap: () async {
-                              Get.back();
-                              //查询自定义歌单列表
-                              Database db = await Db.instance.db;
-                              List<Map<String, Object?>> res =
-                                  await db.rawQuery('''
-                                SELECT a.*,b.rowCount,b.pic120
-                                FROM custom_play_list AS a
-                                  LEFT JOIN (
-                                    SELECT custom_play_list_id,pic120,COUNT(id) AS rowCount FROM custom_play_list_content 
-                                    GROUP BY custom_play_list_id
-                                  ) AS b
-                                  ON a.id = b.custom_play_list_id 
-                              ''');
-
-                              List customPlayList = res.isNotEmpty ? res : [];
-
-                              //添加到自定义歌单
-                              showModalBottomSheet<void>(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AddBottomSheetWidget(
-                                        customPlayList: customPlayList,
-                                        item: item,
-                                        db: db);
-                                  });
-                            },
                           ),
                         ),
                         Offstage(

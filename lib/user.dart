@@ -295,6 +295,11 @@ class _UserCommponentState extends State<UserCommponent> {
                           tileColor: Colors.white,
                           onTap: () {
                             //自定义歌单详情
+                            Get.toNamed('/custom_play_list_detail',
+                                arguments: {"id": item["id"]})?.then((value) {
+                              //刷新
+                              getCustomPlayList();
+                            });
                           },
                           onLongPress: () {
                             //删除
@@ -312,13 +317,12 @@ class _UserCommponentState extends State<UserCommponent> {
                                           onPressed: () async {
                                             Database db = await Db.instance.db;
 
-                                            int deleteId = await db.delete(
+                                            int deleteCount = await db.delete(
                                                 'custom_play_list',
                                                 where: 'id = ?',
                                                 whereArgs: [item["id"]]);
 
-                                            if (deleteId > 0) {
-                                              //已存在
+                                            if (deleteCount > 0) {
                                               Fluttertoast.showToast(
                                                 msg: "删除成功",
                                               );

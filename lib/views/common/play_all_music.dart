@@ -15,7 +15,7 @@ class PlayAllMusicWidget extends StatelessWidget {
 
   //列表
   final List list;
-  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载
+  //显示在哪个特殊页面 0 普通页面 1我的收藏（我喜欢）2已下载 3自定义歌单
   final int pageType;
 
   final dynamic callback;
@@ -50,21 +50,23 @@ class PlayAllMusicWidget extends StatelessWidget {
                         ),
                       ]),
                       Offstage(
-                          offstage: pageType != 1,
+                          offstage: pageType != 1 && pageType != 3,
                           child: GestureDetector(
                               behavior: HitTestBehavior.opaque,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Row(children: const [
+                                child: Row(children: [
                                   Text(
-                                    '清空收藏列表',
-                                    style: TextStyle(fontSize: 16),
+                                    pageType == 1 ? '清空收藏列表' : '清空歌单',
+                                    style: const TextStyle(fontSize: 16),
                                   )
                                 ]),
                               ),
                               onTap: () async {
                                 //清空收藏列表
-                                await store.deleteFavouriteMusicList();
+                                if (pageType == 1) {
+                                  await store.deleteFavouriteMusicList();
+                                }
                                 //回调函数
                                 if (callback != null) {
                                   callback();

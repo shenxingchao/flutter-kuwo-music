@@ -314,51 +314,49 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                             flex: 1,
                                             child: SingleChildScrollView(
                                                 controller: scrollController,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    ...lrcList
-                                                        .asMap()
-                                                        .entries
-                                                        .map(
-                                                            (entry) =>
-                                                                Container(
-                                                                  height: constraints
-                                                                          .maxHeight /
-                                                                      11,
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .fromLTRB(
-                                                                          10,
-                                                                          0,
-                                                                          10,
-                                                                          0),
-                                                                  child: Text(
-                                                                    entry.value[
-                                                                        "lineLyric"],
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: TextStyle(
-                                                                        fontFamily:
-                                                                            "PingFangSC",
-                                                                        fontSize: positionIndex == entry.key
-                                                                            ? 20
-                                                                            : 16,
-                                                                        color: positionIndex ==
-                                                                                entry.key
-                                                                            ? Colors.white
-                                                                            : const Color(0xff999999)),
-                                                                  ),
-                                                                ))
-                                                        .toList(),
-                                                  ],
-                                                )),
+                                                child: lrcList.isNotEmpty
+                                                    ? Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          ...lrcList
+                                                              .asMap()
+                                                              .entries
+                                                              .map(
+                                                                  (entry) =>
+                                                                      Container(
+                                                                        height:
+                                                                            constraints.maxHeight /
+                                                                                11,
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                            10,
+                                                                            0,
+                                                                            10,
+                                                                            0),
+                                                                        child:
+                                                                            Text(
+                                                                          entry.value[
+                                                                              "lineLyric"],
+                                                                          maxLines:
+                                                                              1,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style: TextStyle(
+                                                                              fontFamily: "PingFangSC",
+                                                                              fontSize: positionIndex == entry.key ? 20 : 16,
+                                                                              color: positionIndex == entry.key ? Colors.white : const Color(0xff999999)),
+                                                                        ),
+                                                                      ))
+                                                              .toList(),
+                                                        ],
+                                                      )
+                                                    : SizedBox(
+                                                        height: constraints
+                                                            .maxHeight,
+                                                      )),
                                           ),
                                         ]),
                                   ),

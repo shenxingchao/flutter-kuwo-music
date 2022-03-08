@@ -17,6 +17,7 @@ import '../views/search/search_list.dart';
 import '../views/user/history.dart';
 import '../views/user/favourite_list.dart';
 import '../views/user/download_list.dart';
+import '../views/user/custom_play_list_detail.dart';
 
 //抽离路由代码
 class Routers {
@@ -93,6 +94,10 @@ class Routers {
     GetPage(
         name: '/download_list',
         page: () => const DownloadListComponent(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: '/custom_play_list_detail',
+        page: () => const CustomPlayListDetailComponent(),
         transition: Transition.cupertino),
   ];
 }
