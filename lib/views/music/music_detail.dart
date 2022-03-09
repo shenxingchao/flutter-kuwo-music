@@ -458,7 +458,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                         },
                                       )),
                                   Offstage(
-                                    offstage: store.playMusicInfo != null && store.playMusicInfo!.hasmv == 0,
+                                    offstage: store.playMusicInfo != null &&
+                                        store.playMusicInfo!.hasmv == 0,
                                     child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
@@ -491,8 +492,13 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                     flex: 1,
                                     child: SliderTheme(
                                       data: SliderTheme.of(context).copyWith(
-                                          trackHeight: 0.2,
-                                          inactiveTrackColor: Colors.white),
+                                        trackHeight: 0.2,
+                                        inactiveTrackColor: Colors.white,
+                                        thumbShape: const RoundSliderThumbShape(
+                                          disabledThumbRadius: 5, //禁用是滑块大小
+                                          enabledThumbRadius: 5, //滑块大小
+                                        ),
+                                      ),
                                       child: Slider(
                                         value: audioPercent,
                                         onChanged: (v) {
