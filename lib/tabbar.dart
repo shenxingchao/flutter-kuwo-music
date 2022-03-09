@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:flutterkuwomusic/views/common/play_list_bottom_sheet.dart';
 import 'package:get/get.dart';
 import './home.dart';
 import './user.dart';
@@ -133,6 +134,19 @@ class _TabbarComponentState extends State<TabbarComponent>
             fontSize: 20,
             color: Color(0xff333333),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            //显示下拉弹出方法
+            showModalBottomSheet<void>(
+                context: context,
+                builder: (BuildContext context) {
+                  return const PlayListBottomSheetWidget();
+                });
+          },
+          mini: true,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: const Icon(Icons.menu),
         ),
         body: router[currentIndex],
         //tabbar

@@ -9,13 +9,13 @@ import 'package:flutter/services.dart';
 import 'package:flutterkuwomusic/component/appbar.dart';
 import 'package:flutterkuwomusic/interface/play_mode.dart';
 import 'package:flutterkuwomusic/utils/play_audio.dart';
+import 'package:flutterkuwomusic/views/common/play_list_bottom_sheet.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../store/store.dart';
 import '../../utils/request.dart';
 import '../common/add_cusom_play_list_bottom_sheet.dart';
-import '../common/bottom_bar.dart';
 
 class MusicDetailComponent extends StatefulWidget {
   const MusicDetailComponent({Key? key}) : super(key: key);
@@ -458,7 +458,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                         },
                                       )),
                                   Offstage(
-                                    offstage: store.playMusicInfo!.hasmv == 0,
+                                    offstage: store.playMusicInfo != null && store.playMusicInfo!.hasmv == 0,
                                     child: Material(
                                         color: Colors.transparent,
                                         child: InkWell(
