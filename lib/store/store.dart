@@ -379,6 +379,35 @@ class Store extends GetxController {
       }
     }
     playMode = playModeList[index];
+    switch (playMode) {
+      case PlayMode.SINGLE_MODE:
+        Fluttertoast.showToast(
+          msg: "单曲播放",
+        );
+        break;
+      case PlayMode.SINGLE_FOR_MODE:
+        Fluttertoast.showToast(
+          msg: "单曲循环",
+        );
+        break;
+      case PlayMode.LIST_MODE:
+        Fluttertoast.showToast(
+          msg: "顺序播放",
+        );
+        break;
+      case PlayMode.LIST_FOR_MODE:
+        Fluttertoast.showToast(
+          msg: "列表循环",
+        );
+        break;
+      case PlayMode.RANDOM_MODE:
+        Fluttertoast.showToast(
+          msg: "随机播放",
+        );
+        break;
+      default:
+        break;
+    }
   }
 
   //查询歌曲是否已经收藏
