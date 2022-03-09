@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutterkuwomusic/views/common/add_cusom_play_list_bottom_sheet.dart';
 import 'package:get/get.dart';
-import 'package:sqflite/sqflite.dart';
 import '../../store/store.dart';
-import '../../utils/db.dart';
 
 //音乐列表
 class MusicListWidget extends StatelessWidget {
@@ -369,29 +366,12 @@ class MoreBottomSheetWidget extends StatelessWidget {
                               ),
                               onTap: () async {
                                 Get.back();
-                                //查询自定义歌单列表
-                                Database db = await Db.instance.db;
-                                List<Map<String, Object?>> res =
-                                    await db.rawQuery('''
-                                  SELECT a.*,b.rowCount,b.pic120
-                                  FROM custom_play_list AS a
-                                    LEFT JOIN (
-                                      SELECT custom_play_list_id,pic120,COUNT(id) AS rowCount FROM custom_play_list_content 
-                                      GROUP BY custom_play_list_id
-                                    ) AS b
-                                    ON a.id = b.custom_play_list_id 
-                                ''');
-
-                                List customPlayList = res.isNotEmpty ? res : [];
 
                                 //添加到自定义歌单
                                 showModalBottomSheet<void>(
                                     context: context,
                                     builder: (BuildContext context) {
-                                      return AddBottomSheetWidget(
-                                          customPlayList: customPlayList,
-                                          item: item,
-                                          db: db);
+                                      return AddCustomPlayListBottomSheetWidget(item: item);
                                     });
                               },
                             ),
@@ -433,111 +413,5 @@ class MoreBottomSheetWidget extends StatelessWidget {
                     ))
               ]));
         });
-  }
-}
-
-//添加到自定义歌单列表
-class AddBottomSheetWidget extends StatelessWidget {
-  const AddBottomSheetWidget({
-    Key? key,
-    required this.customPlayList,
-    required this.item,
-    required this.db,
-  }) : super(key: key);
-
-  final List customPlayList;
-  final dynamic item;
-  final Database db;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: Get.height / 3,
-        color: Colors.white,
-        child: ListView(
-            //垂直列表 水平列表有滚动条哦
-            scrollDirection: Axis.vertical,
-            //children可以放任意的组件
-            children: [
-              ...customPlayList.asMap().entries.map((entry) {
-                var value = entry.value;
-                return ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: value["pic120"] != null
-                        ? CachedNetworkImage(
-                            imageUrl: value["pic120"],
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                            width: 56,
-                            height: 56,
-                            errorWidget: (context, url, error) => Image.asset(
-                                  'assets/images/default.png',
-                                  alignment: Alignment.center,
-                                  fit: BoxFit.cover,
-                                  width: 56,
-                                  height: 56,
-                                ))
-                        : Image.asset(
-                            'assets/images/music_bg_0.jpg',
-                            alignment: Alignment.center,
-                            fit: BoxFit.cover,
-                            width: 56,
-                            height: 56,
-                          ),
-                  ),
-                  trailing: const Icon(Icons.add, color: Color(0xff999999)),
-                  title: Text(
-                    value["name"],
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  tileColor: Colors.white,
-                  onTap: () async {
-                    //判断歌曲是否存在
-                    List res = await db.query('custom_play_list_content',
-                        where: 'custom_play_list_id = ? and rid = ?',
-                        whereArgs: [value["id"], item["rid"]]);
-                    if (res.isNotEmpty) {
-                      //已存在
-                      Fluttertoast.showToast(
-                        msg: "当前歌单已存在该歌曲",
-                      );
-                      return;
-                    }
-                    //需要添加的数据
-                    var musicItem = {
-                      "custom_play_list_id": value["id"],
-                      "artist": item["artist"],
-                      "pic": item["pic"],
-                      "rid": item["rid"],
-                      "duration": item["duration"],
-                      "mvPlayCnt": item["mvPlayCnt"],
-                      "hasLossless": item["hasLossless"] ? 1 : 0,
-                      "hasmv": item["hasmv"],
-                      "releaseDate": item["releaseDate"],
-                      "album": item["album"],
-                      "albumid": item["albumid"],
-                      "artistid": item["artistid"],
-                      "songTimeMinutes": item["songTimeMinutes"],
-                      "isListenFee": item["isListenFee"] ? 1 : 0,
-                      "pic120": item["pic120"],
-                      "albuminfo": item["albuminfo"],
-                      "name": item["name"]
-                    };
-                    //添加到当前歌单的内容列表
-                    int insertId =
-                        await db.insert('custom_play_list_content', musicItem);
-                    if (insertId > 0) {
-                      Fluttertoast.showToast(
-                        msg: "添加成功",
-                      );
-                      Get.back();
-                    }
-                  },
-                );
-              })
-            ]));
   }
 }

@@ -74,6 +74,7 @@ class _HomeComponentState extends State<HomeComponent>
       onRefresh();
     }
 
+    //添加观察者
     WidgetsBinding.instance!.addObserver(this);
     //更新app
     updateApp();
@@ -90,6 +91,13 @@ class _HomeComponentState extends State<HomeComponent>
         appUpdate.installApk();
       }
     }
+  }
+
+  @override
+  void dispose() {
+    //删除观察者
+    WidgetsBinding.instance!.removeObserver(this); 
+    super.dispose();
   }
 
   //检查app更新

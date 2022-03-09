@@ -329,150 +329,184 @@ class _PlayListBottomSheetWidgetState extends State<PlayListBottomSheetWidget> {
                     child: ListView(
                       controller: scrollController,
                       children: [
-                        ...store.playListMusic.map((item) => Material(
-                            color: Colors.white,
-                            child: InkWell(
-                              child: Column(children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  height: 72,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Offstage(
-                                        offstage: store.playMusicInfo?.rid !=
-                                            item.rid,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              0, 0, 10, 0),
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(4),
-                                              child: CachedNetworkImage(
-                                                  imageUrl: item.pic120,
-                                                  alignment: Alignment.center,
-                                                  fit: BoxFit.cover,
-                                                  width: 50,
-                                                  height: 50,
-                                                  errorWidget:
-                                                      (context, url, error) =>
-                                                          Image.asset(
-                                                            'assets/images/default.png',
-                                                            fit: BoxFit.cover,
-                                                            width: 50,
-                                                            height: 50,
-                                                          ))),
-                                        ),
-                                      ),
-                                      Expanded(
-                                          flex: 1,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                item.name
-                                                    .replaceAll('&nbsp;', ' '),
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              Text(
-                                                item.artist
-                                                    .replaceAll('&nbsp;', ' '),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                    color: Color(0xff999999)),
-                                              ),
-                                            ],
-                                          )),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          //当前播放歌曲才显示收藏按钮
-                                          store.playMusicInfo?.rid == item.rid
-                                              ? Offstage(
-                                                  offstage: store.playMusicInfo
-                                                              ?.rid !=
-                                                          item.rid ||
-                                                      Get.currentRoute ==
-                                                          '/favourite_list',
-                                                  child: GestureDetector(
-                                                      child: store
-                                                              .getMusicLikeState(
-                                                                  item.rid)
-                                                          ? const Icon(
-                                                              Icons
-                                                                  .favorite_rounded,
-                                                              size: 30,
-                                                              color: Colors.red)
-                                                          : const Icon(
-                                                              Icons
-                                                                  .favorite_border_rounded,
-                                                              size: 30,
-                                                              color: Color(
-                                                                  0xffC3CADE)),
-                                                      onTap: () async {
-                                                        await store
-                                                            .setLikeState(
-                                                                item.rid);
-                                                        setState(() {});
-                                                      }))
-                                              : const SizedBox(),
-                                          GestureDetector(
-                                            child: Icon(
-                                                store.playMusicInfo?.rid ==
-                                                            item.rid &&
-                                                        store.audioPlayState ==
-                                                            PlayerState.PLAYING
-                                                    ? Icons.pause_circle
-                                                    : Icons.play_circle,
-                                                size: 30,
-                                                color: const Color(0xffC3CADE)),
-                                            onTap: () {
-                                              if (store.playMusicInfo?.rid ==
-                                                  item.rid) {
-                                                if (store.audioPlayState ==
-                                                    PlayerState.PLAYING) {
-                                                  //暂停
-                                                  PlayAudio.instance
-                                                      .pauseAudio();
-                                                }
-                                                if (store.audioPlayState ==
-                                                        PlayerState.PAUSED ||
-                                                    store.audioPlayState ==
-                                                        PlayerState.COMPLETED) {
-                                                  //播放完了再继续播放
-                                                  PlayAudio.instance
-                                                      .resumeAudio();
-                                                }
-                                              } else {
-                                                //直接播放
-                                                store.playMusic(rid: item.rid);
-                                              }
-                                            },
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ]),
-                              onTap: () {
-                                //直接播放
-                                store.playMusic(rid: item.rid);
+                        ...store.playListMusic.asMap().entries.map((entry) {
+                          var item = entry.value;
+                          var key = entry.key;
+                          return Dismissible(
+                              key: Key(item.rid.toString()),
+                              onDismissed: (direction) {
+                                //删除并更新
+                                store.playListMusic.removeAt(key);
+
+                                store.changePlayListMusic(store.playListMusic,
+                                    stopMusic:
+                                        store.playMusicInfo?.rid == item.rid);
                               },
-                            )))
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                color: const Color(0xfff1f1f1),
+                              ),
+                              child: Material(
+                                  color: Colors.white,
+                                  child: InkWell(
+                                    child: Column(children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        height: 72,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Offstage(
+                                              offstage:
+                                                  store.playMusicInfo?.rid !=
+                                                      item.rid,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 0, 10, 0),
+                                                child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    child: CachedNetworkImage(
+                                                        imageUrl: item.pic120,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        fit: BoxFit.cover,
+                                                        width: 50,
+                                                        height: 50,
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Image.asset(
+                                                              'assets/images/default.png',
+                                                              fit: BoxFit.cover,
+                                                              width: 50,
+                                                              height: 50,
+                                                            ))),
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      item.name.replaceAll(
+                                                          '&nbsp;', ' '),
+                                                      style: const TextStyle(
+                                                          fontSize: 16),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    Text(
+                                                      item.artist.replaceAll(
+                                                          '&nbsp;', ' '),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                          color: Color(
+                                                              0xff999999)),
+                                                    ),
+                                                  ],
+                                                )),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                //当前播放歌曲才显示收藏按钮
+                                                store.playMusicInfo?.rid ==
+                                                        item.rid
+                                                    ? Offstage(
+                                                        offstage: store
+                                                                    .playMusicInfo
+                                                                    ?.rid !=
+                                                                item.rid ||
+                                                            Get.currentRoute ==
+                                                                '/favourite_list',
+                                                        child: GestureDetector(
+                                                            child: store.getMusicLikeState(
+                                                                    item.rid)
+                                                                ? const Icon(
+                                                                    Icons
+                                                                        .favorite_rounded,
+                                                                    size: 30,
+                                                                    color: Colors
+                                                                        .red)
+                                                                : const Icon(
+                                                                    Icons
+                                                                        .favorite_border_rounded,
+                                                                    size: 30,
+                                                                    color: Color(0xffC3CADE)),
+                                                            onTap: () async {
+                                                              await store
+                                                                  .setLikeState(
+                                                                      item.rid);
+                                                              setState(() {});
+                                                            }))
+                                                    : const SizedBox(),
+                                                GestureDetector(
+                                                  child: Icon(
+                                                      store.playMusicInfo
+                                                                      ?.rid ==
+                                                                  item.rid &&
+                                                              store.audioPlayState ==
+                                                                  PlayerState
+                                                                      .PLAYING
+                                                          ? Icons.pause_circle
+                                                          : Icons.play_circle,
+                                                      size: 30,
+                                                      color: const Color(
+                                                          0xffC3CADE)),
+                                                  onTap: () {
+                                                    if (store.playMusicInfo
+                                                            ?.rid ==
+                                                        item.rid) {
+                                                      if (store
+                                                              .audioPlayState ==
+                                                          PlayerState.PLAYING) {
+                                                        //暂停
+                                                        PlayAudio.instance
+                                                            .pauseAudio();
+                                                      }
+                                                      if (store.audioPlayState ==
+                                                              PlayerState
+                                                                  .PAUSED ||
+                                                          store.audioPlayState ==
+                                                              PlayerState
+                                                                  .COMPLETED) {
+                                                        //播放完了再继续播放
+                                                        PlayAudio.instance
+                                                            .resumeAudio();
+                                                      }
+                                                    } else {
+                                                      //直接播放
+                                                      store.playMusic(
+                                                          rid: item.rid);
+                                                    }
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ]),
+                                    onTap: () {
+                                      //直接播放
+                                      store.playMusic(rid: item.rid);
+                                    },
+                                  )));
+                        })
                       ],
                     ),
                   )

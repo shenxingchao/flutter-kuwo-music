@@ -77,19 +77,19 @@ class Request {
     Response response;
     //重新请求次数
     int numberOfRequest = 10;
-    //重新请求间隙1000ms
+    //重新请求间隙1000ms * count 这样重新请求的间隔会越来越长
     int requestDelay = 1000;
 
     //捕获异常
     try {
-      Future<Response> fn({count = 1}) async {
+      Future<Response> fn({int count = 1}) async {
         response = await dio.request(url,
             data: data ?? {},
             options: Options(method: type),
             cancelToken: Request.instance.cancelToken);
         //如果data 为null 也重新请求
         if (response.data == null && count < numberOfRequest) {
-          await Future.delayed(Duration(milliseconds: requestDelay), () async {
+          await Future.delayed(Duration(milliseconds: requestDelay * count), () async {
             count++;
             response = await fn(count: count);
           });

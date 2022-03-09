@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 
 import '../../store/store.dart';
 import '../../utils/request.dart';
+import '../common/add_cusom_play_list_bottom_sheet.dart';
 import '../common/bottom_bar.dart';
 
 class MusicDetailComponent extends StatefulWidget {
@@ -23,7 +24,8 @@ class MusicDetailComponent extends StatefulWidget {
   _MusicDetailComponentState createState() => _MusicDetailComponentState();
 }
 
-class _MusicDetailComponentState extends State<MusicDetailComponent> {
+class _MusicDetailComponentState extends State<MusicDetailComponent>
+    with WidgetsBindingObserver {
   //歌词容器key 用于获取容器高度
   GlobalKey lrcContinerKey = GlobalKey();
   double lrcContainerHeight = 0;
@@ -54,6 +56,18 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
     initLrcContainerHeight();
     //播放进度监听
     audioProgressListen();
+    //监听前后台切换
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    //从后台隐藏状态切换到前台显示状态
+    if (state == AppLifecycleState.resumed) {
+      //重新获取一下歌词
+      getLrcList();
+    }
   }
 
   @override
@@ -61,6 +75,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
     //为了避免内存泄露，需要调用_controller.dispose
     scrollController.dispose();
     audioPositionListen.cancel();
+    //删除观察者
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
@@ -417,7 +433,50 @@ class _MusicDetailComponentState extends State<MusicDetailComponent> {
                                             );
                                           }
                                         },
-                                      ))
+                                      )),
+                                  Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            child: Row(children: const [
+                                              Icon(Icons.add_box_rounded,
+                                                  size: 30, color: Colors.grey),
+                                            ])),
+                                        onTap: () {
+                                          if (store.playMusicInfo != null) {
+                                            //添加到自定义歌单
+                                            showModalBottomSheet<void>(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AddCustomPlayListBottomSheetWidget(
+                                                      item: store.playMusicInfo!
+                                                          .toMap());
+                                                });
+                                          }
+                                        },
+                                      )),
+                                  Offstage(
+                                    offstage: store.playMusicInfo!.hasmv == 0,
+                                    child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          child: Container(
+                                              padding: const EdgeInsets.all(10),
+                                              child: Row(children: const [
+                                                Icon(Icons.play_circle_rounded,
+                                                    size: 30,
+                                                    color: Colors.grey),
+                                              ])),
+                                          onTap: () {
+                                            Get.toNamed('/mv_detail',
+                                                arguments: {
+                                                  "id": store.playMusicInfo!.rid
+                                                });
+                                          },
+                                        )),
+                                  )
                                 ]),
                             Row(
                                 mainAxisAlignment:
