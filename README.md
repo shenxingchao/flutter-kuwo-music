@@ -1,5 +1,5 @@
 # 基于flutter开发的音乐app-android
-![calc](https://img.shields.io/badge/version-1.1.6-COLOR)  ![calc](https://img.shields.io/badge/-flutter-red)
+![calc](https://img.shields.io/badge/version-1.1.6-COLOR)  ![calc](https://img.shields.io/badge/-flutter-red)  
 本软件仅用于学习用途，接口皆来自于网络，版权归酷我公司所有，请在法律允许的范围内使用,使用此软件造成的法律责任，皆由使用者承担。若本项目被告知侵权，则立即删除此项目
 
 ## 演示gif
