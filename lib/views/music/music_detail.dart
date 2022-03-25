@@ -252,14 +252,14 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
                             errorWidget: (context, url, error) => Image.asset(
-                              'assets/images/music_bg_1.jpg',
+                              'assets/images/music_bg_0.jpg',
                               alignment: Alignment.center,
                               fit: BoxFit.fitWidth,
                             ),
                           )
                         : Image.asset(
                             'assets/images/music_bg_' +
-                                Random().nextInt(6).toString() +
+                                Random().nextInt(2).toString() +
                                 '.jpg',
                             alignment: Alignment.center,
                             fit: BoxFit.cover,
@@ -273,7 +273,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                     child: Center(
                       child: Container(
                         color: Colors.black.withOpacity(
-                            store.playMusicInfo != null ? 0.6 : 0.2),
+                            store.playMusicInfo != null ? 0.6 : 0.3),
                       ),
                     ),
                   ),
@@ -297,7 +297,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                     height: Get.width / 5 * 3,
                                     errorWidget: (context, url, error) =>
                                         Image.asset(
-                                      'assets/images/icons/music.png',
+                                      'assets/images/music_bg_0.jpg',
                                       alignment: Alignment.center,
                                       fit: BoxFit.fitWidth,
                                     ),
@@ -408,7 +408,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                                       Icons
                                                           .favorite_border_rounded,
                                                       size: 30,
-                                                      color: Colors.grey),
+                                                      color: Color(0xffdddddd)),
                                             ])),
                                         onTap: () async {
                                           if (store.playMusicInfo != null) {
@@ -424,7 +424,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                             padding: const EdgeInsets.all(10),
                                             child: Row(children: const [
                                               Icon(Icons.download,
-                                                  size: 30, color: Colors.grey),
+                                                  size: 30,
+                                                  color: Color(0xffdddddd)),
                                             ])),
                                         onTap: () {
                                           if (store.playMusicInfo != null) {
@@ -441,7 +442,8 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                             padding: const EdgeInsets.all(10),
                                             child: Row(children: const [
                                               Icon(Icons.add_box_rounded,
-                                                  size: 30, color: Colors.grey),
+                                                  size: 30,
+                                                  color: Color(0xffdddddd)),
                                             ])),
                                         onTap: () {
                                           if (store.playMusicInfo != null) {
@@ -468,7 +470,7 @@ class _MusicDetailComponentState extends State<MusicDetailComponent>
                                               child: Row(children: const [
                                                 Icon(Icons.play_circle_rounded,
                                                     size: 30,
-                                                    color: Colors.grey),
+                                                    color: Color(0xffdddddd)),
                                               ])),
                                           onTap: () {
                                             Get.toNamed('/mv_detail',
