@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:wakelock/wakelock.dart';
 import './router/router.dart';
 import './store/store.dart';
 import 'utils/play_audio.dart';
@@ -20,6 +21,8 @@ void main() async {
   listenAudio();
   //初始化通知插件
   initNotification();
+  //屏幕常亮
+  Wakelock.enable();
   runApp(const MyApp());
 }
 
